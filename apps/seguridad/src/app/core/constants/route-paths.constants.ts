@@ -8,5 +8,8 @@ export const ROUTE_PATHS = {
   },
   dashboard: {
     root: '/dashboard',
+    inicio: '/dashboard/inicio',
+    apiKeys: '/dashboard/seguridad/api-keys',
+    formatos: '/dashboard/formato/lista',
   },
 } as const;
