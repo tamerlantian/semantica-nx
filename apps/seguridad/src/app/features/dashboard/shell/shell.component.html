@@ -14,7 +14,12 @@
       @if (currentUser()) {
         <div class="user-info">
           <div class="user-avatar">{{ currentUser()!.email.charAt(0).toUpperCase() }}</div>
-          <span class="user-name">{{ currentUser()!.email }}</span>
+          <div class="user-details">
+            @if (currentUser()!.tenant_nombre) {
+              <span class="user-empresa">{{ currentUser()!.tenant_nombre }}</span>
+            }
+            <span class="user-name">{{ currentUser()!.email }}</span>
+          </div>
         </div>
         <div class="navbar-divider"></div>
       }

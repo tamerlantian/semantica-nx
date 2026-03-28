@@ -31,8 +31,11 @@
         <ng-template #header>
           <tr>
             <th>Contrato</th>
+            <th>Tipo</th>
             <th>Desde</th>
             <th>Hasta</th>
+            <th>Cargo</th>
+            <th>Grupo</th>
             <th>Salario</th>
             <th></th>
           </tr>
@@ -40,11 +43,21 @@
         <ng-template #body let-contrato>
           <tr>
             <td>{{ contrato.codigo_contrato_pk }}</td>
+            <td>{{ contrato.contrato_tipo_nombre }}</td>
             <td>{{ contrato.fecha_desde | date: 'dd/MM/yyyy' }}</td>
             <td>{{ contrato.fecha_hasta | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ contrato.cargo_nombre }}</td>
+            <td>{{ contrato.grupo_nombre }}</td>
             <td>{{ contrato.vr_salario | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
             <td>
-              <p-button icon="pi pi-print" severity="secondary" [text]="true" [rounded]="true" />
+              <p-button
+                icon="pi pi-print"
+                severity="secondary"
+                [text]="true"
+                [rounded]="true"
+                [loading]="printing() === contrato.codigo_contrato_pk"
+                (click)="imprimirCertificado(contrato)"
+              />
             </td>
           </tr>
         </ng-template>

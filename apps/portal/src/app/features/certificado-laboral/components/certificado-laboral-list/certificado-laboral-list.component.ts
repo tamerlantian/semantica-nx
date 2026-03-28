@@ -8,7 +8,7 @@ import {
 } from '../../../../shared';
 import { CertificadoLaboralService } from '../../services/certificado-laboral.service';
 import { Contrato } from '../../models/contrato.model';
-import { extractErrorMessage } from '@semantica/core';
+import { extractErrorMessage, ToastService } from '@semantica/core';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../auth/services/auth.service';
@@ -32,6 +32,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 export class CertificadoLaboralListComponent implements OnInit {
   private readonly certificadoLaboralService = inject(CertificadoLaboralService);
   private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToastService);
 
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
@@ -39,6 +40,7 @@ export class CertificadoLaboralListComponent implements OnInit {
   readonly totalRecords = signal(0);
   readonly pageSize = signal(50);
   readonly first = signal(0);
+  readonly printing = signal<number | null>(null);
 
   ngOnInit(): void {
     this.loadContratos(1);
@@ -76,5 +78,24 @@ export class CertificadoLaboralListComponent implements OnInit {
     this.first.set(first);
     this.pageSize.set(rows);
     this.loadContratos(Math.floor(first / rows) + 1);
+  }
+
+  imprimirCertificado(contrato: Contrato): void {
+    this.printing.set(contrato.codigo_contrato_pk);
+
+    this.certificadoLaboralService.imprimirCertificado(contrato.codigo_contrato_pk).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        URL.revokeObjectURL(url);
+        this.printing.set(null);
+      },
+      error: (err) => {
+        this.toastService.error(
+          extractErrorMessage(err, 'No se pudo imprimir el certificado laboral.'),
+        );
+        this.printing.set(null);
+      },
+    });
   }
 }

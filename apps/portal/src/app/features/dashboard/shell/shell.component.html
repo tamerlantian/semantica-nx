@@ -14,7 +14,12 @@
       @if (currentUser()) {
         <div class="user-info">
           <div class="user-avatar">{{ currentUser()!.email.charAt(0).toUpperCase() }}</div>
-          <span class="user-name">{{ currentUser()!.email }}</span>
+          <div class="user-details">
+            @if (currentUser()!.tenant_nombre) {
+              <span class="user-empresa">{{ currentUser()!.tenant_nombre }}</span>
+            }
+            <span class="user-name">{{ currentUser()!.email }}</span>
+          </div>
         </div>
         <div class="navbar-divider"></div>
       }
@@ -127,54 +132,4 @@
   </nav>
 </p-drawer>
 
-<!-- Dialog asociar empresa -->
-<p-dialog
-  header="Asociar empresa"
-  [visible]="dialogVisible()"
-  (visibleChange)="dialogVisible.set($event)"
-  [modal]="true"
-  [closable]="true"
-  [style]="{ width: '420px' }"
-  [breakpoints]="{ '500px': '90vw' }"
->
-  <form [formGroup]="form" (ngSubmit)="onAsociar()" novalidate class="asociar-form">
-    <p class="asociar-form__desc">
-      Ingresa el código de empresa proporcionado por tu empleador para vincular tu cuenta.
-    </p>
-
-    @if (errorMessage()) {
-      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
-    }
-
-    <div class="field">
-      <label for="tenantId" class="field__label">Código de empresa</label>
-      <input
-        pInputText
-        id="tenantId"
-        type="text"
-        formControlName="tenantId"
-        fluid
-        placeholder="Ej: 1001"
-        [invalid]="tenantIdControl.invalid && tenantIdControl.touched"
-        aria-describedby="tenantId-error"
-      />
-      @if (tenantIdControl.invalid && tenantIdControl.touched) {
-        <small id="tenantId-error" class="field__error">
-          @if (tenantIdControl.hasError('required')) {
-            El código de empresa es requerido.
-          } @else if (tenantIdControl.hasError('pattern')) {
-            El código debe ser numérico.
-          }
-        </small>
-      }
-    </div>
-
-    <p-button
-      type="submit"
-      label="Asociar empresa"
-      fluid
-      [loading]="isLoading()"
-      [disabled]="isLoading()"
-    />
-  </form>
-</p-dialog>
+<app-asociar-empresa-dialog [(visible)]="dialogVisible" />

@@ -5,7 +5,9 @@ export type { LoginRequest, AuthResponse, ResendVerificationRequest };
 
 export interface Usuario extends BaseUsuario {
   name: string;
+  tenant_id: number | null;
   empleado_id: number | null;
+  tenant_nombre: string | null;
 }
 
 export interface AsociarEmpresaRequest {

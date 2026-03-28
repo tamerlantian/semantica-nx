@@ -13,4 +13,7 @@ export const API_ENDPOINTS = {
     asociarEmpresa: '/auth/user/asociar',
     resendVerification: '/auth/user/reenviar-verificacion',
   },
+  tenant: {
+    buscar: '/auth/tenant/seleccionar',
+  },
 } as const;

@@ -4,5 +4,6 @@ import { BaseUsuario, LoginRequest, AuthResponse, ResendVerificationRequest } fr
 export type { LoginRequest, AuthResponse, ResendVerificationRequest };
 
 export interface Usuario extends BaseUsuario {
-  tenant_id?: number;
+  tenant_id: number | null;
+  tenant_nombre: string | null;
 }

@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.1](https://github.com/tamerlantian/semantica-nx/compare/v0.0.0...v0.0.1) (2026-03-28)
+
+
+### Features
+
+* **certificado-laboral:** conectar botón imprimir y agregar columnas a tabla ([a05a4c8](https://github.com/tamerlantian/semantica-nx/commit/a05a4c854442876a93ff8db78c01481a8a650943))
+* **portal, seguridad:** mostrar nombre de empresa en navbar ([0f0006c](https://github.com/tamerlantian/semantica-nx/commit/0f0006cebd964b4a124a63e19b3068915fc7dd3f))
+
+
+### Refactoring
+
+* **core:** mover tenant_id de BaseUsuario a modelos de cada app ([e4dc8d6](https://github.com/tamerlantian/semantica-nx/commit/e4dc8d6374c64915e2c365437419bc9164db5c01))
+* **portal:** extraer diálogo asociar empresa a componente con autocomplete ([2d58144](https://github.com/tamerlantian/semantica-nx/commit/2d58144dc43f7d9da678490dbbbba9c7850dcef7))
+
+
+### Documentation
+
+* agregar README del monorepo ([a4a0e7c](https://github.com/tamerlantian/semantica-nx/commit/a4a0e7c78103029510132f60916664c4e2f903b0))
+
 ## 0.0.0 (2026-03-28)
 
 

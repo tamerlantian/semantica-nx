@@ -1,0 +1,46 @@
+<p-dialog
+  header="Asociar empresa"
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '420px' }"
+  [breakpoints]="{ '500px': '90vw' }"
+  (onShow)="onShow()"
+>
+  <div class="asociar-form">
+    <p class="asociar-form__desc">
+      Busca la empresa por nombre para vincular tu cuenta.
+    </p>
+
+    @if (errorMessage()) {
+      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+    }
+
+    <div class="form-field">
+      <label for="empresa">Empresa</label>
+      <p-autocomplete
+        id="empresa"
+        [(ngModel)]="selectedTenant"
+        [suggestions]="suggestions()"
+        (completeMethod)="onSearch($event)"
+        optionLabel="nombre"
+        [forceSelection]="true"
+        placeholder="Escribe para buscar..."
+        appendTo="body"
+        [style]="{ width: '100%' }"
+        [inputStyle]="{ width: '100%' }"
+      />
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" severity="secondary" [text]="true" (click)="visible.set(false)" />
+    <p-button
+      label="Asociar empresa"
+      icon="pi pi-check"
+      (click)="onSubmit()"
+      [loading]="submitting()"
+      [disabled]="submitting() || !selectedTenant"
+    />
+  </ng-template>
+</p-dialog>

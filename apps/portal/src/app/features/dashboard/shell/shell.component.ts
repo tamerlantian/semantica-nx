@@ -1,14 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DrawerModule } from 'primeng/drawer';
-import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { MessageModule } from 'primeng/message';
 import { AccordionModule } from 'primeng/accordion';
 import { AuthService } from '../../auth/services/auth.service';
-import { ToastService, extractErrorMessage } from '@semantica/core';
+import { AsociarEmpresaDialogComponent } from '../components/asociar-empresa-dialog/asociar-empresa-dialog.component';
 import { ROUTE_PATHS } from '../../../core/constants/route-paths.constants';
 
 interface NavItem {
@@ -31,32 +27,21 @@ interface NavGroup {
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-    ReactiveFormsModule,
     DrawerModule,
-    DialogModule,
     ButtonModule,
-    InputTextModule,
-    MessageModule,
     AccordionModule,
+    AsociarEmpresaDialogComponent,
   ],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
 })
 export class ShellComponent {
-  private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
-  private readonly toast = inject(ToastService);
 
   readonly currentUser = this.authService.currentUser;
   readonly hasTenant = this.authService.hasTenant;
   readonly drawerVisible = signal(false);
   readonly dialogVisible = signal(false);
-  readonly isLoading = signal(false);
-  readonly errorMessage = signal<string | null>(null);
-
-  readonly form = this.fb.group({
-    tenantId: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
-  });
 
   readonly inicioItem: NavItem = {
     label: 'Inicio',
@@ -134,42 +119,7 @@ export class ShellComponent {
   }
 
   openDialog(): void {
-    this.errorMessage.set(null);
-    this.form.reset();
     this.dialogVisible.set(true);
-  }
-
-  onAsociar(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    this.isLoading.set(true);
-    this.errorMessage.set(null);
-
-    const tenantId = Number(this.form.getRawValue().tenantId);
-
-    this.authService.asociarEmpresa(tenantId).subscribe({
-      next: () => {
-        this.isLoading.set(false);
-        this.dialogVisible.set(false);
-        this.toast.success('Empresa asociada correctamente.');
-      },
-      error: (err) => {
-        this.errorMessage.set(
-          extractErrorMessage(
-            err,
-            'No se pudo asociar la empresa. Verifica el código e intenta de nuevo.',
-          ),
-        );
-        this.isLoading.set(false);
-      },
-    });
-  }
-
-  get tenantIdControl() {
-    return this.form.controls.tenantId;
   }
 
   logout(): void {
