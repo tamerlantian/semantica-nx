@@ -68,19 +68,27 @@ jobs:
       - name: Set deploy variables (dev)
         if: github.ref == 'refs/heads/dev'
         run: |
+          echo "DEPLOY_HOST=${{ secrets.DEV_HOST }}" >> $GITHUB_ENV
+          echo "DEPLOY_USER=${{ secrets.DEV_SSH_USER }}" >> $GITHUB_ENV
           echo "DEPLOY_PATH=${{ secrets.PORTAL_DEV_DEPLOY_PATH }}" >> $GITHUB_ENV
 
       - name: Set deploy variables (prod)
         if: github.ref == 'refs/heads/main'
         run: |
+          echo "DEPLOY_HOST=${{ secrets.PROD_HOST }}" >> $GITHUB_ENV
+          echo "DEPLOY_USER=${{ secrets.PROD_SSH_USER }}" >> $GITHUB_ENV
           echo "DEPLOY_PATH=${{ secrets.PORTAL_PROD_DEPLOY_PATH }}" >> $GITHUB_ENV
 
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/deploy_key
+          if [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+            echo "${{ secrets.DEV_SSH_KEY }}" > ~/.ssh/deploy_key
+          else
+            echo "${{ secrets.PROD_SSH_KEY }}" > ~/.ssh/deploy_key
+          fi
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ env.DEPLOY_HOST }} >> ~/.ssh/known_hosts
 
       - name: Validate deploy path
         run: |
@@ -94,7 +102,7 @@ jobs:
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key" \
             dist/apps/portal/browser/ \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.DEPLOY_PATH }}/
+            ${{ env.DEPLOY_USER }}@${{ env.DEPLOY_HOST }}:${{ env.DEPLOY_PATH }}/
 
       - name: Cleanup SSH key
         if: always()
@@ -129,19 +137,27 @@ jobs:
       - name: Set deploy variables (dev)
         if: github.ref == 'refs/heads/dev'
         run: |
+          echo "DEPLOY_HOST=${{ secrets.DEV_HOST }}" >> $GITHUB_ENV
+          echo "DEPLOY_USER=${{ secrets.DEV_SSH_USER }}" >> $GITHUB_ENV
           echo "DEPLOY_PATH=${{ secrets.SEGURIDAD_DEV_DEPLOY_PATH }}" >> $GITHUB_ENV
 
       - name: Set deploy variables (prod)
         if: github.ref == 'refs/heads/main'
         run: |
+          echo "DEPLOY_HOST=${{ secrets.PROD_HOST }}" >> $GITHUB_ENV
+          echo "DEPLOY_USER=${{ secrets.PROD_SSH_USER }}" >> $GITHUB_ENV
           echo "DEPLOY_PATH=${{ secrets.SEGURIDAD_PROD_DEPLOY_PATH }}" >> $GITHUB_ENV
 
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/deploy_key
+          if [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+            echo "${{ secrets.DEV_SSH_KEY }}" > ~/.ssh/deploy_key
+          else
+            echo "${{ secrets.PROD_SSH_KEY }}" > ~/.ssh/deploy_key
+          fi
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ env.DEPLOY_HOST }} >> ~/.ssh/known_hosts
 
       - name: Validate deploy path
         run: |
@@ -155,7 +171,7 @@ jobs:
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key" \
             dist/apps/seguridad/browser/ \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.DEPLOY_PATH }}/
+            ${{ env.DEPLOY_USER }}@${{ env.DEPLOY_HOST }}:${{ env.DEPLOY_PATH }}/
 
       - name: Cleanup SSH key
         if: always()
