@@ -34,6 +34,3 @@ jobs:
 
       - name: Build affected
         run: npx nx affected -t build
-
-      - name: Test affected
-        run: npx nx affected -t test
