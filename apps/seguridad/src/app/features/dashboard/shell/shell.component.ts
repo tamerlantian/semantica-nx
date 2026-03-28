@@ -42,6 +42,11 @@ export class ShellComponent {
 
   readonly navItems: NavItem[] = [
     {
+      label: 'Inicio',
+      icon: 'pi pi-home',
+      route: '/dashboard/inicio',
+    },
+    {
       label: 'Seguridad',
       icon: 'pi pi-shield',
       children: [{ label: 'API Keys', icon: 'pi pi-key', route: '/dashboard/seguridad/api-keys' }],
