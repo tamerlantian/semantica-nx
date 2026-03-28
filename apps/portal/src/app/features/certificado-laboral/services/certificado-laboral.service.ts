@@ -14,4 +14,11 @@ export class CertificadoLaboralService extends BaseHttpService {
       empleado_id: params?.empleado_id,
     });
   }
+
+  imprimirCertificado(contratoId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/rhu/contrato/imprimir-certificado-laboral`, {
+      responseType: 'blob',
+      params: { contrato_id: contratoId },
+    });
+  }
 }

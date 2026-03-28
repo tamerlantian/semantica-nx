@@ -8,7 +8,7 @@ export class PagosService extends BaseHttpService {
   private readonly PAGOS_URL = '/rhu/pago/lista';
 
   getPagos(params?: BaseQueryParams): Observable<PaginatedResponse<Pago>> {
-    return this.get<PaginatedResponse<Pago>>(this.PAGOS_URL, {
+    return this.get<PaginatedResponse<Pago>>('/rhu/pago/lista-portal', {
       page: params?.page,
       size: params?.size,
       empleado_id: params?.empleado_id,

@@ -4,4 +4,7 @@ export interface Contrato {
   fecha_desde: string;
   fecha_hasta: string;
   vr_salario: number;
+  contrato_tipo_nombre: string;
+  cargo_nombre: string;
+  grupo_nombre: string;
 }
