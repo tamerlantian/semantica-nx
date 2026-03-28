@@ -1,6 +1,8 @@
 import { Injectable, computed } from '@angular/core';
 import { Observable, switchMap } from 'rxjs';
 import { BaseAuthService, AuthApiEndpoints } from '@semantica/core';
+import { PaginatedResponse } from '../../../core';
+import { Tenant } from '../../dashboard/models/tenant.model';
 import {
   AsociarEmpresaRequest,
   RegisterRequest,
@@ -25,7 +27,7 @@ export class AuthService extends BaseAuthService<Usuario> {
 
   protected readonly loginRoute = ROUTE_PATHS.auth.login;
 
-  readonly hasTenant = computed(() => !!this.currentUser()?.empleado_id);
+  readonly hasTenant = computed(() => !!this.currentUser()?.tenant_id);
 
   /**
    * Asocia al usuario autenticado con una empresa (tenant).
@@ -33,7 +35,12 @@ export class AuthService extends BaseAuthService<Usuario> {
    */
   asociarEmpresa(tenantId: number): Observable<Usuario | null> {
     const userId = this.currentUser()?.id;
-    const body: AsociarEmpresaRequest = { usuario_id: userId!, tenant_id: tenantId };
+
+    if (!userId) {
+      throw new Error('No se puede asociar empresa sin un usuario autenticado.');
+    }
+
+    const body: AsociarEmpresaRequest = { usuario_id: userId, tenant_id: tenantId };
     return this.http
       .post<void>(`${this.environment.apiUrl}${API_ENDPOINTS.auth.asociarEmpresa}`, body)
       .pipe(switchMap(() => this.me()));
@@ -46,6 +53,13 @@ export class AuthService extends BaseAuthService<Usuario> {
     return this.http.post<RegisterResponse>(
       `${this.environment.apiUrl}${API_ENDPOINTS.auth.register}`,
       data,
+    );
+  }
+
+  buscarTenants(nombre: string): Observable<PaginatedResponse<Tenant>> {
+    return this.http.get<PaginatedResponse<Tenant>>(
+      `${this.environment.apiUrl}${API_ENDPOINTS.tenant.buscar}`,
+      { params: { nombre } },
     );
   }
 }
