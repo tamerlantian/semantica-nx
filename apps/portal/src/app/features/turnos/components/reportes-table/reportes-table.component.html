@@ -1,0 +1,133 @@
+<div class="reportes-section">
+  <div class="reportes-section__header">
+    <div class="reportes-section__header-icon">
+      <i class="pi pi-file-edit"></i>
+    </div>
+    <div class="reportes-section__header-text">
+      <span class="reportes-section__title">Reportes</span>
+      <span class="reportes-section__subtitle">Historial de reportes enviados</span>
+    </div>
+  </div>
+
+  <p-table
+    [value]="reportes()"
+    [lazy]="true"
+    [paginator]="true"
+    [rows]="pageSize()"
+    [totalRecords]="totalRecords()"
+    [first]="first()"
+    [loading]="loading()"
+    (onLazyLoad)="onLazyLoad($event)"
+    dataKey="codigo_programacion_reporte_pk"
+    (onRowExpand)="onRowExpand($event)"
+    [expandedRowKeys]="expandedRows()"
+    styleClass="reportes-table"
+    [rowsPerPageOptions]="[10, 25, 50]"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 3rem"></th>
+        <th>Id</th>
+        <th>Fecha</th>
+        <th>Tipo</th>
+        <th>Días</th>
+        <th>Comentario</th>
+        <th>Estado</th>
+        <th>Respuestas</th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-reporte let-expanded="expanded">
+      <tr>
+        <td>
+          <p-button
+            type="button"
+            [pRowToggler]="reporte"
+            [text]="true"
+            [rounded]="true"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+            pTooltip="Ver respuestas"
+            tooltipPosition="top"
+            size="small"
+          />
+        </td>
+        <td>{{ reporte.codigo_programacion_reporte_pk }}</td>
+        <td>{{ reporte.fecha | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ reporte.programacion_reporte_tipo_nombre }}</td>
+        <td>{{ reporte.dia_desde }} — {{ reporte.dia_hasta }}</td>
+        <td>{{ reporte.comentario }}</td>
+        <td>
+          <p-tag
+            [value]="getEstado(reporte).label"
+            [severity]="$any(getEstado(reporte).severity)"
+          />
+        </td>
+        <td>{{ reporte.cantidad_respuestas }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template #expandedrow let-reporte>
+      <tr>
+        <td colspan="8" class="expansion-cell">
+          @if (respuestasLoading().has(reporte.codigo_programacion_reporte_pk)) {
+            <div class="respuestas-state">
+              <i class="pi pi-spin pi-spinner"></i>
+              <span>Cargando respuestas...</span>
+            </div>
+          } @else if (respuestasError().has(reporte.codigo_programacion_reporte_pk)) {
+            <div class="respuestas-state respuestas-error">
+              <i class="pi pi-exclamation-triangle"></i>
+              <span>{{ respuestasError().get(reporte.codigo_programacion_reporte_pk) }}</span>
+              <p-button
+                label="Reintentar"
+                icon="pi pi-refresh"
+                [text]="true"
+                size="small"
+                (click)="retryLoadRespuestas(reporte)"
+              />
+            </div>
+          } @else if (
+            respuestasCache().has(reporte.codigo_programacion_reporte_pk) &&
+            respuestasCache().get(reporte.codigo_programacion_reporte_pk)!.length === 0
+          ) {
+            <div class="respuestas-state">
+              <i class="pi pi-inbox"></i>
+              <span>No hay respuestas registradas.</span>
+            </div>
+          } @else if (respuestasCache().has(reporte.codigo_programacion_reporte_pk)) {
+            <div class="respuestas-timeline">
+              @for (
+                respuesta of respuestasCache().get(reporte.codigo_programacion_reporte_pk)!;
+                track respuesta.codigo_programacion_reporte_respuesta_pk
+              ) {
+                <div class="respuesta-item">
+                  <div class="respuesta-fecha">
+                    <i class="pi pi-calendar"></i>
+                    {{ respuesta.fecha | date: 'dd/MM/yyyy HH:mm' }}
+                    <span class="respuesta-usuario">
+                      <i class="pi pi-user"></i>
+                      {{ respuesta.usuario }}
+                    </span>
+                  </div>
+                  <div class="respuesta-texto">{{ respuesta.respuesta }}</div>
+                </div>
+              }
+            </div>
+          }
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="8" style="text-align: center; padding: 2rem; color: var(--p-text-muted-color)">
+          <i
+            class="pi pi-inbox"
+            style="font-size: 1.5rem; display: block; margin-bottom: 0.5rem"
+          ></i>
+          No hay reportes registrados.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

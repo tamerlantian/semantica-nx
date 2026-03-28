@@ -1,0 +1,84 @@
+<p-dialog
+  header="Nuevo reporte"
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '480px' }"
+  [breakpoints]="{ '575px': '95vw' }"
+  (onShow)="onShow()"
+  (onHide)="onHide()"
+>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <label for="tipo">Tipo de reporte <span style="color: var(--p-red-500)">*</span></label>
+      <p-select
+        id="tipo"
+        formControlName="codigo_programacion_reporte_tipo_fk"
+        [options]="tipos()"
+        optionLabel="nombre"
+        optionValue="codigo_programacion_reporte_tipo_pk"
+        placeholder="Seleccione un tipo"
+        [loading]="loadingTipos()"
+        [style]="{ width: '100%' }"
+      />
+      @if (
+        form.controls.codigo_programacion_reporte_tipo_fk.touched &&
+        form.controls.codigo_programacion_reporte_tipo_fk.hasError('required')
+      ) {
+        <small class="form-error">El tipo de reporte es requerido.</small>
+      }
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label for="dia_desde">Día desde <span style="color: var(--p-red-500)">*</span></label>
+        <p-inputnumber id="dia_desde" formControlName="dia_desde" [min]="1" [max]="31" />
+        @if (form.controls.dia_desde.touched && form.controls.dia_desde.hasError('required')) {
+          <small class="form-error">El día desde es requerido.</small>
+        }
+        @if (form.controls.dia_desde.touched && form.controls.dia_desde.hasError('min')) {
+          <small class="form-error">El día debe ser mayor a 0.</small>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="dia_hasta">Día hasta <span style="color: var(--p-red-500)">*</span></label>
+        <p-inputnumber id="dia_hasta" formControlName="dia_hasta" [min]="1" [max]="31" />
+        @if (form.controls.dia_hasta.touched && form.controls.dia_hasta.hasError('required')) {
+          <small class="form-error">El día hasta es requerido.</small>
+        }
+        @if (form.controls.dia_hasta.touched && form.controls.dia_hasta.hasError('min')) {
+          <small class="form-error">El día debe ser mayor a 0.</small>
+        }
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="comentario">Comentario <span style="color: var(--p-red-500)">*</span></label>
+      <textarea
+        pTextarea
+        id="comentario"
+        formControlName="comentario"
+        rows="4"
+        [style]="{ width: '100%' }"
+      ></textarea>
+      @if (form.controls.comentario.touched && form.controls.comentario.hasError('required')) {
+        <small class="form-error">El comentario es requerido.</small>
+      }
+      @if (form.controls.comentario.touched && form.controls.comentario.hasError('maxlength')) {
+        <small class="form-error">El comentario no puede exceder 500 caracteres.</small>
+      }
+    </div>
+  </form>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" severity="secondary" [text]="true" (click)="visible.set(false)" />
+    <p-button
+      label="Guardar"
+      icon="pi pi-check"
+      (click)="onSubmit()"
+      [loading]="submitting()"
+      [disabled]="submitting()"
+    />
+  </ng-template>
+</p-dialog>

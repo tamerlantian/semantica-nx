@@ -1,0 +1,53 @@
+<div class="page-container">
+  <app-page-header title="Turnos" subtitle="Programación de turnos del empleado" />
+
+  @if (loading()) {
+    <app-loading-spinner message="Cargando turnos..." />
+  } @else {
+    <div class="turnos-cards">
+      <app-turno-card
+        [turno]="turnoHoy()"
+        titulo="Hoy"
+        subtitulo="Tu turno actual"
+        icono="pi pi-calendar"
+        [activo]="true"
+        emptyIcon="pi pi-sun"
+        emptyTitle="Día libre"
+        emptyMessage="No tienes turno asignado para hoy"
+      />
+      <app-turno-card
+        [turno]="turnoManana()"
+        titulo="Mañana"
+        subtitulo="Próximo turno"
+        icono="pi pi-calendar-plus"
+        [activo]="false"
+        emptyIcon="pi pi-moon"
+        emptyTitle="Sin asignar"
+        emptyMessage="Aún no tienes turno para mañana"
+      />
+    </div>
+
+    @if (programaciones().length > 0) {
+      <app-programacion-table
+        [programaciones]="programaciones()"
+        [diasDelMes]="diasDelMes()"
+        [diaActual]="diaActual"
+      />
+    }
+
+    @if (empleadoId() > 0) {
+      <app-reportes-table [empleadoId]="empleadoId()" />
+    }
+
+    @if (programaciones().length > 0) {
+      <div class="turnos-bottom">
+        <div class="turnos-calendar">
+          <app-programacion-calendar [programaciones]="programaciones()" [diaActual]="diaActual" />
+        </div>
+        @if (turnos().length > 0) {
+          <app-turnos-legend [turnos]="turnos()" />
+        }
+      </div>
+    }
+  }
+</div>

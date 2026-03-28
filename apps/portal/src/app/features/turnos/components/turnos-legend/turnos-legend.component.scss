@@ -1,0 +1,183 @@
+.legend {
+  background: var(--p-content-background);
+  border: 1px solid var(--p-surface-200);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  height: 100%;
+
+  // --- Header ---
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--p-surface-200);
+  }
+
+  &__header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    background: var(--p-surface-100);
+    color: var(--p-text-muted-color);
+    font-size: 0.875rem;
+    flex-shrink: 0;
+  }
+
+  &__header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.0625rem;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--p-text-color);
+    line-height: 1.2;
+  }
+
+  &__subtitle {
+    font-size: 0.725rem;
+    color: var(--p-text-muted-color);
+    line-height: 1.2;
+  }
+
+  // --- Body ---
+  &__body {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0;
+  }
+
+  // --- Item row ---
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.625rem 1.25rem;
+    transition: background 0.15s ease;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--p-surface-100);
+    }
+
+    &:hover {
+      background: var(--p-surface-50);
+    }
+  }
+
+  // --- Badge (mirrors turno-badge del calendario) ---
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.375rem;
+    background: var(--p-surface-100);
+    color: var(--p-text-color);
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+  }
+
+  // --- Info ---
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--p-text-color);
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__hours {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.7rem;
+    color: var(--p-text-muted-color);
+    line-height: 1.2;
+
+    i {
+      font-size: 0.65rem;
+    }
+  }
+
+  // --- Flags (día/noche) ---
+  &__flags {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+  }
+
+  &__flag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.375rem;
+
+    i {
+      font-size: 0.7rem;
+    }
+
+    &--day {
+      background: color-mix(in srgb, #f59e0b 12%, transparent);
+      color: #b45309;
+    }
+
+    &--night {
+      background: color-mix(in srgb, var(--brand-navy) 10%, transparent);
+      color: var(--brand-navy);
+    }
+
+    &--rest {
+      background: color-mix(in srgb, #10b981 12%, transparent);
+      color: #047857;
+    }
+
+    &--novelty {
+      background: color-mix(in srgb, #f59e0b 12%, transparent);
+      color: #b45309;
+    }
+  }
+
+  // --- Empty ---
+  &__empty {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem 1.25rem;
+    font-size: 0.8rem;
+    color: var(--p-text-muted-color);
+
+    i {
+      font-size: 1rem;
+    }
+  }
+}
+
+// --- Dark mode ---
+:host-context(.dark-mode) {
+  .legend__flag--night {
+    background: color-mix(in srgb, var(--brand-blue) 15%, transparent);
+    color: var(--brand-blue);
+  }
+}

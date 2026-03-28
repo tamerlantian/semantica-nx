@@ -1,0 +1,54 @@
+<div class="page-container">
+  <app-page-header title="Certificado laboral" subtitle="Contratos del empleado" />
+
+  @if (loading() && contratos().length === 0) {
+    <app-loading-spinner message="Cargando contratos..." />
+  } @else if (error()) {
+    <app-error-alert [message]="error()!" [retryable]="false" />
+  } @else if (!loading() && contratos().length === 0) {
+    <app-empty-state
+      title="Sin contratos"
+      message="No se encontraron contratos registrados."
+      icon="pi pi-file"
+    />
+  } @else {
+    <div class="table-card">
+      <p-table
+        [value]="contratos()"
+        [lazy]="true"
+        [lazyLoadOnInit]="false"
+        [totalRecords]="totalRecords()"
+        [paginator]="true"
+        [rows]="pageSize()"
+        [first]="first()"
+        [loading]="loading()"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [rowHover]="true"
+        (onLazyLoad)="onLazyLoad($event)"
+        [scrollable]="true"
+        scrollHeight="600px"
+      >
+        <ng-template #header>
+          <tr>
+            <th>Contrato</th>
+            <th>Desde</th>
+            <th>Hasta</th>
+            <th>Salario</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-contrato>
+          <tr>
+            <td>{{ contrato.codigo_contrato_pk }}</td>
+            <td>{{ contrato.fecha_desde | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ contrato.fecha_hasta | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ contrato.vr_salario | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td>
+              <p-button icon="pi pi-print" severity="secondary" [text]="true" [rounded]="true" />
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+</div>

@@ -1,0 +1,180 @@
+<div class="shell-layout">
+  <!-- Navbar -->
+  <header class="shell-navbar">
+    <div class="navbar-start">
+      <button class="hamburger-btn" (click)="toggleDrawer()" aria-label="Abrir menú">
+        <i class="pi pi-bars"></i>
+      </button>
+      <div class="navbar-brand">
+        <img src="fondo_transparente.png" alt="Semantica Digital" class="navbar-logo-img" />
+      </div>
+    </div>
+
+    <div class="navbar-end">
+      @if (currentUser()) {
+        <div class="user-info">
+          <div class="user-avatar">{{ currentUser()!.email.charAt(0).toUpperCase() }}</div>
+          <span class="user-name">{{ currentUser()!.email }}</span>
+        </div>
+        <div class="navbar-divider"></div>
+      }
+      <button class="logout-btn" (click)="logout()" title="Cerrar sesión">
+        <i class="pi pi-sign-out"></i>
+        <span>Salir</span>
+      </button>
+    </div>
+  </header>
+
+  @if (!hasTenant()) {
+    <div class="tenant-banner">
+      <i class="pi pi-info-circle"></i>
+      <span>Tu cuenta no está asociada a ninguna empresa.</span>
+      <button class="tenant-banner__btn" (click)="openDialog()">Asociar empresa</button>
+    </div>
+  }
+
+  <div class="shell-body">
+    <!-- Sidebar desktop -->
+    <aside class="shell-sidebar">
+      <nav class="sidebar-nav">
+        <a class="nav-item" [routerLink]="inicioItem.route" routerLinkActive="active">
+          <i [class]="inicioItem.icon"></i>
+          <span>{{ inicioItem.label }}</span>
+        </a>
+
+        <p-accordion [multiple]="true" [value]="activeGroups" class="sidebar-accordion">
+          @for (group of navGroups; track group.label) {
+            <p-accordion-panel [value]="group.label">
+              <p-accordion-header>
+                <span>{{ group.label }}</span>
+              </p-accordion-header>
+              <p-accordion-content>
+                @for (item of group.children; track item.route) {
+                  @if (item.requiresTenant && !hasTenant()) {
+                    <span class="nav-item nav-item--disabled">
+                      <i [class]="item.icon"></i>
+                      <span>{{ item.label }}</span>
+                    </span>
+                  } @else {
+                    <a class="nav-item" [routerLink]="item.route" routerLinkActive="active">
+                      <i [class]="item.icon"></i>
+                      <span>{{ item.label }}</span>
+                    </a>
+                  }
+                }
+              </p-accordion-content>
+            </p-accordion-panel>
+          }
+        </p-accordion>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="shell-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>
+
+<!-- Drawer móvil -->
+<p-drawer
+  [visible]="drawerVisible()"
+  (visibleChange)="drawerVisible.set($event)"
+  position="left"
+  header="Menú"
+>
+  <nav class="sidebar-nav">
+    <a
+      class="nav-item"
+      [routerLink]="inicioItem.route"
+      routerLinkActive="active"
+      (click)="drawerVisible.set(false)"
+    >
+      <i [class]="inicioItem.icon"></i>
+      <span>{{ inicioItem.label }}</span>
+    </a>
+
+    <p-accordion [multiple]="true" [value]="activeGroups" class="sidebar-accordion">
+      @for (group of navGroups; track group.label) {
+        <p-accordion-panel [value]="group.label">
+          <p-accordion-header>
+            <i [class]="group.icon"></i>
+            <span>{{ group.label }}</span>
+          </p-accordion-header>
+          <p-accordion-content>
+            @for (item of group.children; track item.route) {
+              @if (item.requiresTenant && !hasTenant()) {
+                <span class="nav-item nav-item--disabled">
+                  <i [class]="item.icon"></i>
+                  <span>{{ item.label }}</span>
+                </span>
+              } @else {
+                <a
+                  class="nav-item"
+                  [routerLink]="item.route"
+                  routerLinkActive="active"
+                  (click)="drawerVisible.set(false)"
+                >
+                  <i [class]="item.icon"></i>
+                  <span>{{ item.label }}</span>
+                </a>
+              }
+            }
+          </p-accordion-content>
+        </p-accordion-panel>
+      }
+    </p-accordion>
+  </nav>
+</p-drawer>
+
+<!-- Dialog asociar empresa -->
+<p-dialog
+  header="Asociar empresa"
+  [visible]="dialogVisible()"
+  (visibleChange)="dialogVisible.set($event)"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '420px' }"
+  [breakpoints]="{ '500px': '90vw' }"
+>
+  <form [formGroup]="form" (ngSubmit)="onAsociar()" novalidate class="asociar-form">
+    <p class="asociar-form__desc">
+      Ingresa el código de empresa proporcionado por tu empleador para vincular tu cuenta.
+    </p>
+
+    @if (errorMessage()) {
+      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+    }
+
+    <div class="field">
+      <label for="tenantId" class="field__label">Código de empresa</label>
+      <input
+        pInputText
+        id="tenantId"
+        type="text"
+        formControlName="tenantId"
+        fluid
+        placeholder="Ej: 1001"
+        [invalid]="tenantIdControl.invalid && tenantIdControl.touched"
+        aria-describedby="tenantId-error"
+      />
+      @if (tenantIdControl.invalid && tenantIdControl.touched) {
+        <small id="tenantId-error" class="field__error">
+          @if (tenantIdControl.hasError('required')) {
+            El código de empresa es requerido.
+          } @else if (tenantIdControl.hasError('pattern')) {
+            El código debe ser numérico.
+          }
+        </small>
+      }
+    </div>
+
+    <p-button
+      type="submit"
+      label="Asociar empresa"
+      fluid
+      [loading]="isLoading()"
+      [disabled]="isLoading()"
+    />
+  </form>
+</p-dialog>

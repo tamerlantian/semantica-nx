@@ -1,0 +1,57 @@
+<div class="calendario-section">
+  <div class="calendario-section__header">
+    <div class="calendario-section__header-icon">
+      <i class="pi pi-calendar"></i>
+    </div>
+    <div class="calendario-section__header-text">
+      <span class="calendario-section__title">Calendario del mes</span>
+      <span class="calendario-section__subtitle">Vista mensual de turnos asignados</span>
+    </div>
+  </div>
+
+  @if (leyendaPuestos().length > 0) {
+    <div class="calendario-legend">
+      @for (item of leyendaPuestos(); track item.puesto) {
+        <div class="calendario-legend__item">
+          <span class="calendario-legend__dot" [style.--dot-color]="item.color"></span>
+          <span class="calendario-legend__label">{{ item.puesto }}</span>
+        </div>
+      }
+    </div>
+  }
+
+  <div class="calendario-grid">
+    <div class="calendario-grid__header">
+      @for (dia of diasSemana; track dia) {
+        <div class="calendario-grid__header-cell">{{ dia }}</div>
+      }
+    </div>
+
+    @for (semana of semanas(); track $index) {
+      <div class="calendario-grid__row">
+        @for (dia of semana; track $index) {
+          <div
+            class="calendario-cell"
+            [class.calendario-cell--hoy]="dia.esDelMes && dia.dia === diaActual()"
+            [class.calendario-cell--fuera]="!dia.esDelMes"
+            [pTooltip]="dia.turnos.length > 0 ? buildCellTooltip(dia.turnos) : ''"
+            tooltipPosition="top"
+          >
+            @if (dia.esDelMes) {
+              <span class="calendario-cell__numero">{{ dia.dia }}</span>
+              @if (dia.turnos.length > 0) {
+                <div class="calendario-cell__turnos">
+                  @for (turno of dia.turnos; track turno.codigo + turno.cliente) {
+                    <span class="turno-badge" [style.--badge-color]="getPuestoColor(turno.puesto)">
+                      {{ turno.codigo }}
+                    </span>
+                  }
+                </div>
+              }
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

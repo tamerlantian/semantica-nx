@@ -1,0 +1,83 @@
+<div class="landing">
+  <!-- ── Navigation ─────────────────────────────── -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <div class="nav__logo">
+        <img src="fondo_transparente.png" alt="Semantica Seguridad" class="nav__logo-img" />
+      </div>
+
+      <div class="nav__links">
+        <a href="mailto:contacto@semantica.com.co" class="nav__link">Contáctenos</a>
+        <a href="#acerca" class="nav__link">Acerca de</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Main ───────────────────────────────────── -->
+  <main class="main">
+    <div class="main__bg" aria-hidden="true">
+      <div class="main__orb main__orb--1"></div>
+      <div class="main__orb main__orb--2"></div>
+      <div class="main__grid"></div>
+    </div>
+
+    <div class="main__content">
+      <div class="main__eyebrow">Semantica ERP API</div>
+
+      <div class="panels">
+        <!-- Panel izquierdo: Administración -->
+        <div class="panel panel--left">
+          <div class="panel__icon">
+            <i class="pi pi-shield"></i>
+          </div>
+          <div class="panel__body">
+            <h2 class="panel__title">Administración</h2>
+            <p class="panel__desc">
+              Gestione las claves de acceso a la API y configure los permisos de seguridad de su
+              empresa desde un solo lugar.
+            </p>
+          </div>
+          <a routerLink="/auth/login" class="btn btn--primary">
+            Iniciar sesión
+            <i class="pi pi-arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- Divisor -->
+        <div class="divider" aria-hidden="true"></div>
+
+        <!-- Panel derecho: API Reference -->
+        <div class="panel panel--right">
+          <div class="panel__icon panel__icon--blue">
+            <i class="pi pi-code"></i>
+          </div>
+          <div class="panel__body">
+            <h2 class="panel__title">API Reference</h2>
+            <p class="panel__desc">
+              Explore la documentación completa de nuestros servicios y comience a integrar su
+              aplicación con la plataforma.
+            </p>
+          </div>
+          <a
+            href="https://semanticadigitalsas.mintlify.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn--ghost"
+          >
+            Ir a documentación
+            <i class="pi pi-external-link"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────── -->
+  <footer class="footer" id="acerca">
+    <div class="footer__inner">
+      <span class="footer__copy"
+        >&copy; {{ currentYear }} Semantica. Todos los derechos reservados.</span
+      >
+    </div>
+  </footer>
+</div>

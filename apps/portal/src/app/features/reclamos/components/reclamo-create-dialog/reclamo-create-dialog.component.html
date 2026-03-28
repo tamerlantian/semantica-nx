@@ -1,0 +1,60 @@
+<p-dialog
+  header="Nuevo reclamo"
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '480px' }"
+  [breakpoints]="{ '575px': '95vw' }"
+  (onShow)="onShow()"
+  (onHide)="onHide()"
+>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <label for="concepto">Concepto</label>
+      <p-select
+        id="concepto"
+        formControlName="codigo_reclamo_concepto_fk"
+        [options]="conceptos()"
+        optionLabel="nombre"
+        optionValue="codigo_reclamo_concepto_pk"
+        placeholder="Seleccione un concepto"
+        [loading]="loadingConceptos()"
+        [style]="{ width: '100%' }"
+      />
+      @if (
+        form.controls.codigo_reclamo_concepto_fk.touched &&
+        form.controls.codigo_reclamo_concepto_fk.hasError('required')
+      ) {
+        <small class="form-error">El concepto es requerido.</small>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="descripcion">Descripción</label>
+      <textarea
+        pTextarea
+        id="descripcion"
+        formControlName="descripcion"
+        rows="4"
+        [style]="{ width: '100%' }"
+      ></textarea>
+      @if (form.controls.descripcion.touched && form.controls.descripcion.hasError('required')) {
+        <small class="form-error">La descripción es requerida.</small>
+      }
+      @if (form.controls.descripcion.touched && form.controls.descripcion.hasError('maxlength')) {
+        <small class="form-error">La descripción no puede exceder 2000 caracteres.</small>
+      }
+    </div>
+  </form>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" severity="secondary" [text]="true" (click)="visible.set(false)" />
+    <p-button
+      label="Guardar"
+      icon="pi pi-check"
+      (click)="onSubmit()"
+      [loading]="submitting()"
+      [disabled]="submitting()"
+    />
+  </ng-template>
+</p-dialog>

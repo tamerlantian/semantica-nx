@@ -1,0 +1,49 @@
+.turnos-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+app-programacion-table {
+  display: block;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+app-reportes-table {
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+.turnos-bottom {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: start;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.turnos-calendar {
+  width: 50%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+app-turnos-legend {
+  display: block;
+  width: 18rem;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}

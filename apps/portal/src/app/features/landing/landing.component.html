@@ -1,0 +1,299 @@
+<div class="landing">
+  <!-- ── Navigation ─────────────────────────────── -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <div class="nav__logo">
+        <img src="fondo_transparente.png" alt="Semantica Portal" class="nav__logo-img" />
+      </div>
+
+      <div class="nav__links">
+        <a href="#contacto" class="nav__link">Contáctenos</a>
+        <a href="#acerca" class="nav__link">Acerca de</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Main ───────────────────────────────────── -->
+  <main class="main">
+    <div class="main__bg" aria-hidden="true">
+      <div class="main__orb main__orb--1"></div>
+      <div class="main__orb main__orb--2"></div>
+      <div class="main__grid"></div>
+    </div>
+
+    <div class="main__content">
+      <div class="main__hero-header">
+        <span class="main__eyebrow">Semantica ERP</span>
+        <h1 class="main__headline">Tu portal de gestión laboral</h1>
+        <p class="main__subtitle">
+          Accede a tu nómina, certificaciones, vacaciones y más desde un solo lugar.
+        </p>
+      </div>
+
+      <div class="panels">
+        <!-- Panel izquierdo: Portal de Empleados -->
+        <div class="panel panel--left">
+          <div class="panel__icon">
+            <i class="pi pi-users"></i>
+          </div>
+          <div class="panel__body">
+            <h2 class="panel__title">Portal de Empleados</h2>
+            <p class="panel__desc">
+              Consulta tu nómina, certificaciones, vacaciones, seguridad social y mucho más desde un
+              solo lugar.
+            </p>
+          </div>
+          <a routerLink="/auth/login" class="btn btn--primary">
+            Iniciar sesión
+            <i class="pi pi-arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- Divisor -->
+        <div class="divider" aria-hidden="true"></div>
+
+        <!-- Panel derecho: Novedades -->
+        <div class="panel panel--right">
+          <div class="panel__icon panel__icon--blue">
+            <i class="pi pi-megaphone"></i>
+          </div>
+          <div class="panel__body">
+            <h2 class="panel__title">Novedades</h2>
+            <p class="panel__desc">
+              Nuevos módulos disponibles: programación de turnos, capacitaciones en línea y
+              certificado laboral histórico.
+            </p>
+          </div>
+          <a
+            href="https://wa.me/573125829803"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn--ghost"
+          >
+            Escribir por WhatsApp
+            <i class="pi pi-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── FAQs ──────────────────────────────────── -->
+  <section class="faq">
+    <div class="faq__inner">
+      <div class="faq__header">
+        <span class="faq__eyebrow">Soporte</span>
+        <h2 class="faq__title">Preguntas frecuentes</h2>
+        <p class="faq__subtitle">
+          Encuentra respuestas a las consultas más comunes sobre el portal de empleados.
+        </p>
+      </div>
+
+      <div class="faq__list">
+        @for (item of faqItems; track item.question; let i = $index) {
+          <div class="faq__item" [class.faq__item--open]="openIndex() === i">
+            <button class="faq__question" (click)="toggle(i)">
+              <span>{{ item.question }}</span>
+              <i class="pi pi-chevron-down faq__chevron"></i>
+            </button>
+            <div class="faq__answer">
+              <p>{{ item.answer }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Acerca de ───────────────────────────────── -->
+  <section class="about" id="acerca">
+    <div class="about__inner">
+      <div class="about__header">
+        <span class="about__eyebrow">Nosotros</span>
+        <h2 class="about__title">Conoce Semantica</h2>
+      </div>
+
+      <div class="about__body">
+        <div class="about__narrative">
+          <p class="about__lead">Soluciones tecnológicas para la gestión laboral de tu empresa.</p>
+          <p class="about__desc">
+            Semantica es una plataforma diseñada para centralizar y simplificar la gestión laboral
+            de tu empresa. Desde nuestro portal, empleados y administradores acceden a nómina,
+            certificaciones, vacaciones, seguridad social y más, todo en un solo lugar.
+          </p>
+          <p class="about__desc">
+            Nuestro objetivo es transformar la manera en que las empresas gestionan sus procesos de
+            talento humano, ofreciendo herramientas modernas, seguras e integradas con tu sistema
+            ERP.
+          </p>
+        </div>
+
+        <div class="about__divider" aria-hidden="true"></div>
+
+        <div class="about__pillars">
+          <div class="about__pillar">
+            <i class="pi pi-shield about__pillar-icon"></i>
+            <div class="about__pillar-content">
+              <h3 class="about__pillar-title">Seguridad</h3>
+              <p class="about__pillar-desc">Datos protegidos con los más altos estándares.</p>
+            </div>
+          </div>
+
+          <div class="about__pillar">
+            <i class="pi pi-clock about__pillar-icon"></i>
+            <div class="about__pillar-content">
+              <h3 class="about__pillar-title">Disponibilidad</h3>
+              <p class="about__pillar-desc">Acceso 24/7 desde cualquier dispositivo.</p>
+            </div>
+          </div>
+
+          <div class="about__pillar">
+            <i class="pi pi-headphones about__pillar-icon"></i>
+            <div class="about__pillar-content">
+              <h3 class="about__pillar-title">Soporte</h3>
+              <p class="about__pillar-desc">Equipo dedicado para resolver tus dudas.</p>
+            </div>
+          </div>
+
+          <div class="about__pillar">
+            <i class="pi pi-sync about__pillar-icon"></i>
+            <div class="about__pillar-content">
+              <h3 class="about__pillar-title">Integración</h3>
+              <p class="about__pillar-desc">Conectado directamente con tu sistema ERP.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contáctenos ──────────────────────────────── -->
+  <section class="contact" id="contacto">
+    <div class="contact__inner">
+      <div class="contact__header">
+        <span class="contact__eyebrow">Contacto</span>
+        <h2 class="contact__title">Estamos para ayudarte</h2>
+        <p class="contact__subtitle">
+          Completa el formulario y nos pondremos en contacto contigo lo antes posible.
+        </p>
+      </div>
+
+      <div class="contact__card">
+        @if (contactSent()) {
+          <div class="success-state">
+            <div class="success-state__icon">
+              <i class="pi pi-check-circle"></i>
+            </div>
+            <h2 class="success-state__title">¡Mensaje enviado!</h2>
+            <p class="success-state__desc">Gracias por contactarnos. Te responderemos pronto.</p>
+            <button class="success-state__back" (click)="contactSent.set(false)">
+              Enviar otro mensaje
+            </button>
+          </div>
+        } @else {
+          <form [formGroup]="contactForm" (ngSubmit)="submitContact()" class="contact__form">
+            <div class="contact__row">
+              <div class="contact__field">
+                <label class="contact__label" for="contact-nombre">Nombre</label>
+                <input
+                  pInputText
+                  id="contact-nombre"
+                  type="text"
+                  fluid
+                  formControlName="nombre"
+                  placeholder="Tu nombre completo"
+                />
+              </div>
+              <div class="contact__field">
+                <label class="contact__label" for="contact-correo">Correo electrónico</label>
+                <input
+                  pInputText
+                  id="contact-correo"
+                  type="email"
+                  fluid
+                  formControlName="correo"
+                  placeholder="correo&#64;ejemplo.com"
+                  [invalid]="correoControl.invalid && correoControl.touched"
+                />
+                @if (correoControl.invalid && correoControl.touched) {
+                  <small class="form-error">
+                    @if (correoControl.hasError('required')) {
+                      El correo es requerido.
+                    } @else if (correoControl.hasError('email')) {
+                      Ingresa un correo válido.
+                    }
+                  </small>
+                }
+              </div>
+            </div>
+
+            <div class="contact__row">
+              <div class="contact__field">
+                <label class="contact__label" for="contact-telefono">Teléfono</label>
+                <input
+                  pInputText
+                  id="contact-telefono"
+                  type="tel"
+                  fluid
+                  formControlName="telefono"
+                  placeholder="+57 300 000 0000"
+                  [invalid]="telefonoControl.invalid && telefonoControl.touched"
+                />
+                @if (telefonoControl.invalid && telefonoControl.touched) {
+                  <small class="form-error">El teléfono es requerido.</small>
+                }
+              </div>
+              <div class="contact__field">
+                <label class="contact__label" for="contact-empresa">Empresa</label>
+                <input
+                  pInputText
+                  id="contact-empresa"
+                  type="text"
+                  fluid
+                  formControlName="empresa"
+                  placeholder="Nombre de la empresa"
+                />
+              </div>
+            </div>
+
+            <div class="contact__field">
+              <label class="contact__label" for="contact-descripcion">Descripción</label>
+              <textarea
+                pTextarea
+                id="contact-descripcion"
+                fluid
+                formControlName="descripcion"
+                placeholder="¿En qué podemos ayudarte?"
+                rows="4"
+              ></textarea>
+            </div>
+
+            <p-button
+              type="submit"
+              label="Enviar mensaje"
+              icon="pi pi-send"
+              fluid
+              [loading]="contactSending()"
+              [disabled]="contactSending()"
+              styleClass="contact__submit"
+            />
+          </form>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <span class="footer__copy"
+        >&copy; {{ currentYear }} Semantica. Todos los derechos reservados.</span
+      >
+      <nav class="footer__links">
+        <a href="#contacto" class="footer__link">Contáctenos</a>
+        <a routerLink="/politica-de-privacidad" class="footer__link">Política de privacidad</a>
+        <a routerLink="/terminos-de-uso" class="footer__link">Términos de uso</a>
+      </nav>
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,162 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main, dev]
+
+permissions:
+  contents: read
+
+jobs:
+  check-affected:
+    runs-on: ubuntu-latest
+    outputs:
+      portal: ${{ steps.check.outputs.portal }}
+      seguridad: ${{ steps.check.outputs.seguridad }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Derive SHAs for Nx affected
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Check affected apps
+        id: check
+        run: |
+          AFFECTED=$(npx nx show projects --affected --type=app 2>/dev/null || echo "")
+          echo "portal=$(echo "$AFFECTED" | grep -q "^portal$" && echo true || echo false)" >> $GITHUB_OUTPUT
+          echo "seguridad=$(echo "$AFFECTED" | grep -q "^seguridad$" && echo true || echo false)" >> $GITHUB_OUTPUT
+
+  deploy-portal:
+    needs: check-affected
+    if: needs.check-affected.outputs.portal == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build (staging)
+        if: github.ref == 'refs/heads/dev'
+        run: npx nx build portal --configuration=staging
+
+      - name: Build (prod)
+        if: github.ref == 'refs/heads/main'
+        run: npx nx build portal --configuration=production
+
+      - name: Set deploy variables (dev)
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          echo "DEPLOY_PATH=${{ secrets.PORTAL_DEV_DEPLOY_PATH }}" >> $GITHUB_ENV
+
+      - name: Set deploy variables (prod)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "DEPLOY_PATH=${{ secrets.PORTAL_PROD_DEPLOY_PATH }}" >> $GITHUB_ENV
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Validate deploy path
+        run: |
+          if [[ "$DEPLOY_PATH" == "/var/www/html" || "$DEPLOY_PATH" == "/var/www" || -z "$DEPLOY_PATH" ]]; then
+            echo "ERROR: DEPLOY_PATH '$DEPLOY_PATH' is too broad."
+            exit 1
+          fi
+
+      - name: Deploy via rsync
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key" \
+            dist/apps/portal/browser/ \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.DEPLOY_PATH }}/
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
+
+  deploy-seguridad:
+    needs: check-affected
+    if: needs.check-affected.outputs.seguridad == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build (staging)
+        if: github.ref == 'refs/heads/dev'
+        run: npx nx build seguridad --configuration=staging
+
+      - name: Build (prod)
+        if: github.ref == 'refs/heads/main'
+        run: npx nx build seguridad --configuration=production
+
+      - name: Set deploy variables (dev)
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          echo "DEPLOY_PATH=${{ secrets.SEGURIDAD_DEV_DEPLOY_PATH }}" >> $GITHUB_ENV
+
+      - name: Set deploy variables (prod)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "DEPLOY_PATH=${{ secrets.SEGURIDAD_PROD_DEPLOY_PATH }}" >> $GITHUB_ENV
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Validate deploy path
+        run: |
+          if [[ "$DEPLOY_PATH" == "/var/www/html" || "$DEPLOY_PATH" == "/var/www" || -z "$DEPLOY_PATH" ]]; then
+            echo "ERROR: DEPLOY_PATH '$DEPLOY_PATH' is too broad."
+            exit 1
+          fi
+
+      - name: Deploy via rsync
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key" \
+            dist/apps/seguridad/browser/ \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.DEPLOY_PATH }}/
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

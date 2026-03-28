@@ -1,0 +1,57 @@
+<div class="legend">
+  <div class="legend__header">
+    <div class="legend__header-icon">
+      <i class="pi pi-list"></i>
+    </div>
+    <div class="legend__header-text">
+      <span class="legend__title">Tipos de turno</span>
+      <span class="legend__subtitle">Referencia de códigos asignados</span>
+    </div>
+  </div>
+
+  <div class="legend__body">
+    @if (turnos().length === 0) {
+      <div class="legend__empty">
+        <i class="pi pi-inbox"></i>
+        <span>Sin turnos disponibles</span>
+      </div>
+    } @else {
+      @for (turno of turnos(); track turno.codigo_turno_pk) {
+        <div class="legend__item">
+          <span class="legend__badge">{{ turno.codigo_turno_pk }}</span>
+          <div class="legend__info">
+            <span class="legend__name">{{ turno.nombre }}</span>
+            @if (turno.hora_desde && turno.hora_hasta) {
+              <span class="legend__hours">
+                <i class="pi pi-clock"></i>
+                {{ turno.hora_desde }} – {{ turno.hora_hasta }}
+              </span>
+            }
+          </div>
+          <div class="legend__flags">
+            @if (turno.novedad) {
+              <span class="legend__flag legend__flag--novelty" title="Novedad">
+                <i class="pi pi-exclamation-circle"></i>
+              </span>
+            } @else if (turno.descanso) {
+              <span class="legend__flag legend__flag--rest" title="Descanso">
+                <i class="pi pi-home"></i>
+              </span>
+            } @else {
+              @if (turno.dia) {
+                <span class="legend__flag legend__flag--day" title="Diurno">
+                  <i class="pi pi-sun"></i>
+                </span>
+              }
+              @if (turno.noche) {
+                <span class="legend__flag legend__flag--night" title="Nocturno">
+                  <i class="pi pi-moon"></i>
+                </span>
+              }
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

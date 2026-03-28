@@ -1,0 +1,121 @@
+{
+  "name": "portal",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/portal/src",
+  "tags": ["scope:portal", "type:app"],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputPath": "dist/apps/portal",
+      "options": {
+        "browser": "apps/portal/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/portal/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/portal/public"
+          },
+          {
+            "glob": "*.woff2",
+            "input": "node_modules/geist/dist/fonts/geist-sans",
+            "output": "fonts/geist"
+          }
+        ],
+        "styles": ["apps/portal/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/styles/src"]
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kB",
+              "maximumError": "1MB"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "8kB",
+              "maximumError": "16kB"
+            }
+          ],
+          "outputHashing": "all",
+          "fileReplacements": [
+            {
+              "replace": "apps/portal/src/environments/environment.ts",
+              "with": "apps/portal/src/environments/environment.prod.ts"
+            }
+          ]
+        },
+        "staging": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kB",
+              "maximumError": "1MB"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "8kB",
+              "maximumError": "16kB"
+            }
+          ],
+          "outputHashing": "all",
+          "fileReplacements": [
+            {
+              "replace": "apps/portal/src/environments/environment.ts",
+              "with": "apps/portal/src/environments/environment.staging.ts"
+            }
+          ]
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "portal:build:production"
+        },
+        "development": {
+          "buildTarget": "portal:build:development",
+          "proxyConfig": "apps/portal/proxy.conf.json"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "test": {
+      "executor": "@angular/build:karma",
+      "options": {
+        "polyfills": ["zone.js", "zone.js/testing"],
+        "tsConfig": "apps/portal/tsconfig.spec.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/portal/public"
+          },
+          {
+            "glob": "*.woff2",
+            "input": "node_modules/geist/dist/fonts/geist-sans",
+            "output": "fonts/geist"
+          }
+        ],
+        "styles": ["apps/portal/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/styles/src"]
+        }
+      }
+    }
+  }
+}

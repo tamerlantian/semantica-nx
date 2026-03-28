@@ -1,0 +1,41 @@
+// Tokens
+export {
+  ENVIRONMENT,
+  ROUTE_PATHS,
+  AUTH_SERVICE,
+  AUTH_SKIP_URLS,
+  type SemanticaEnvironment,
+  type RoutePaths,
+  type AuthServiceContract,
+} from './lib/tokens';
+
+// Guards
+export { authGuard } from './lib/guards/auth.guard';
+export { publicGuard } from './lib/guards/public.guard';
+
+// Interceptors
+export { authInterceptor } from './lib/interceptors/auth.interceptor';
+export { errorInterceptor } from './lib/interceptors/error.interceptor';
+
+// Services
+export { ToastService } from './lib/services/toast.service';
+export { TokenRefreshService } from './lib/services/token-refresh.service';
+
+// Models
+export {
+  type BaseUsuario,
+  type LoginRequest,
+  type AuthResponse,
+  type ResendVerificationRequest,
+} from './lib/models/auth.model';
+
+// Utils
+export {
+  extractErrorMessage,
+  parseApiError,
+  type ApiError,
+  type ApiErrorResponse,
+} from './lib/utils/error.utils';
+
+// Auth
+export { BaseAuthService, type AuthApiEndpoints } from './lib/auth/base-auth.service';

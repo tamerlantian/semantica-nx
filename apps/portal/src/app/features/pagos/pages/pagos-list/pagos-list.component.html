@@ -1,0 +1,71 @@
+<div class="page-container">
+  <app-page-header title="Pagos" subtitle="Historial de pagos del empleado" />
+
+  @if (loading() && pagos().length === 0) {
+    <app-loading-spinner message="Cargando pagos..." />
+  } @else if (error()) {
+    <app-error-alert [message]="error()!" [retryable]="false" />
+  } @else if (!loading() && pagos().length === 0) {
+    <app-empty-state
+      title="Sin pagos"
+      message="No se encontraron pagos registrados."
+      icon="pi pi-wallet"
+    />
+  } @else {
+    <div class="table-card">
+      <p-table
+        [value]="pagos()"
+        [lazy]="true"
+        [lazyLoadOnInit]="false"
+        [totalRecords]="totalRecords()"
+        [paginator]="true"
+        [rows]="pageSize()"
+        [first]="first()"
+        [loading]="loading()"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [rowHover]="true"
+        (onLazyLoad)="onLazyLoad($event)"
+        [scrollable]="true"
+        scrollHeight="600px"
+      >
+        <ng-template #header>
+          <tr>
+            <th>Id</th>
+            <th>Tipo</th>
+            <th>Número</th>
+            <th>Desde</th>
+            <th>Hasta</th>
+            <th>Salario</th>
+            <th>Devengado</th>
+            <th>Deducciones</th>
+            <th>Neto</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-pago>
+          <tr>
+            <td>{{ pago.codigo_pago_pk }}</td>
+            <td>{{ pago.pago_tipo_nombre }}</td>
+            <td>{{ pago.numero }}</td>
+            <td>{{ pago.fecha_desde | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ pago.fecha_hasta | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ pago.vr_salario_contrato | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td>{{ pago.vr_devengado | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td>{{ pago.vr_deduccion | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td>{{ pago.vr_neto | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td>
+              <p-button
+                icon="pi pi-print"
+                severity="secondary"
+                [text]="true"
+                [rounded]="true"
+                [loading]="printing() === pago.codigo_pago_pk"
+                (click)="imprimirPago(pago)"
+              />
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+</div>

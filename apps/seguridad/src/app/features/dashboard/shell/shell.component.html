@@ -1,0 +1,98 @@
+<div class="shell-layout">
+  <!-- Navbar -->
+  <header class="shell-navbar">
+    <div class="navbar-start">
+      <button class="hamburger-btn" (click)="toggleDrawer()" aria-label="Abrir menú">
+        <i class="pi pi-bars"></i>
+      </button>
+      <div class="navbar-brand">
+        <img src="fondo_transparente.png" alt="Semantica Seguridad" class="navbar-logo-img" />
+      </div>
+    </div>
+
+    <div class="navbar-end">
+      @if (currentUser()) {
+        <div class="user-info">
+          <div class="user-avatar">{{ currentUser()!.email.charAt(0).toUpperCase() }}</div>
+          <span class="user-name">{{ currentUser()!.email }}</span>
+        </div>
+        <div class="navbar-divider"></div>
+      }
+      <button class="logout-btn" (click)="logout()" title="Cerrar sesión">
+        <i class="pi pi-sign-out"></i>
+        <span>Salir</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="shell-body">
+    <!-- Sidebar desktop -->
+    <aside class="shell-sidebar">
+      <nav class="sidebar-nav">
+        <ng-container *ngTemplateOutlet="navTpl; context: { $implicit: navItems }" />
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="shell-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>
+
+<!-- Drawer móvil -->
+<p-drawer
+  [visible]="drawerVisible()"
+  (visibleChange)="drawerVisible.set($event)"
+  position="left"
+  header="Menú"
+>
+  <nav class="sidebar-nav">
+    <ng-container *ngTemplateOutlet="navTpl; context: { $implicit: navItems }" />
+  </nav>
+</p-drawer>
+
+<!-- Template compartido para la navegación -->
+<ng-template #navTpl let-items>
+  @for (item of items; track item.label) {
+    @if (isNavGroup(item)) {
+      <!-- Grupo colapsable -->
+      <button
+        class="nav-group-header"
+        [class.expanded]="isExpanded(item.label)"
+        (click)="toggleGroup(item.label)"
+        [attr.aria-expanded]="isExpanded(item.label)"
+      >
+        <i [class]="item.icon"></i>
+        <span>{{ item.label }}</span>
+        <i class="nav-group-chevron pi pi-chevron-right"></i>
+      </button>
+      @if (isExpanded(item.label)) {
+        <div class="nav-children">
+          @for (child of item.children; track child.route) {
+            <a
+              class="nav-item nav-item--child"
+              [routerLink]="child.route"
+              routerLinkActive="active"
+              (click)="drawerVisible.set(false)"
+            >
+              <i [class]="child.icon"></i>
+              <span>{{ child.label }}</span>
+            </a>
+          }
+        </div>
+      }
+    } @else {
+      <!-- Ítem directo -->
+      <a
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        (click)="drawerVisible.set(false)"
+      >
+        <i [class]="item.icon"></i>
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  }
+</ng-template>

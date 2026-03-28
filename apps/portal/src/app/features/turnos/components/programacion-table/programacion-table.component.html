@@ -1,0 +1,59 @@
+<div class="programacion-section">
+  <div class="programacion-section__header">
+    <div class="programacion-section__header-icon">
+      <i class="pi pi-table"></i>
+    </div>
+    <div class="programacion-section__header-text">
+      <span class="programacion-section__title">Programación del mes</span>
+      <span class="programacion-section__subtitle">Detalle completo de turnos asignados</span>
+    </div>
+  </div>
+
+  <p-table
+    [value]="programaciones()"
+    [scrollable]="true"
+    scrollDirection="both"
+    styleClass="programacion-table"
+  >
+    <ng-template #header>
+      <tr class="dias-header-row">
+        <th class="accion-col"></th>
+        @for (dia of diasDelMes(); track dia) {
+          <th style="min-width: 48px; text-align: center" [class.dia-actual]="dia === diaActual()">
+            {{ dia }}
+          </th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template #body let-prog>
+      <tr>
+        <td [attr.colspan]="totalColumnas() + 1" class="prog-info-cell">
+          {{ prog.tercero_nombre_corto }} — {{ prog.puesto_nombre }}
+        </td>
+      </tr>
+      <tr>
+        <td class="accion-col">
+          <p-button
+            label="Reportar"
+            icon="pi pi-flag"
+            severity="warn"
+            size="small"
+            [text]="true"
+            (click)="abrirReporte(prog)"
+          />
+        </td>
+        @for (dia of diasDelMes(); track dia) {
+          <td style="min-width: 48px; text-align: center" [class.dia-actual]="dia === diaActual()">
+            {{ prog['dia_' + dia] || '-' }}
+          </td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<app-reporte-create-dialog
+  [(visible)]="reporteDialogVisible"
+  [codigoProgramacion]="programacionSeleccionada()"
+  (created)="onReporteCreado()"
+/>
