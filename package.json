@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "release": "commit-and-tag-version",
+    "release:first": "commit-and-tag-version --first-release"
   },
   "dependencies": {
     "@angular/animations": "^20.3.17",
