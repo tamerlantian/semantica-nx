@@ -5,11 +5,12 @@ import { ProgramacionEmpleado, Turno, TurnoDelDia } from '../../models/turno.mod
 import { extraerTurnosUnicos, obtenerTurnosHoyManana } from '../../helpers/turno.helper';
 import { PageHeaderComponent, LoadingSpinnerComponent } from '@semantica/ui';
 import { TurnoCardComponent } from '../../components/turno-card/turno-card.component';
+import { ProgramacionCalendarComponent } from '../../components/programacion-calendar/programacion-calendar.component';
 
 @Component({
   selector: 'app-turnos-list',
   standalone: true,
-  imports: [PageHeaderComponent, LoadingSpinnerComponent, TurnoCardComponent],
+  imports: [PageHeaderComponent, LoadingSpinnerComponent, TurnoCardComponent, ProgramacionCalendarComponent],
   templateUrl: './turnos-list.component.html',
   styleUrl: './turnos-list.component.scss',
 })
@@ -19,7 +20,10 @@ export class TurnosListComponent implements OnInit {
 
   readonly turnoHoy = signal<TurnoDelDia | null>(null);
   readonly turnoManana = signal<TurnoDelDia | null>(null);
+  readonly programaciones = signal<ProgramacionEmpleado[]>([]);
   readonly loading = signal(true);
+
+  readonly diaActual = new Date().getDate();
 
   ngOnInit(): void {
     const user = this.authService.currentUser();
@@ -30,6 +34,7 @@ export class TurnosListComponent implements OnInit {
 
     obtenerTurnosHoyManana(this.turnosService, user.empleado_id!).subscribe({
       next: ({ turnoHoy, turnoManana, programaciones }) => {
+        this.programaciones.set(programaciones);
         this.loading.set(false);
         this.cargarTurnosProgramacion(programaciones, turnoHoy, turnoManana);
       },

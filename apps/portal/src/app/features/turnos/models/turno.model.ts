@@ -52,6 +52,18 @@ export interface TurnoDelDia {
   nombre_turno?: string;
 }
 
+export interface DiaCalendario {
+  dia: number;
+  esDelMes: boolean;
+  turnos: TurnoCalendario[];
+}
+
+export interface TurnoCalendario {
+  codigo: string;
+  cliente: string;
+  puesto: string;
+}
+
 export interface Turno {
   codigo_turno_pk: string;
   nombre: string;

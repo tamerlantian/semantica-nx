@@ -5,7 +5,6 @@ import { ProgramacionEmpleado, Turno } from '../../models/programacion.model';
 import { extraerTurnosUnicos } from '../../helpers/programacion.helper';
 import { PageHeaderComponent, LoadingSpinnerComponent } from '@semantica/ui';
 import { ProgramacionTableComponent } from '../../components/programacion-table/programacion-table.component';
-import { ProgramacionCalendarComponent } from '../../components/programacion-calendar/programacion-calendar.component';
 import { ProgramacionesLegendComponent } from '../../components/programaciones-legend/programaciones-legend.component';
 
 @Component({
@@ -15,7 +14,6 @@ import { ProgramacionesLegendComponent } from '../../components/programaciones-l
     PageHeaderComponent,
     LoadingSpinnerComponent,
     ProgramacionTableComponent,
-    ProgramacionCalendarComponent,
     ProgramacionesLegendComponent,
   ],
   templateUrl: './programaciones-list.component.html',
