@@ -26,5 +26,12 @@
         emptyMessage="Aún no tienes turno para mañana"
       />
     </div>
+
+    @if (programaciones().length > 0) {
+      <app-programacion-calendar
+        [programaciones]="programaciones()"
+        [diaActual]="diaActual"
+      />
+    }
   }
 </div>

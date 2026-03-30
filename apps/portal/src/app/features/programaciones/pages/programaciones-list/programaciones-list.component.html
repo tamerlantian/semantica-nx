@@ -12,15 +12,8 @@
       />
     }
 
-    @if (programaciones().length > 0) {
-      <div class="programaciones-bottom">
-        <div class="programaciones-calendar">
-          <app-programacion-calendar [programaciones]="programaciones()" [diaActual]="diaActual" />
-        </div>
-        @if (turnos().length > 0) {
-          <app-programaciones-legend [turnos]="turnos()" />
-        }
-      </div>
+    @if (turnos().length > 0) {
+      <app-programaciones-legend [turnos]="turnos()" />
     }
   }
 </div>
