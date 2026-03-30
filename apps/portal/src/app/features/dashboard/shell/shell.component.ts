@@ -69,6 +69,18 @@ export class ShellComponent {
           requiresTenant: true,
         },
         {
+          label: 'Programaciones',
+          icon: 'pi pi-table',
+          route: ROUTE_PATHS.dashboard.programaciones,
+          requiresTenant: true,
+        },
+        {
+          label: 'Reportes programación',
+          icon: 'pi pi-file-edit',
+          route: ROUTE_PATHS.dashboard.reportesProgramacion,
+          requiresTenant: true,
+        },
+        {
           label: 'Reclamos',
           icon: 'pi pi-exclamation-triangle',
           route: ROUTE_PATHS.dashboard.reclamos,

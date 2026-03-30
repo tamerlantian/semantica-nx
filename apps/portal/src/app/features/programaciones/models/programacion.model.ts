@@ -40,16 +40,16 @@ export interface ProgramacionEmpleado {
   dia_31: string | null;
 }
 
-export interface TurnoDelDia {
-  puesto_nombre: string;
-  puesto_direccion: string;
-  codigo_puesto_fk: string;
-  coordinador_nombre: string;
-  programador_nombre: string;
-  codigo_modalidad_fk: string;
-  tercero_nombre_corto: string;
-  turno: string;
-  nombre_turno?: string;
+export interface DiaCalendario {
+  dia: number;
+  esDelMes: boolean;
+  turnos: TurnoCalendario[];
+}
+
+export interface TurnoCalendario {
+  codigo: string;
+  cliente: string;
+  puesto: string;
 }
 
 export interface Turno {
@@ -84,4 +84,37 @@ export interface Turno {
   adicional_noche: boolean;
   codigo_empresa_fk: number;
   estado_inactivo: boolean;
+}
+
+export interface ProgramacionReporteTipo {
+  codigo_programacion_reporte_tipo_pk: string;
+  nombre: string;
+}
+
+export interface CreateProgramacionReporteRequest {
+  codigo_programacion_fk: number;
+  codigo_programacion_reporte_tipo_fk: string;
+  comentario: string;
+  dia_desde: number;
+  dia_hasta: number;
+  reporta: string;
+}
+
+export interface ProgramacionReporte {
+  codigo_programacion_reporte_pk: number;
+  codigo_programacion_fk: number;
+  fecha: string;
+  fecha_cierre: string;
+  reporta: string;
+  comentario: string;
+  cantidad_respuestas: number;
+  estado_autorizado: boolean;
+  estado_aprobado: boolean;
+  estado_anulado: boolean;
+  estado_atendido: boolean;
+  estado_cerrado: boolean;
+  dia_desde: number;
+  dia_hasta: number;
+  codigo_programacion_reporte_tipo_fk: string;
+  programacion_reporte_tipo_nombre: string;
 }

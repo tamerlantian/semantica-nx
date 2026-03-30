@@ -1,5 +1,5 @@
 <div class="page-container">
-  <app-page-header title="Turnos" subtitle="Programación de turnos del empleado" />
+  <app-page-header title="Turnos" subtitle="Turnos de hoy y mañana" />
 
   @if (loading()) {
     <app-loading-spinner message="Cargando turnos..." />
@@ -26,28 +26,5 @@
         emptyMessage="Aún no tienes turno para mañana"
       />
     </div>
-
-    @if (programaciones().length > 0) {
-      <app-programacion-table
-        [programaciones]="programaciones()"
-        [diasDelMes]="diasDelMes()"
-        [diaActual]="diaActual"
-      />
-    }
-
-    @if (empleadoId() > 0) {
-      <app-reportes-table [empleadoId]="empleadoId()" />
-    }
-
-    @if (programaciones().length > 0) {
-      <div class="turnos-bottom">
-        <div class="turnos-calendar">
-          <app-programacion-calendar [programaciones]="programaciones()" [diaActual]="diaActual" />
-        </div>
-        @if (turnos().length > 0) {
-          <app-turnos-legend [turnos]="turnos()" />
-        }
-      </div>
-    }
   }
 </div>

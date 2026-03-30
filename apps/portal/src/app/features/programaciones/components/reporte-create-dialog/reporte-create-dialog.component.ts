@@ -5,8 +5,8 @@ import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { TurnosService } from '../../services/turnos.service';
-import { ProgramacionReporteTipo } from '../../models/turno.model';
+import { ProgramacionesService } from '../../services/programaciones.service';
+import { ProgramacionReporteTipo } from '../../models/programacion.model';
 import { ToastService } from '../../../../core';
 import { AuthService } from '../../../auth/services/auth.service';
 
@@ -26,7 +26,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 })
 export class ReporteCreateDialogComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly turnosService = inject(TurnosService);
+  private readonly programacionesService = inject(ProgramacionesService);
   private readonly toastService = inject(ToastService);
   private readonly authService = inject(AuthService);
 
@@ -48,7 +48,7 @@ export class ReporteCreateDialogComponent {
   onShow(): void {
     if (this.tipos().length === 0) {
       this.loadingTipos.set(true);
-      this.turnosService.getReporteTipos().subscribe({
+      this.programacionesService.getReporteTipos().subscribe({
         next: (res) => {
           this.tipos.set(res.items);
           this.loadingTipos.set(false);
@@ -74,7 +74,7 @@ export class ReporteCreateDialogComponent {
     const { codigo_programacion_reporte_tipo_fk, comentario, dia_desde, dia_hasta } =
       this.form.getRawValue();
 
-    this.turnosService
+    this.programacionesService
       .createReporte({
         codigo_programacion_fk: this.codigoProgramacion(),
         codigo_programacion_reporte_tipo_fk,

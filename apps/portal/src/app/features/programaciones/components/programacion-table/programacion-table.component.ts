@@ -1,7 +1,7 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { ProgramacionEmpleado } from '../../models/turno.model';
+import { ProgramacionEmpleado } from '../../models/programacion.model';
 import { ReporteCreateDialogComponent } from '../reporte-create-dialog/reporte-create-dialog.component';
 
 @Component({

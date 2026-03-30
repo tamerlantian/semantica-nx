@@ -71,6 +71,20 @@ export const DASHBOARD_ROUTES: Routes = [
         loadChildren: () => import('../turnos/turnos.routes').then((m) => m.TURNOS_ROUTES),
       },
       {
+        path: 'programaciones',
+        canActivate: [tenantGuard],
+        loadChildren: () =>
+          import('../programaciones/programaciones.routes').then((m) => m.PROGRAMACIONES_ROUTES),
+      },
+      {
+        path: 'reportes-programacion',
+        canActivate: [tenantGuard],
+        loadChildren: () =>
+          import('../reportes-programacion/reportes-programacion.routes').then(
+            (m) => m.REPORTES_PROGRAMACION_ROUTES,
+          ),
+      },
+      {
         path: 'creditos',
         canActivate: [tenantGuard],
         loadChildren: () => import('../creditos/creditos.routes').then((m) => m.CREDITOS_ROUTES),

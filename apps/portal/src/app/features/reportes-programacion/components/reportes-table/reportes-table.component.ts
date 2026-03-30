@@ -3,8 +3,8 @@ import { DatePipe } from '@angular/common';
 import { TableModule, TableLazyLoadEvent, TableRowExpandEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
-import { ProgramacionReporte, ProgramacionReporteRespuesta } from '../../models/turno.model';
-import { TurnosService } from '../../services/turnos.service';
+import { ProgramacionReporte, ProgramacionReporteRespuesta } from '../../models/reporte-programacion.model';
+import { ReportesProgramacionService } from '../../services/reportes-programacion.service';
 import { extractErrorMessage } from '@semantica/core';
 
 @Component({
@@ -15,7 +15,7 @@ import { extractErrorMessage } from '@semantica/core';
   styleUrl: './reportes-table.component.scss',
 })
 export class ReportesTableComponent {
-  private readonly turnosService = inject(TurnosService);
+  private readonly reportesService = inject(ReportesProgramacionService);
 
   readonly empleadoId = input.required<number>();
 
@@ -35,7 +35,7 @@ export class ReportesTableComponent {
     this.loading.set(true);
     this.error.set(null);
 
-    this.turnosService.getReportes(this.empleadoId(), page, this.pageSize()).subscribe({
+    this.reportesService.getReportes(this.empleadoId(), page, this.pageSize()).subscribe({
       next: (res) => {
         this.reportes.set(res.items);
         this.totalRecords.set(res.total);
@@ -85,7 +85,7 @@ export class ReportesTableComponent {
     loadingSet.add(id);
     this.respuestasLoading.set(loadingSet);
 
-    this.turnosService.getRespuestasReporte(id).subscribe({
+    this.reportesService.getRespuestasReporte(id).subscribe({
       next: (res) => {
         const cache = new Map(this.respuestasCache());
         cache.set(id, res.items);

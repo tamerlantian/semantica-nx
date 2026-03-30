@@ -1,0 +1,33 @@
+app-programacion-table {
+  display: block;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.programaciones-bottom {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: start;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.programaciones-calendar {
+  width: 50%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+app-programaciones-legend {
+  display: block;
+  width: 18rem;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}

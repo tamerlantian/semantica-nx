@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { TooltipModule } from 'primeng/tooltip';
-import { ProgramacionEmpleado, TurnoCalendario } from '../../models/turno.model';
-import { buildCalendarioMensual } from '../../helpers/turno.helper';
+import { ProgramacionEmpleado, TurnoCalendario } from '../../models/programacion.model';
+import { buildCalendarioMensual } from '../../helpers/programacion.helper';
 
 const TURNO_COLORES = [
   'var(--p-blue-500)',
