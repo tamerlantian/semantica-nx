@@ -42,30 +42,6 @@ export const DASHBOARD_ROUTES: Routes = [
           ),
       },
       {
-        path: 'certificado-laboral-historico',
-        canActivate: [tenantGuard],
-        loadChildren: () =>
-          import('../certificado-laboral-historico/certificado-laboral-historico.routes').then(
-            (m) => m.CERTIFICADO_LABORAL_HISTORICO_ROUTES,
-          ),
-      },
-      {
-        path: 'autorizacion-arma',
-        canActivate: [tenantGuard],
-        loadChildren: () =>
-          import('../autorizacion-arma/autorizacion-arma.routes').then(
-            (m) => m.AUTORIZACION_ARMA_ROUTES,
-          ),
-      },
-      {
-        path: 'seguridad-social',
-        canActivate: [tenantGuard],
-        loadChildren: () =>
-          import('../seguridad-social/seguridad-social.routes').then(
-            (m) => m.SEGURIDAD_SOCIAL_ROUTES,
-          ),
-      },
-      {
         path: 'turnos',
         canActivate: [tenantGuard],
         loadChildren: () => import('../turnos/turnos.routes').then((m) => m.TURNOS_ROUTES),
