@@ -49,7 +49,12 @@
             <td>{{ solicitud.fecha_desde | date: 'dd/MM/yyyy' }}</td>
             <td>{{ solicitud.fecha_hasta | date: 'dd/MM/yyyy' }}</td>
             <td>{{ solicitud.comentario }}</td>
-            <td>{{ solicitud.estado_solicitud }}</td>
+            <td>
+              <p-tag
+                [value]="getEstadoSolicitud(solicitud.estado_solicitud).label"
+                [severity]="getEstadoSolicitud(solicitud.estado_solicitud).severity"
+              />
+            </td>
             <td>{{ solicitud.comentario_rechazo }}</td>
             <td>
               <p-button
