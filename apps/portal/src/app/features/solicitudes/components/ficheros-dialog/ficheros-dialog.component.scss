@@ -1,58 +1,99 @@
-.ficheros-content {
-  min-height: 120px;
+.upload-container {
+  :host ::ng-deep {
+    .p-fileupload {
+      border: none;
+      background: none;
+    }
+
+    .p-fileupload-header {
+      display: none;
+    }
+
+    .p-fileupload-content {
+      border: 2px dashed var(--p-surface-300);
+      border-radius: 12px;
+      background: var(--p-surface-50);
+      transition:
+        border-color 0.2s,
+        background-color 0.2s;
+      padding: 0;
+
+      &:hover {
+        border-color: var(--p-primary-color);
+        background: var(--p-primary-50, var(--p-surface-100));
+      }
+    }
+  }
 }
 
-.ficheros-state {
+.drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 1.5rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.drop-zone__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--p-primary-100, var(--p-surface-200));
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 2rem;
-  color: var(--p-text-muted-color);
+  margin-bottom: 1rem;
 
-  &.ficheros-error {
-    color: var(--p-red-500);
+  i {
+    font-size: 1.75rem;
+    color: var(--p-primary-color);
   }
 }
 
-.ficheros-list {
-  list-style: none;
+.drop-zone__title {
   margin: 0;
-  padding: 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--p-text-color);
 }
 
-.fichero-item {
+.drop-zone__subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: var(--p-text-muted-color);
+}
+
+.file-preview {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem;
-  border-bottom: 1px solid var(--p-surface-100);
-
-  &:last-child {
-    border-bottom: none;
-  }
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.fichero-info {
+.file-preview__card {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--p-surface-200);
+  border-radius: 10px;
+  background: var(--p-surface-50);
 }
 
-.fichero-icon {
-  font-size: 1.25rem;
+.file-preview__icon {
+  font-size: 1.5rem;
   color: var(--p-primary-color);
   flex-shrink: 0;
 }
 
-.fichero-details {
+.file-preview__info {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  flex: 1;
 }
 
-.fichero-nombre {
+.file-preview__name {
   font-weight: 500;
   font-size: 0.875rem;
   white-space: nowrap;
@@ -60,16 +101,7 @@
   text-overflow: ellipsis;
 }
 
-.fichero-meta {
+.file-preview__size {
   font-size: 0.75rem;
   color: var(--p-text-muted-color);
-}
-
-.ficheros-upload {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--p-surface-200);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
 }

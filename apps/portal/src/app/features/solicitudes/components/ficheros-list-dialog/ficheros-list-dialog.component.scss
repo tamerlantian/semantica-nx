@@ -1,0 +1,65 @@
+.ficheros-content {
+  min-height: 120px;
+}
+
+.ficheros-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  color: var(--p-text-muted-color);
+
+  &.ficheros-error {
+    color: var(--p-red-500);
+  }
+}
+
+.ficheros-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fichero-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--p-surface-100);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.fichero-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.fichero-icon {
+  font-size: 1.25rem;
+  color: var(--p-primary-color);
+  flex-shrink: 0;
+}
+
+.fichero-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fichero-nombre {
+  font-weight: 500;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fichero-meta {
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+}

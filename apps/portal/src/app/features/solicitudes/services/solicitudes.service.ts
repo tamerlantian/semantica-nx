@@ -39,7 +39,7 @@ export class SolicitudesService extends BaseHttpService {
 
   cargarFichero(solicitudId: number, file: File): Observable<unknown> {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('archivo', file);
     return this.http.post(
       `${this.baseUrl}/doc/fichero/cargar/RhuSolicitudEmpleado/${solicitudId}`,
       formData,

@@ -1,17 +1,15 @@
 import { Component, inject, input, model, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
-import { FileUploadModule, FileUploadHandlerEvent } from 'primeng/fileupload';
+import { FileUploadModule } from 'primeng/fileupload';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { SolicitudesService } from '../../services/solicitudes.service';
-import { Fichero } from '../../models/fichero.model';
 import { extractErrorMessage, ToastService } from '@semantica/core';
 
 @Component({
   selector: 'app-ficheros-dialog',
   standalone: true,
-  imports: [DatePipe, DialogModule, ButtonModule, FileUploadModule, ProgressBarModule],
+  imports: [DialogModule, ButtonModule, FileUploadModule, ProgressBarModule],
   templateUrl: './ficheros-dialog.component.html',
   styleUrl: './ficheros-dialog.component.scss',
 })
@@ -22,22 +20,19 @@ export class FicherosDialogComponent {
   readonly visible = model(false);
   readonly solicitudId = input.required<number>();
 
-  readonly ficheros = signal<Fichero[]>([]);
-  readonly loading = signal(false);
-  readonly error = signal<string | null>(null);
   readonly uploading = signal(false);
+  readonly selectedFile = signal<File | null>(null);
 
-  onShow(): void {
-    this.loadFicheros();
+  onSelect(event: { files: File[] }): void {
+    this.selectedFile.set(event.files[0] ?? null);
   }
 
-  onHide(): void {
-    this.ficheros.set([]);
-    this.error.set(null);
+  onClear(): void {
+    this.selectedFile.set(null);
   }
 
-  onUpload(event: FileUploadHandlerEvent): void {
-    const file = event.files[0];
+  submitUpload(): void {
+    const file = this.selectedFile();
     if (!file) return;
 
     this.uploading.set(true);
@@ -46,13 +41,18 @@ export class FicherosDialogComponent {
       next: () => {
         this.toastService.success('Archivo cargado', 'El archivo se subió correctamente.');
         this.uploading.set(false);
-        this.loadFicheros();
+        this.selectedFile.set(null);
+        this.visible.set(false);
       },
       error: (err) => {
         this.toastService.error(extractErrorMessage(err, 'No se pudo cargar el archivo.'));
         this.uploading.set(false);
       },
     });
+  }
+
+  onHide(): void {
+    this.selectedFile.set(null);
   }
 
   formatSize(bytes: number): string {
@@ -63,19 +63,12 @@ export class FicherosDialogComponent {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   }
 
-  private loadFicheros(): void {
-    this.loading.set(true);
-    this.error.set(null);
-
-    this.solicitudesService.getFicheros().subscribe({
-      next: (res) => {
-        this.ficheros.set(res.items);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        this.error.set(extractErrorMessage(err, 'No se pudieron cargar los archivos.'));
-        this.loading.set(false);
-      },
-    });
+  getFileIcon(file: File): string {
+    const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+    if (['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'].includes(ext)) return 'pi pi-image';
+    if (['pdf'].includes(ext)) return 'pi pi-file-pdf';
+    if (['doc', 'docx'].includes(ext)) return 'pi pi-file-word';
+    if (['xls', 'xlsx'].includes(ext)) return 'pi pi-file-excel';
+    return 'pi pi-file';
   }
 }

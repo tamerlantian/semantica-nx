@@ -1,5 +1,12 @@
 <div class="page-container">
   <app-page-header title="Solicitudes" subtitle="Historial de solicitudes del empleado">
+    <p-button
+      label="Ficheros"
+      icon="pi pi-file"
+      severity="secondary"
+      [outlined]="true"
+      (click)="onFicheros()"
+    />
     <p-button label="Nuevo" icon="pi pi-plus" (click)="onNuevo()" />
   </app-page-header>
 
@@ -57,7 +64,7 @@
                 severity="secondary"
                 [text]="true"
                 [rounded]="true"
-                pTooltip="Adjuntos"
+                pTooltip="Adjuntar archivo"
                 tooltipPosition="top"
                 (click)="onAdjuntos(solicitud)"
               />
@@ -75,4 +82,5 @@
       [solicitudId]="selectedSolicitudId()"
     />
   }
+  <app-ficheros-list-dialog [(visible)]="ficherosListDialogVisible" />
 </div>
