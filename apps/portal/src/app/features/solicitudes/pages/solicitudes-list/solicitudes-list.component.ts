@@ -11,8 +11,10 @@ import { SolicitudEmpleado } from '../../models/solicitud.model';
 import { extractErrorMessage } from '@semantica/core';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { AuthService } from '../../../auth/services/auth.service';
 import { SolicitudCreateDialogComponent } from '../../components/solicitud-create-dialog/solicitud-create-dialog.component';
+import { FicherosDialogComponent } from '../../components/ficheros-dialog/ficheros-dialog.component';
 
 @Component({
   selector: 'app-solicitudes-list',
@@ -24,8 +26,10 @@ import { SolicitudCreateDialogComponent } from '../../components/solicitud-creat
     ErrorAlertComponent,
     TableModule,
     ButtonModule,
+    TooltipModule,
     DatePipe,
     SolicitudCreateDialogComponent,
+    FicherosDialogComponent,
   ],
   templateUrl: './solicitudes-list.component.html',
   styleUrl: './solicitudes-list.component.scss',
@@ -41,6 +45,8 @@ export class SolicitudesListComponent implements OnInit {
   readonly pageSize = signal(50);
   readonly first = signal(0);
   readonly dialogVisible = signal(false);
+  readonly ficherosDialogVisible = signal(false);
+  readonly selectedSolicitudId = signal(0);
 
   ngOnInit(): void {
     this.loadSolicitudes(1);
@@ -86,5 +92,10 @@ export class SolicitudesListComponent implements OnInit {
 
   onSolicitudCreated(): void {
     this.loadSolicitudes(1);
+  }
+
+  onAdjuntos(solicitud: SolicitudEmpleado): void {
+    this.selectedSolicitudId.set(solicitud.codigo_solicitud_empleado_pk);
+    this.ficherosDialogVisible.set(true);
   }
 }
