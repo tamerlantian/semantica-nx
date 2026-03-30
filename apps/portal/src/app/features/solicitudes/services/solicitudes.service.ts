@@ -6,7 +6,6 @@ import {
   SolicitudEmpleado,
   SolicitudEmpleadoTipo,
 } from '../models/solicitud.model';
-import { Fichero } from '../models/fichero.model';
 
 @Injectable({ providedIn: 'root' })
 export class SolicitudesService extends BaseHttpService {
@@ -31,19 +30,5 @@ export class SolicitudesService extends BaseHttpService {
 
   crearSolicitud(body: CreateSolicitudRequest): Observable<SolicitudEmpleado> {
     return this.post<SolicitudEmpleado>('/rhu/solicitud_empleado/nuevo', body);
-  }
-
-  getFicherosByModelo(codigoModelo: string, codigo: string): Observable<Fichero[]> {
-    return this.get<Fichero[]>(`/doc/fichero/modelo/${codigoModelo}/${codigo}`);
-  }
-
-  cargarFichero(solicitudId: number, file: File): Observable<unknown> {
-    const formData = new FormData();
-    formData.append('archivo', file);
-    return this.http.post(
-      `${this.baseUrl}/doc/fichero/cargar/RhuSolicitudEmpleado/${solicitudId}`,
-      formData,
-      { withCredentials: true },
-    );
   }
 }

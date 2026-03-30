@@ -20,6 +20,7 @@ export { errorInterceptor } from './lib/interceptors/error.interceptor';
 // Services
 export { ToastService } from './lib/services/toast.service';
 export { TokenRefreshService } from './lib/services/token-refresh.service';
+export { FicherosService } from './lib/services/ficheros.service';
 
 // Models
 export {
@@ -28,6 +29,7 @@ export {
   type AuthResponse,
   type ResendVerificationRequest,
 } from './lib/models/auth.model';
+export { type Fichero } from './lib/models/fichero.model';
 
 // Utils
 export {
