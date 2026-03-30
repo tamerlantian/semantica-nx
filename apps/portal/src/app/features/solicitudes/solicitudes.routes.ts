@@ -4,7 +4,7 @@ export const SOLICITUDES_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./components/solicitudes-list/solicitudes-list.component').then(
+      import('./pages/solicitudes-list/solicitudes-list.component').then(
         (m) => m.SolicitudesListComponent,
       ),
   },

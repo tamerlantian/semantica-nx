@@ -1,0 +1,18 @@
+export interface SolicitudEmpleado {
+  codigo_solicitud_empleado_pk: number;
+  codigo_empleado_fk: number;
+  codigo_solicitud_empleado_tipo_fk: string;
+  solicitud_empleado_tipo_nombre: string;
+  fecha_registro: string;
+  fecha_desde: string;
+  fecha_hasta: string;
+  comentario: string;
+  usuario: string;
+  comentario_rechazo: string;
+  estado_autorizado: boolean;
+  estado_aprobado: boolean;
+  estado_anulado: boolean;
+  estado_cerrado: boolean;
+  estado_solicitud: string;
+  codigo_empresa_fk: number;
+}
