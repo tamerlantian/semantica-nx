@@ -12,6 +12,7 @@ import { extractErrorMessage } from '@semantica/core';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { TagModule } from 'primeng/tag';
 import { AuthService } from '../../../auth/services/auth.service';
 import { SolicitudCreateDialogComponent } from '../../components/solicitud-create-dialog/solicitud-create-dialog.component';
 import { FicherosDialogComponent } from '@semantica/ui';
@@ -30,6 +31,7 @@ import { FicherosDialogComponent } from '@semantica/ui';
     DatePipe,
     SolicitudCreateDialogComponent,
     FicherosDialogComponent,
+    TagModule,
   ],
   templateUrl: './solicitudes-list.component.html',
   styleUrl: './solicitudes-list.component.scss',
@@ -92,6 +94,22 @@ export class SolicitudesListComponent implements OnInit {
 
   onSolicitudCreated(): void {
     this.loadSolicitudes(1);
+  }
+
+  getEstadoSolicitud(estado: string): {
+    label: string;
+    severity: 'success' | 'info' | 'warn' | 'secondary' | 'contrast' | 'danger';
+  } {
+    switch (estado) {
+      case 'a':
+        return { label: 'Aceptado', severity: 'success' };
+      case 'r':
+        return { label: 'Rechazado', severity: 'danger' };
+      case 'c':
+        return { label: 'Cerrado', severity: 'secondary' };
+      default:
+        return { label: 'Pendiente', severity: 'warn' };
+    }
   }
 
   onAdjuntos(solicitud: SolicitudEmpleado): void {
