@@ -33,8 +33,8 @@ export class SolicitudesService extends BaseHttpService {
     return this.post<SolicitudEmpleado>('/rhu/solicitud_empleado/nuevo', body);
   }
 
-  getFicheros(page = 1, size = 50): Observable<PaginatedResponse<Fichero>> {
-    return this.get<PaginatedResponse<Fichero>>('/doc/fichero/lista', { page, size });
+  getFicherosByModelo(codigoModelo: string, codigo: string): Observable<Fichero[]> {
+    return this.get<Fichero[]>(`/doc/fichero/modelo/${codigoModelo}/${codigo}`);
   }
 
   cargarFichero(solicitudId: number, file: File): Observable<unknown> {

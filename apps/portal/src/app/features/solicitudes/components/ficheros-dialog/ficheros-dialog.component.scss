@@ -1,3 +1,84 @@
+// Lista de ficheros
+.ficheros-content {
+  min-height: 60px;
+  max-height: 220px;
+  overflow-y: auto;
+  margin-bottom: 0.75rem;
+}
+
+.ficheros-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  color: var(--p-text-muted-color);
+
+  &.ficheros-error {
+    color: var(--p-red-500);
+  }
+}
+
+.ficheros-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fichero-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--p-surface-100);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.fichero-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.fichero-icon {
+  font-size: 1.25rem;
+  color: var(--p-primary-color);
+  flex-shrink: 0;
+}
+
+.fichero-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fichero-nombre {
+  font-weight: 500;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fichero-meta {
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+}
+
+// Separador de sección
+.upload-section-header {
+  padding: 0.5rem 0;
+  margin-bottom: 0.5rem;
+  border-top: 1px solid var(--p-surface-200);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--p-text-color);
+}
+
+// Upload
 .upload-container {
   :host ::ng-deep {
     .p-fileupload {
@@ -11,7 +92,7 @@
 
     .p-fileupload-content {
       border: 2px dashed var(--p-surface-300);
-      border-radius: 12px;
+      border-radius: 8px;
       background: var(--p-surface-50);
       transition:
         border-color 0.2s,
@@ -28,38 +109,34 @@
 
 .drop-zone {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 2.5rem 1.5rem;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1rem;
   cursor: pointer;
-  text-align: center;
 }
 
 .drop-zone__icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--p-primary-100, var(--p-surface-200));
+  font-size: 1.25rem;
+  color: var(--p-primary-color);
+  flex-shrink: 0;
+}
+
+.drop-zone__text {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-
-  i {
-    font-size: 1.75rem;
-    color: var(--p-primary-color);
-  }
+  gap: 0.35rem;
 }
 
 .drop-zone__title {
   margin: 0;
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: 500;
+  font-size: 0.85rem;
   color: var(--p-text-color);
 }
 
 .drop-zone__subtitle {
-  margin: 0.25rem 0 0;
+  margin: 0;
   font-size: 0.8rem;
   color: var(--p-text-muted-color);
 }
@@ -74,14 +151,14 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem;
+  padding: 0.75rem;
   border: 1px solid var(--p-surface-200);
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--p-surface-50);
 }
 
 .file-preview__icon {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: var(--p-primary-color);
   flex-shrink: 0;
 }

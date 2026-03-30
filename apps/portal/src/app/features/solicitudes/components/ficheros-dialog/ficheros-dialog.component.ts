@@ -1,15 +1,17 @@
 import { Component, inject, input, model, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { SolicitudesService } from '../../services/solicitudes.service';
+import { Fichero } from '../../models/fichero.model';
 import { extractErrorMessage, ToastService } from '@semantica/core';
 
 @Component({
   selector: 'app-ficheros-dialog',
   standalone: true,
-  imports: [DialogModule, ButtonModule, FileUploadModule, ProgressBarModule],
+  imports: [DatePipe, DialogModule, ButtonModule, FileUploadModule, ProgressBarModule],
   templateUrl: './ficheros-dialog.component.html',
   styleUrl: './ficheros-dialog.component.scss',
 })
@@ -22,6 +24,13 @@ export class FicherosDialogComponent {
 
   readonly uploading = signal(false);
   readonly selectedFile = signal<File | null>(null);
+  readonly ficheros = signal<Fichero[]>([]);
+  readonly loadingFicheros = signal(false);
+  readonly errorFicheros = signal<string | null>(null);
+
+  onShow(): void {
+    this.loadFicheros();
+  }
 
   onSelect(event: { files: File[] }): void {
     this.selectedFile.set(event.files[0] ?? null);
@@ -42,7 +51,7 @@ export class FicherosDialogComponent {
         this.toastService.success('Archivo cargado', 'El archivo se subió correctamente.');
         this.uploading.set(false);
         this.selectedFile.set(null);
-        this.visible.set(false);
+        this.loadFicheros();
       },
       error: (err) => {
         this.toastService.error(extractErrorMessage(err, 'No se pudo cargar el archivo.'));
@@ -53,6 +62,8 @@ export class FicherosDialogComponent {
 
   onHide(): void {
     this.selectedFile.set(null);
+    this.ficheros.set([]);
+    this.errorFicheros.set(null);
   }
 
   formatSize(bytes: number): string {
@@ -65,10 +76,35 @@ export class FicherosDialogComponent {
 
   getFileIcon(file: File): string {
     const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+    return this.getExtensionIcon(ext);
+  }
+
+  getExtensionIcon(extension: string): string {
+    const ext = extension.toLowerCase();
     if (['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'].includes(ext)) return 'pi pi-image';
     if (['pdf'].includes(ext)) return 'pi pi-file-pdf';
     if (['doc', 'docx'].includes(ext)) return 'pi pi-file-word';
     if (['xls', 'xlsx'].includes(ext)) return 'pi pi-file-excel';
     return 'pi pi-file';
+  }
+
+  private loadFicheros(): void {
+    this.loadingFicheros.set(true);
+    this.errorFicheros.set(null);
+
+    this.solicitudesService
+      .getFicherosByModelo('RhuSolicitudEmpleado', String(this.solicitudId()))
+      .subscribe({
+        next: (ficheros) => {
+          this.ficheros.set(ficheros);
+          this.loadingFicheros.set(false);
+        },
+        error: (err) => {
+          this.errorFicheros.set(
+            extractErrorMessage(err, 'No se pudieron cargar los archivos.'),
+          );
+          this.loadingFicheros.set(false);
+        },
+      });
   }
 }

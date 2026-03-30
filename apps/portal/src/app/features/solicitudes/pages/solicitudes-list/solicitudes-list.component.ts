@@ -15,7 +15,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { AuthService } from '../../../auth/services/auth.service';
 import { SolicitudCreateDialogComponent } from '../../components/solicitud-create-dialog/solicitud-create-dialog.component';
 import { FicherosDialogComponent } from '../../components/ficheros-dialog/ficheros-dialog.component';
-import { FicherosListDialogComponent } from '../../components/ficheros-list-dialog/ficheros-list-dialog.component';
 
 @Component({
   selector: 'app-solicitudes-list',
@@ -31,7 +30,6 @@ import { FicherosListDialogComponent } from '../../components/ficheros-list-dial
     DatePipe,
     SolicitudCreateDialogComponent,
     FicherosDialogComponent,
-    FicherosListDialogComponent,
   ],
   templateUrl: './solicitudes-list.component.html',
   styleUrl: './solicitudes-list.component.scss',
@@ -48,7 +46,6 @@ export class SolicitudesListComponent implements OnInit {
   readonly first = signal(0);
   readonly dialogVisible = signal(false);
   readonly ficherosDialogVisible = signal(false);
-  readonly ficherosListDialogVisible = signal(false);
   readonly selectedSolicitudId = signal(0);
 
   ngOnInit(): void {
@@ -100,9 +97,5 @@ export class SolicitudesListComponent implements OnInit {
   onAdjuntos(solicitud: SolicitudEmpleado): void {
     this.selectedSolicitudId.set(solicitud.codigo_solicitud_empleado_pk);
     this.ficherosDialogVisible.set(true);
-  }
-
-  onFicheros(): void {
-    this.ficherosListDialogVisible.set(true);
   }
 }

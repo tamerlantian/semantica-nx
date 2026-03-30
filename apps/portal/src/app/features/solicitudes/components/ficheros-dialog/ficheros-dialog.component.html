@@ -1,12 +1,54 @@
 <p-dialog
-  [header]="'Adjuntar archivo - Solicitud #' + solicitudId()"
+  [header]="'Archivos - Solicitud #' + solicitudId()"
   [(visible)]="visible"
   [modal]="true"
   [draggable]="false"
-  [style]="{ width: '520px' }"
+  [style]="{ width: '560px' }"
   [breakpoints]="{ '575px': '95vw' }"
+  (onShow)="onShow()"
   (onHide)="onHide()"
 >
+  <!-- Lista de ficheros existentes -->
+  <div class="ficheros-content">
+    @if (loadingFicheros()) {
+      <div class="ficheros-state">
+        <i class="pi pi-spin pi-spinner"></i>
+        <span>Cargando archivos...</span>
+      </div>
+    } @else if (errorFicheros()) {
+      <div class="ficheros-state ficheros-error">
+        <i class="pi pi-exclamation-triangle"></i>
+        <span>{{ errorFicheros() }}</span>
+      </div>
+    } @else if (ficheros().length === 0) {
+      <div class="ficheros-state">
+        <i class="pi pi-inbox"></i>
+        <span>No hay archivos adjuntos.</span>
+      </div>
+    } @else {
+      <ul class="ficheros-list">
+        @for (fichero of ficheros(); track fichero.codigo_fichero_pk) {
+          <li class="fichero-item">
+            <div class="fichero-info">
+              <i [class]="getExtensionIcon(fichero.extension) + ' fichero-icon'"></i>
+              <div class="fichero-details">
+                <span class="fichero-nombre">{{ fichero.nombre }}.{{ fichero.extension }}</span>
+                <span class="fichero-meta">
+                  {{ formatSize(fichero.tamano) }} · {{ fichero.fecha | date: 'dd/MM/yyyy' }}
+                </span>
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  <!-- Separador y sección de upload -->
+  <div class="upload-section-header">
+    <span>Subir archivo</span>
+  </div>
+
   <div class="upload-container">
     @if (!selectedFile()) {
       <p-fileupload
@@ -25,18 +67,17 @@
         </ng-template>
         <ng-template #empty>
           <div class="drop-zone">
-            <div class="drop-zone__icon">
-              <i class="pi pi-cloud-upload"></i>
+            <i class="pi pi-cloud-upload drop-zone__icon"></i>
+            <div class="drop-zone__text">
+              <span class="drop-zone__title">Arrastra tu archivo aquí</span>
+              <span class="drop-zone__subtitle">o</span>
             </div>
-            <p class="drop-zone__title">Arrastra tu archivo aquí</p>
-            <p class="drop-zone__subtitle">o selecciona desde tu dispositivo</p>
             <p-button
-              label="Seleccionar archivo"
+              label="Seleccionar"
               icon="pi pi-folder-open"
               severity="secondary"
               [outlined]="true"
               size="small"
-              [style]="{ marginTop: '0.75rem' }"
               (click)="fileUpload.choose($event)"
             />
           </div>
@@ -69,7 +110,7 @@
   </div>
 
   <ng-template #footer>
-    <p-button label="Cancelar" severity="secondary" [text]="true" (click)="visible.set(false)" />
+    <p-button label="Cerrar" severity="secondary" [text]="true" (click)="visible.set(false)" />
     @if (selectedFile()) {
       <p-button
         label="Subir archivo"
