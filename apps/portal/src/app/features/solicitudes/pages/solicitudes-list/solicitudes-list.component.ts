@@ -14,7 +14,7 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { AuthService } from '../../../auth/services/auth.service';
 import { SolicitudCreateDialogComponent } from '../../components/solicitud-create-dialog/solicitud-create-dialog.component';
-import { FicherosDialogComponent } from '../../components/ficheros-dialog/ficheros-dialog.component';
+import { FicherosDialogComponent } from '@semantica/ui';
 
 @Component({
   selector: 'app-solicitudes-list',

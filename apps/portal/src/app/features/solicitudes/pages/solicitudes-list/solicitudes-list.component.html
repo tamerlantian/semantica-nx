@@ -72,7 +72,9 @@
   @if (selectedSolicitudId()) {
     <app-ficheros-dialog
       [(visible)]="ficherosDialogVisible"
-      [solicitudId]="selectedSolicitudId()"
+      [recordId]="selectedSolicitudId()"
+      codigoModelo="RhuSolicitudEmpleado"
+      header="Ficheros adjuntos de la solicitud"
     />
   }
 

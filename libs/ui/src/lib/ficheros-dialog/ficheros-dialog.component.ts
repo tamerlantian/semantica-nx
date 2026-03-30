@@ -1,12 +1,11 @@
-import { Component, inject, input, model, signal } from '@angular/core';
+import { Component, computed, inject, input, model, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { SolicitudesService } from '../../services/solicitudes.service';
-import { Fichero } from '../../models/fichero.model';
-import { extractErrorMessage, ToastService } from '@semantica/core';
+import { extractErrorMessage, FicherosService, ToastService } from '@semantica/core';
+import type { Fichero } from '@semantica/core';
 
 @Component({
   selector: 'app-ficheros-dialog',
@@ -16,11 +15,17 @@ import { extractErrorMessage, ToastService } from '@semantica/core';
   styleUrl: './ficheros-dialog.component.scss',
 })
 export class FicherosDialogComponent {
-  private readonly solicitudesService = inject(SolicitudesService);
+  private readonly ficherosService = inject(FicherosService);
   private readonly toastService = inject(ToastService);
 
   readonly visible = model(false);
-  readonly solicitudId = input.required<number>();
+  readonly recordId = input.required<number | string>();
+  readonly codigoModelo = input.required<string>();
+  readonly header = input<string>();
+
+  protected readonly dialogHeader = computed(
+    () => this.header() ?? `Archivos - Registro #${this.recordId()}`,
+  );
 
   readonly uploading = signal(false);
   readonly selectedFile = signal<File | null>(null);
@@ -46,18 +51,20 @@ export class FicherosDialogComponent {
 
     this.uploading.set(true);
 
-    this.solicitudesService.cargarFichero(this.solicitudId(), file).subscribe({
-      next: () => {
-        this.toastService.success('Archivo cargado', 'El archivo se subió correctamente.');
-        this.uploading.set(false);
-        this.selectedFile.set(null);
-        this.loadFicheros();
-      },
-      error: (err) => {
-        this.toastService.error(extractErrorMessage(err, 'No se pudo cargar el archivo.'));
-        this.uploading.set(false);
-      },
-    });
+    this.ficherosService
+      .cargarFichero(this.codigoModelo(), this.recordId(), file)
+      .subscribe({
+        next: () => {
+          this.toastService.success('Archivo cargado', 'El archivo se subió correctamente.');
+          this.uploading.set(false);
+          this.selectedFile.set(null);
+          this.loadFicheros();
+        },
+        error: (err) => {
+          this.toastService.error(extractErrorMessage(err, 'No se pudo cargar el archivo.'));
+          this.uploading.set(false);
+        },
+      });
   }
 
   onHide(): void {
@@ -92,8 +99,8 @@ export class FicherosDialogComponent {
     this.loadingFicheros.set(true);
     this.errorFicheros.set(null);
 
-    this.solicitudesService
-      .getFicherosByModelo('RhuSolicitudEmpleado', String(this.solicitudId()))
+    this.ficherosService
+      .getFicheros(this.codigoModelo(), String(this.recordId()))
       .subscribe({
         next: (ficheros) => {
           this.ficheros.set(ficheros);
