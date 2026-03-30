@@ -16,3 +16,17 @@ export interface SolicitudEmpleado {
   estado_solicitud: string;
   codigo_empresa_fk: number;
 }
+
+export interface CreateSolicitudRequest {
+  codigo_empleado_fk: number;
+  codigo_solicitud_empleado_tipo_fk: string;
+  fecha_desde: string;
+  fecha_hasta: string;
+  comentario: string | null;
+}
+
+export interface SolicitudEmpleadoTipo {
+  codigo_solicitud_empleado_tipo_pk: string;
+  nombre: string;
+  habilitado_portal: boolean;
+}

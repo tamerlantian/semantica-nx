@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseHttpService, BaseQueryParams, PaginatedResponse } from '../../../core';
-import { SolicitudEmpleado } from '../models/solicitud.model';
+import {
+  CreateSolicitudRequest,
+  SolicitudEmpleado,
+  SolicitudEmpleadoTipo,
+} from '../models/solicitud.model';
 
 @Injectable({ providedIn: 'root' })
 export class SolicitudesService extends BaseHttpService {
@@ -11,5 +15,20 @@ export class SolicitudesService extends BaseHttpService {
       size: params?.size,
       empleado_id: params?.empleado_id,
     });
+  }
+
+  getTipos(nombre?: string): Observable<PaginatedResponse<SolicitudEmpleadoTipo>> {
+    return this.get<PaginatedResponse<SolicitudEmpleadoTipo>>(
+      '/rhu/solicitud_empleado_tipo/lista',
+      {
+        page: 1,
+        size: 50,
+        nombre,
+      },
+    );
+  }
+
+  crearSolicitud(body: CreateSolicitudRequest): Observable<SolicitudEmpleado> {
+    return this.post<SolicitudEmpleado>('/rhu/solicitud_empleado/nuevo', body);
   }
 }

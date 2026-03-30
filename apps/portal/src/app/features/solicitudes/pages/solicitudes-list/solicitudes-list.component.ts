@@ -10,7 +10,9 @@ import { SolicitudesService } from '../../services/solicitudes.service';
 import { SolicitudEmpleado } from '../../models/solicitud.model';
 import { extractErrorMessage } from '@semantica/core';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../auth/services/auth.service';
+import { SolicitudCreateDialogComponent } from '../../components/solicitud-create-dialog/solicitud-create-dialog.component';
 
 @Component({
   selector: 'app-solicitudes-list',
@@ -21,7 +23,9 @@ import { AuthService } from '../../../auth/services/auth.service';
     EmptyStateComponent,
     ErrorAlertComponent,
     TableModule,
+    ButtonModule,
     DatePipe,
+    SolicitudCreateDialogComponent,
   ],
   templateUrl: './solicitudes-list.component.html',
   styleUrl: './solicitudes-list.component.scss',
@@ -29,12 +33,14 @@ import { AuthService } from '../../../auth/services/auth.service';
 export class SolicitudesListComponent implements OnInit {
   private readonly solicitudesService = inject(SolicitudesService);
   private readonly authService = inject(AuthService);
+
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
   readonly solicitudes = signal<SolicitudEmpleado[]>([]);
   readonly totalRecords = signal(0);
   readonly pageSize = signal(50);
   readonly first = signal(0);
+  readonly dialogVisible = signal(false);
 
   ngOnInit(): void {
     this.loadSolicitudes(1);
@@ -72,5 +78,13 @@ export class SolicitudesListComponent implements OnInit {
     this.first.set(first);
     this.pageSize.set(rows);
     this.loadSolicitudes(Math.floor(first / rows) + 1);
+  }
+
+  onNuevo(): void {
+    this.dialogVisible.set(true);
+  }
+
+  onSolicitudCreated(): void {
+    this.loadSolicitudes(1);
   }
 }

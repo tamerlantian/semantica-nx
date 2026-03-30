@@ -1,5 +1,7 @@
 <div class="page-container">
-  <app-page-header title="Solicitudes" subtitle="Historial de solicitudes del empleado" />
+  <app-page-header title="Solicitudes" subtitle="Historial de solicitudes del empleado">
+    <p-button label="Nuevo" icon="pi pi-plus" (click)="onNuevo()" />
+  </app-page-header>
 
   @if (loading() && solicitudes().length === 0) {
     <app-loading-spinner message="Cargando solicitudes..." />
@@ -53,4 +55,6 @@
       </p-table>
     </div>
   }
+
+  <app-solicitud-create-dialog [(visible)]="dialogVisible" (created)="onSolicitudCreated()" />
 </div>

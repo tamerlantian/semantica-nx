@@ -37,5 +37,8 @@ export {
   type ApiErrorResponse,
 } from './lib/utils/error.utils';
 
+// Validators
+export { dateRangeValidator } from './lib/validators/date-range.validator';
+
 // Auth
 export { BaseAuthService, type AuthApiEndpoints } from './lib/auth/base-auth.service';

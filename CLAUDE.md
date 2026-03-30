@@ -144,10 +144,10 @@ HTTP-only cookies gestionadas por el backend. El `authInterceptor` agrega `withC
 
 ## Guidelines
 
+- IMPORTANTE: Siempre piensa en el responsive design ya que es de suma importancia
 - Siempre usa buenas prácticas de programación
 - Necesito que cuando crees textos no los pongas asi "Prueba para Ejemplo" sino "Prueba para ejemplo", etc.
 - Escribe código limpio y mantenible
 - Documenta el código de forma clara y concisa
 - Sigue las convenciones del proyecto para la arquitectura y estructura de archivos
 - Usa el mcp de context7 en caso de necesitar información adicional tanto para la version de angular como primeng
-- Siempre piensa en el responsive design ya que es de suma importancia
