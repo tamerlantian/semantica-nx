@@ -1,3 +1,56 @@
 <div class="page-container">
-  <h1>Capacitaciones</h1>
+  <app-page-header title="Capacitaciones" subtitle="Historial de capacitaciones del empleado" />
+
+  @if (loading() && capacitaciones().length === 0) {
+    <app-loading-spinner message="Cargando capacitaciones..." />
+  } @else if (error()) {
+    <app-error-alert [message]="error()!" [retryable]="false" />
+  } @else if (!loading() && capacitaciones().length === 0) {
+    <app-empty-state
+      title="Sin capacitaciones"
+      message="No se encontraron capacitaciones registradas."
+      icon="pi pi-book"
+    />
+  } @else {
+    <div class="table-card">
+      <p-table
+        [value]="capacitaciones()"
+        [lazy]="true"
+        [lazyLoadOnInit]="false"
+        [totalRecords]="totalRecords()"
+        [paginator]="true"
+        [rows]="pageSize()"
+        [first]="first()"
+        [loading]="loading()"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [rowHover]="true"
+        (onLazyLoad)="onLazyLoad($event)"
+        [scrollable]="true"
+        scrollHeight="600px"
+      >
+        <ng-template #header>
+          <tr>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Instructor</th>
+            <th>Desde</th>
+            <th>Hasta</th>
+            <th>Horas</th>
+            <th>Estado</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-capacitacion>
+          <tr>
+            <td>{{ capacitacion.nombre }}</td>
+            <td>{{ capacitacion.tipo }}</td>
+            <td>{{ capacitacion.instructor }}</td>
+            <td>{{ capacitacion.fecha_desde | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ capacitacion.fecha_hasta | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ capacitacion.horas }}</td>
+            <td>{{ capacitacion.estado }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
 </div>
