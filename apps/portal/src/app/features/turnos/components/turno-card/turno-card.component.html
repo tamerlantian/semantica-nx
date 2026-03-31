@@ -84,6 +84,17 @@
         </div>
       </div>
     </div>
+
+    <div class="turno-card__footer">
+      <p-button
+        label="Ver consignas"
+        icon="pi pi-book"
+        severity="secondary"
+        [text]="true"
+        size="small"
+        (click)="verConsignas.emit(turno)"
+      />
+    </div>
   } @else {
     <div class="turno-card__empty">
       <div class="turno-card__empty-icon">

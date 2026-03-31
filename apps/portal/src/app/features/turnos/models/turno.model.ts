@@ -97,3 +97,12 @@ export interface Turno {
   codigo_empresa_fk: number;
   estado_inactivo: boolean;
 }
+
+export interface Consigna {
+  codigo_consigna_pk: number;
+  codigo_puesto_fk: number;
+  puesto_nombre: string;
+  codigo_empresa_fk: number;
+  consigna: string;
+  habilitado_portal: boolean;
+}

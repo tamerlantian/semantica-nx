@@ -6,11 +6,18 @@ import { extraerTurnosUnicos, obtenerTurnosHoyManana } from '../../helpers/turno
 import { PageHeaderComponent, LoadingSpinnerComponent } from '@semantica/ui';
 import { TurnoCardComponent } from '../../components/turno-card/turno-card.component';
 import { ProgramacionCalendarComponent } from '../../components/programacion-calendar/programacion-calendar.component';
+import { ConsignasDialogComponent } from '../../components/consignas-dialog/consignas-dialog.component';
 
 @Component({
   selector: 'app-turnos-list',
   standalone: true,
-  imports: [PageHeaderComponent, LoadingSpinnerComponent, TurnoCardComponent, ProgramacionCalendarComponent],
+  imports: [
+    PageHeaderComponent,
+    LoadingSpinnerComponent,
+    TurnoCardComponent,
+    ProgramacionCalendarComponent,
+    ConsignasDialogComponent,
+  ],
   templateUrl: './turnos-list.component.html',
   styleUrl: './turnos-list.component.scss',
 })
@@ -24,6 +31,9 @@ export class TurnosListComponent implements OnInit {
   readonly loading = signal(true);
 
   readonly diaActual = new Date().getDate();
+
+  readonly consignasVisible = signal(false);
+  readonly selectedTurno = signal<TurnoDelDia | null>(null);
 
   ngOnInit(): void {
     const user = this.authService.currentUser();
@@ -40,6 +50,11 @@ export class TurnosListComponent implements OnInit {
       },
       error: () => this.loading.set(false),
     });
+  }
+
+  onVerConsignas(turno: TurnoDelDia): void {
+    this.selectedTurno.set(turno);
+    this.consignasVisible.set(true);
   }
 
   private cargarTurnosProgramacion(

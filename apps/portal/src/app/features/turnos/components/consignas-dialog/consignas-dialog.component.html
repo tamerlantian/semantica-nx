@@ -1,0 +1,39 @@
+<p-dialog
+  [header]="turno() ? 'Consignas — ' + turno()!.puesto_nombre : 'Consignas'"
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '1000px' }"
+  [breakpoints]="{ '575px': '95vw' }"
+  (onShow)="onShow()"
+  (onHide)="onHide()"
+>
+  @if (loading()) {
+    <div class="consignas-estado">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Cargando consignas...</span>
+    </div>
+  } @else if (error()) {
+    <div class="consignas-estado consignas-estado--error">
+      <i class="pi pi-exclamation-triangle"></i>
+      <span>{{ error() }}</span>
+    </div>
+  } @else if (consignas().length === 0) {
+    <div class="consignas-estado">
+      <i class="pi pi-book"></i>
+      <span>No hay consignas registradas para este puesto.</span>
+    </div>
+  } @else {
+    <ul class="consignas-lista">
+      @for (item of consignas(); track item.codigo_consigna_pk) {
+        <li class="consignas-lista__item">
+          <p>{{ item.consigna }}</p>
+        </li>
+      }
+    </ul>
+  }
+
+  <ng-template #footer>
+    <p-button label="Cerrar" severity="secondary" [text]="true" (click)="visible.set(false)" />
+  </ng-template>
+</p-dialog>
