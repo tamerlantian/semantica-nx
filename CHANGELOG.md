@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.7](https://github.com/tamerlantian/semantica-nx/compare/v0.0.6...v0.0.7) (2026-03-31)
+
+
+### Bug Fixes
+
+* **portal:** no cargar enlaces cuando el usuario no tiene tenant ([6e9da68](https://github.com/tamerlantian/semantica-nx/commit/6e9da68eee4be6491160ed65823cde25a21a3b37))
+
 ## [0.0.6](https://github.com/tamerlantian/semantica-nx/compare/v0.0.5...v0.0.6) (2026-03-31)
 
 

@@ -44,14 +44,16 @@
       }
     </div>
 
-    <div class="inicio__right">
-      <div class="inicio__section">
-        <h2 class="inicio__section-title">
-          <i class="pi pi-link"></i>
-          Enlaces rápidos
-        </h2>
-        <app-enlaces-card />
+    @if (hasTenant()) {
+      <div class="inicio__right">
+        <div class="inicio__section">
+          <h2 class="inicio__section-title">
+            <i class="pi pi-link"></i>
+            Enlaces rápidos
+          </h2>
+          <app-enlaces-card />
+        </div>
       </div>
-    </div>
+    }
   </div>
 </div>
