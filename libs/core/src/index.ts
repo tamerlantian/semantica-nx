@@ -38,6 +38,7 @@ export {
   type ApiError,
   type ApiErrorResponse,
 } from './lib/utils/error.utils';
+export { MESES_ES, getMesAnioLabel, getSiguienteMes } from './lib/utils/date.utils';
 
 // Validators
 export { dateRangeValidator } from './lib/validators/date-range.validator';
