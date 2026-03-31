@@ -42,35 +42,7 @@
     <!-- Sidebar desktop -->
     <aside class="shell-sidebar">
       <nav class="sidebar-nav">
-        <a class="nav-item" [routerLink]="inicioItem.route" routerLinkActive="active">
-          <i [class]="inicioItem.icon"></i>
-          <span>{{ inicioItem.label }}</span>
-        </a>
-
-        <p-accordion [multiple]="true" [value]="activeGroups" class="sidebar-accordion">
-          @for (group of navGroups; track group.label) {
-            <p-accordion-panel [value]="group.label">
-              <p-accordion-header>
-                <span>{{ group.label }}</span>
-              </p-accordion-header>
-              <p-accordion-content>
-                @for (item of group.children; track item.route) {
-                  @if (item.requiresTenant && !hasTenant()) {
-                    <span class="nav-item nav-item--disabled">
-                      <i [class]="item.icon"></i>
-                      <span>{{ item.label }}</span>
-                    </span>
-                  } @else {
-                    <a class="nav-item" [routerLink]="item.route" routerLinkActive="active">
-                      <i [class]="item.icon"></i>
-                      <span>{{ item.label }}</span>
-                    </a>
-                  }
-                }
-              </p-accordion-content>
-            </p-accordion-panel>
-          }
-        </p-accordion>
+        <ng-container *ngTemplateOutlet="navTpl; context: { $implicit: navItems }" />
       </nav>
     </aside>
 
@@ -89,47 +61,60 @@
   header="Menú"
 >
   <nav class="sidebar-nav">
-    <a
-      class="nav-item"
-      [routerLink]="inicioItem.route"
-      routerLinkActive="active"
-      (click)="drawerVisible.set(false)"
-    >
-      <i [class]="inicioItem.icon"></i>
-      <span>{{ inicioItem.label }}</span>
-    </a>
-
-    <p-accordion [multiple]="true" [value]="activeGroups" class="sidebar-accordion">
-      @for (group of navGroups; track group.label) {
-        <p-accordion-panel [value]="group.label">
-          <p-accordion-header>
-            <i [class]="group.icon"></i>
-            <span>{{ group.label }}</span>
-          </p-accordion-header>
-          <p-accordion-content>
-            @for (item of group.children; track item.route) {
-              @if (item.requiresTenant && !hasTenant()) {
-                <span class="nav-item nav-item--disabled">
-                  <i [class]="item.icon"></i>
-                  <span>{{ item.label }}</span>
-                </span>
-              } @else {
-                <a
-                  class="nav-item"
-                  [routerLink]="item.route"
-                  routerLinkActive="active"
-                  (click)="drawerVisible.set(false)"
-                >
-                  <i [class]="item.icon"></i>
-                  <span>{{ item.label }}</span>
-                </a>
-              }
-            }
-          </p-accordion-content>
-        </p-accordion-panel>
-      }
-    </p-accordion>
+    <ng-container *ngTemplateOutlet="navTpl; context: { $implicit: navItems }" />
   </nav>
 </p-drawer>
+
+<!-- Template compartido para la navegación -->
+<ng-template #navTpl let-items>
+  @for (item of items; track item.label) {
+    @if (isNavGroup(item)) {
+      <!-- Grupo colapsable -->
+      <button
+        class="nav-group-header"
+        [class.expanded]="isExpanded(item.label)"
+        (click)="toggleGroup(item.label)"
+        [attr.aria-expanded]="isExpanded(item.label)"
+      >
+        <i [class]="item.icon"></i>
+        <span>{{ item.label }}</span>
+        <i class="nav-group-chevron pi pi-chevron-right"></i>
+      </button>
+      @if (isExpanded(item.label)) {
+        <div class="nav-children">
+          @for (child of item.children; track child.route) {
+            @if (child.requiresTenant && !hasTenant()) {
+              <span class="nav-item nav-item--child nav-item--disabled">
+                <i [class]="child.icon"></i>
+                <span>{{ child.label }}</span>
+              </span>
+            } @else {
+              <a
+                class="nav-item nav-item--child"
+                [routerLink]="child.route"
+                routerLinkActive="active"
+                (click)="drawerVisible.set(false)"
+              >
+                <i [class]="child.icon"></i>
+                <span>{{ child.label }}</span>
+              </a>
+            }
+          }
+        </div>
+      }
+    } @else {
+      <!-- Ítem directo -->
+      <a
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        (click)="drawerVisible.set(false)"
+      >
+        <i [class]="item.icon"></i>
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  }
+</ng-template>
 
 <app-asociar-empresa-dialog [(visible)]="dialogVisible" />
