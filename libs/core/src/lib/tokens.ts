@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 export interface SemanticaEnvironment {
   apiUrl: string;
   turnstileSiteKey: string;
+  whatsappPhone: string;
 }
 
 export interface RoutePaths {
