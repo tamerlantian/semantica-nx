@@ -59,12 +59,12 @@ export class ShellComponent {
   });
 
   readonly userMenuItems: MenuItem[] = [
-    // {
-    //   label: 'Mi perfil',
-    //   icon: 'pi pi-user',
-    //   command: () => this.router.navigate([ROUTE_PATHS.dashboard.perfil]),
-    // },
-    // { separator: true },
+    {
+      label: 'Mi perfil',
+      icon: 'pi pi-user',
+      command: () => this.router.navigate([ROUTE_PATHS.dashboard.perfil]),
+    },
+    { separator: true },
     {
       label: 'Cerrar sesión',
       icon: 'pi pi-sign-out',
