@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.2](https://github.com/tamerlantian/semantica-nx/compare/v0.0.1...v0.0.2) (2026-03-31)
+
+
+### Features
+
+* **portal:** agregar diálogo de creación de solicitudes y validador de rango de fechas ([d1e74e7](https://github.com/tamerlantian/semantica-nx/commit/d1e74e7709b285fd19e76330fa1cb23039eae9c3))
+* **portal:** agregar diálogo de ficheros adjuntos en solicitudes ([8b2ecbb](https://github.com/tamerlantian/semantica-nx/commit/8b2ecbbd9bdfd6428b5f4a5d26ad894c726d7298))
+* **portal:** agregar tags de estado en solicitudes y reordenar menú lateral ([c8deffc](https://github.com/tamerlantian/semantica-nx/commit/c8deffc847395d09d6ad9a2f17b8076721550197))
+* **portal:** aplicar estándar visual a capacitaciones, créditos y anticipo de nómina ([aa32134](https://github.com/tamerlantian/semantica-nx/commit/aa321345ff4759d5f0b3525d37bb957d960c71bd))
+* **portal:** implementar lista de solicitudes con paginación lazy ([ef9de5e](https://github.com/tamerlantian/semantica-nx/commit/ef9de5e144c37369c7f1fe46f7162cc4380b2dbf))
+* **portal:** rediseñar diálogo de ficheros y agregar listado general de adjuntos ([7d455a8](https://github.com/tamerlantian/semantica-nx/commit/7d455a8c2f3ee08329742ef83332f0f8aeea2f74))
+
+
+### Refactoring
+
+* mover FicherosDialogComponent y modelo Fichero a librerías compartidas ([0527ace](https://github.com/tamerlantian/semantica-nx/commit/0527acec15915f90c728a00777f28c7eec64bcb2))
+* **portal:** mover calendario de programaciones al módulo de turnos ([99a968a](https://github.com/tamerlantian/semantica-nx/commit/99a968a2cd2d89e7a07c9d4f19bbd53b47100ee2))
+* **portal:** reemplazar p-accordion por navegación custom en shell sidebar ([54aaf99](https://github.com/tamerlantian/semantica-nx/commit/54aaf99dd309cfb84253b6c3b103f194559487d2))
+* **portal:** separar programaciones y reportes de programación del módulo de turnos ([7daae0d](https://github.com/tamerlantian/semantica-nx/commit/7daae0d041853305f9e77a6b7df36c2111511dab))
+* **portal:** unificar diálogo de ficheros con lista y carga por solicitud ([63e3645](https://github.com/tamerlantian/semantica-nx/commit/63e36455df10a88dd2f3ea9439dd496d43172e9f))
+
 ## [0.0.1](https://github.com/tamerlantian/semantica-nx/compare/v0.0.0...v0.0.1) (2026-03-28)
 
 
