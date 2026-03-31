@@ -15,7 +15,7 @@ import { MessageModule } from 'primeng/message';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 import { AuthService } from '../../services/auth.service';
-import { extractErrorMessage } from '@semantica/core';
+import { ENVIRONMENT, extractErrorMessage } from '@semantica/core';
 import { TurnstileComponent } from '../../../../shared';
 
 function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -49,6 +49,9 @@ export class RegisterComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly turnstile = viewChild(TurnstileComponent);
+  private readonly env = inject(ENVIRONMENT);
+
+  readonly whatsappPhone = this.env.whatsappPhone;
 
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
