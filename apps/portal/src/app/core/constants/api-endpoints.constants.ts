@@ -16,4 +16,7 @@ export const API_ENDPOINTS = {
   tenant: {
     buscar: '/auth/tenant/seleccionar',
   },
+  perfil: {
+    update: '/auth/user/perfil',
+  },
 } as const;

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.4](https://github.com/tamerlantian/semantica-nx/compare/v0.0.3...v0.0.4) (2026-03-31)
+
+
+### Features
+
+* **core:** agregar whatsappPhone a SemanticaEnvironment y environments del portal ([1433791](https://github.com/tamerlantian/semantica-nx/commit/1433791e58f8116a38d1d571ec7e290d509a88d4))
+* **portal:** agregar diálogo de consignas en turnos ([17175c1](https://github.com/tamerlantian/semantica-nx/commit/17175c1b9dc7a5041497d7ddb75d07afa0cc4cc0))
+* **portal:** agregar módulo de perfil y menú de usuario en navbar ([9e155d6](https://github.com/tamerlantian/semantica-nx/commit/9e155d61d69d6cf16934c8830310340f7a86cee3))
+
+
+### Refactoring
+
+* **portal:** centralizar número de WhatsApp usando token ENVIRONMENT ([9201245](https://github.com/tamerlantian/semantica-nx/commit/920124511704f2418722de981ef7fa94eabc40ef))
+
 ## [0.0.3](https://github.com/tamerlantian/semantica-nx/compare/v0.0.1...v0.0.3) (2026-03-31)
 
 

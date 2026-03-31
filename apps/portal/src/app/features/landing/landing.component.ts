@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { ENVIRONMENT } from '@semantica/core';
 import { ButtonModule } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
@@ -21,8 +22,11 @@ interface FaqItem {
 export class LandingComponent {
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
+  private readonly env = inject(ENVIRONMENT);
 
   readonly currentYear = new Date().getFullYear();
+  readonly whatsappPhone = this.env.whatsappPhone;
+  readonly whatsappUrl = `https://wa.me/57${this.env.whatsappPhone}`;
   readonly contactSending = signal(false);
   readonly contactSent = signal(false);
 

@@ -14,6 +14,7 @@
         emptyIcon="pi pi-sun"
         emptyTitle="Día libre"
         emptyMessage="No tienes turno asignado para hoy"
+        (verConsignas)="onVerConsignas($event)"
       />
       <app-turno-card
         [turno]="turnoManana()"
@@ -24,6 +25,7 @@
         emptyIcon="pi pi-moon"
         emptyTitle="Sin asignar"
         emptyMessage="Aún no tienes turno para mañana"
+        (verConsignas)="onVerConsignas($event)"
       />
     </div>
 
@@ -36,4 +38,6 @@
       </div>
     }
   }
+
+  <app-consignas-dialog [turno]="selectedTurno()" [(visible)]="consignasVisible" />
 </div>
