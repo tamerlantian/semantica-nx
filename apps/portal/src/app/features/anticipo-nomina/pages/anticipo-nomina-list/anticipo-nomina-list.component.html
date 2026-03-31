@@ -1,52 +1,9 @@
 <div class="page-container">
   <app-page-header title="Anticipo de nómina" subtitle="Anticipos de nómina del empleado" />
 
-  @if (loading() && anticipos().length === 0) {
-    <app-loading-spinner message="Cargando anticipos..." />
-  } @else if (error()) {
-    <app-error-alert [message]="error()!" [retryable]="false" />
-  } @else if (!loading() && anticipos().length === 0) {
-    <app-empty-state
-      title="Sin anticipos"
-      message="No se encontraron anticipos de nómina registrados."
-      icon="pi pi-dollar"
-    />
-  } @else {
-    <div class="table-card">
-      <p-table
-        [value]="anticipos()"
-        [lazy]="true"
-        [lazyLoadOnInit]="false"
-        [totalRecords]="totalRecords()"
-        [paginator]="true"
-        [rows]="pageSize()"
-        [first]="first()"
-        [loading]="loading()"
-        [rowsPerPageOptions]="[10, 25, 50]"
-        [rowHover]="true"
-        (onLazyLoad)="onLazyLoad($event)"
-        [scrollable]="true"
-        scrollHeight="600px"
-      >
-        <ng-template #header>
-          <tr>
-            <th>Fecha solicitud</th>
-            <th>Valor solicitado</th>
-            <th>Valor aprobado</th>
-            <th>Estado</th>
-            <th>Observación</th>
-          </tr>
-        </ng-template>
-        <ng-template #body let-anticipo>
-          <tr>
-            <td>{{ anticipo.fecha_solicitud | date: 'dd/MM/yyyy' }}</td>
-            <td>{{ anticipo.vr_solicitado | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
-            <td>{{ anticipo.vr_aprobado | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
-            <td>{{ anticipo.estado }}</td>
-            <td>{{ anticipo.observacion }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
-  }
+  <app-empty-state
+    title="Funcionalidad no disponible"
+    message="Tu empresa asociada aún no cumple con los requisitos para esta funcionalidad."
+    icon="pi pi-lock"
+  />
 </div>

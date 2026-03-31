@@ -132,6 +132,18 @@ HTTP-only cookies gestionadas por el backend. El `authInterceptor` agrega `withC
 
 `src/environments/environment.ts` sets `apiUrl: '/api'` (proxied via `proxy.conf.json` in dev). Production uses `https://api.semanticaapi.com.co`, staging uses `https://api.semanticaapi.uk`.
 
+## Commits
+
+Husky ejecuta commitlint (`@commitlint/config-conventional`) en cada commit. Reglas clave:
+
+- **header** (primera línea): máximo 100 caracteres, formato `type(scope): descripción`
+- **types permitidos**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
+- **subject-case**: no usar Start Case, PascalCase ni UPPER CASE
+- **body**: cada línea del body debe tener máximo 100 caracteres (regla `body-max-line-length`)
+- **footer**: cada línea del footer debe tener máximo 100 caracteres
+
+Al redactar el body, partir líneas largas antes de llegar a 100 caracteres. Esto aplica también a bullet points con `-`.
+
 ## Conventions
 
 - All components are standalone; import PrimeNG modules directly in the component's `imports` array
