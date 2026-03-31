@@ -204,6 +204,27 @@
   }
 }
 
+// ─── Aviso cuenta no verificada ──────────────────────────────────────────────
+.unverified-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  margin-bottom: 1.5rem;
+  border-radius: 6px;
+  border-left: 3px solid var(--p-red-500);
+  background: color-mix(in srgb, var(--p-red-500) 8%, transparent);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--p-red-600);
+
+  &__icon {
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    color: var(--p-red-500);
+  }
+}
+
 // ─── Formulario ───────────────────────────────────────────────────────────────
 .auth-form {
   display: flex;

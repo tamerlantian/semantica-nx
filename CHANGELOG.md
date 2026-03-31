@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.6](https://github.com/tamerlantian/semantica-nx/compare/v0.0.5...v0.0.6) (2026-03-31)
+
+
+### Features
+
+* **portal:** mostrar aviso de cuenta no verificada en página de reenvío ([6310453](https://github.com/tamerlantian/semantica-nx/commit/631045333b673142ac7843f74545ac41a66d6b7e))
+
+
+### Bug Fixes
+
+* **portal:** redirigir a reenvío de verificación cuando cuenta no está verificada ([23aa1f7](https://github.com/tamerlantian/semantica-nx/commit/23aa1f7124d30f3de92c773de198c8a3499a86b9))
+
 ## [0.0.5](https://github.com/tamerlantian/semantica-nx/compare/v0.0.4...v0.0.5) (2026-03-31)
 
 

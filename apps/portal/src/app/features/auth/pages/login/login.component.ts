@@ -74,7 +74,7 @@ export class LoginComponent {
 
           if (err.error?.error?.is_verified === false) {
             this.router.navigate([ROUTE_PATHS.auth.resendVerification], {
-              queryParams: { email: this.form.getRawValue().email },
+              queryParams: { email: this.form.getRawValue().email, unverified: true },
             });
             return;
           }

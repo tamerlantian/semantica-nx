@@ -1,6 +1,7 @@
 import { Component, inject, signal, viewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { ROUTE_PATHS } from '../../../../core/constants/route-paths.constants';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
@@ -25,6 +26,7 @@ import { TurnstileComponent } from '../../../../shared';
 export class ForgotPasswordComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
   private readonly turnstile = viewChild(TurnstileComponent);
 
   readonly isLoading = signal(false);
@@ -56,6 +58,14 @@ export class ForgotPasswordComponent {
       error: (err) => {
         this.turnstile()?.reset();
         this.captchaToken.set(null);
+
+        if (err.error?.error?.is_verified === false) {
+          this.router.navigate([ROUTE_PATHS.auth.resendVerification], {
+            queryParams: { email: this.form.getRawValue().email, unverified: true },
+          });
+          return;
+        }
+
         this.errorMessage.set(extractErrorMessage(err, 'Ocurrió un error. Intenta de nuevo.'));
         this.isLoading.set(false);
       },

@@ -48,6 +48,13 @@
           </p>
         </div>
 
+        @if (isUnverified()) {
+          <div class="unverified-notice" role="alert">
+            <i class="pi pi-exclamation-circle unverified-notice__icon"></i>
+            <span>Tu cuenta aún no está verificada. Reenvía el enlace para activarla.</span>
+          </div>
+        }
+
         <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="auth-form">
           @if (errorMessage()) {
             <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />

@@ -33,6 +33,7 @@ export class ResendVerificationComponent implements OnInit {
   readonly submitted = signal(false);
   readonly captchaToken = signal<string | null>(null);
   readonly cooldown = signal(0);
+  readonly isUnverified = signal(false);
 
   private cooldownInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -41,9 +42,13 @@ export class ResendVerificationComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    const email = this.route.snapshot.queryParamMap.get('email');
+    const params = this.route.snapshot.queryParamMap;
+    const email = params.get('email');
     if (email) {
       this.form.patchValue({ email });
+    }
+    if (params.get('unverified') === 'true') {
+      this.isUnverified.set(true);
     }
   }
 
