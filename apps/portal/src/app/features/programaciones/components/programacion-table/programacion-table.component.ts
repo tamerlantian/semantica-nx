@@ -14,7 +14,9 @@ import { ReporteCreateDialogComponent } from '../reporte-create-dialog/reporte-c
 export class ProgramacionTableComponent {
   readonly programaciones = input.required<ProgramacionEmpleado[]>();
   readonly diasDelMes = input.required<number[]>();
-  readonly diaActual = input.required<number>();
+  readonly diaActual = input(0);
+  readonly titulo = input('Programación del mes');
+  readonly subtitulo = input('Detalle completo de turnos asignados');
 
   readonly totalColumnas = computed(() => this.diasDelMes().length);
 

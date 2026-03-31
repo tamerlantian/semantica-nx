@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.5](https://github.com/tamerlantian/semantica-nx/compare/v0.0.4...v0.0.5) (2026-03-31)
+
+
+### Features
+
+* **core:** agregar utilidades de fecha ([6a14430](https://github.com/tamerlantian/semantica-nx/commit/6a14430f11f8171d8ef814f05b06c0231383f2fb))
+* **portal:** agregar componente de enlaces rápidos en inicio ([2c760a7](https://github.com/tamerlantian/semantica-nx/commit/2c760a74ced4da384e36c2190da9040c83e7abb7))
+* **portal:** mostrar programación del mes actual y siguiente ([0a1d52f](https://github.com/tamerlantian/semantica-nx/commit/0a1d52fb09fad2f503964e3af18862f6880f8bad))
+* **portal:** rediseñar página de perfil con endpoint de detalle ([53b365e](https://github.com/tamerlantian/semantica-nx/commit/53b365e5714052bd44f3978546309a08c3e73fe5))
+
+
+### Bug Fixes
+
+* **portal:** corregir recorte del menú de usuario en móvil ([a03c845](https://github.com/tamerlantian/semantica-nx/commit/a03c8455f5d2c3a4e3036fc55bd93db248dc5db8))
+
 ## [0.0.4](https://github.com/tamerlantian/semantica-nx/compare/v0.0.3...v0.0.4) (2026-03-31)
 
 

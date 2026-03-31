@@ -1,0 +1,52 @@
+<div class="enlaces-card">
+  <h2 class="enlaces-card__title">
+    <!-- <i class="pi pi-external-link"></i> -->
+    <!-- Enlaces -->
+  </h2>
+
+  @if (loading()) {
+    <app-loading-spinner message="Cargando enlaces..." size="2rem" />
+  } @else if (error()) {
+    <app-error-alert [message]="error()!" [retryable]="true" (retry)="loadEnlaces()" />
+  } @else if (enlaces().length === 0) {
+    <app-empty-state
+      title="Sin enlaces"
+      message="No hay enlaces disponibles."
+      icon="pi pi-link"
+    />
+  } @else {
+    <ul class="enlaces-card__list">
+      @for (enlace of enlaces(); track enlace.codigo_enlace_pk) {
+        <li class="enlaces-card__item">
+          <div class="enlaces-card__item-icon">
+            <i class="pi pi-link"></i>
+          </div>
+          <div class="enlaces-card__item-body">
+            <span class="enlaces-card__item-name">{{ enlace.nombre }}</span>
+            <p class="enlaces-card__item-desc">{{ enlace.descripcion }}</p>
+            <div class="enlaces-card__item-footer">
+              <span class="enlaces-card__item-date">
+                <i class="pi pi-calendar"></i>
+                {{ enlace.fecha | date: 'd MMM y' }}
+              </span>
+              <a
+                class="enlaces-card__item-action"
+                [href]="enlace.url"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <p-button
+                  label="Visitar"
+                  icon="pi pi-external-link"
+                  severity="secondary"
+                  size="small"
+                  [outlined]="true"
+                />
+              </a>
+            </div>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</div>

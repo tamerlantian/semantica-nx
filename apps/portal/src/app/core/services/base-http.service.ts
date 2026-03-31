@@ -34,6 +34,10 @@ export abstract class BaseHttpService {
     return this.http.post<T>(`${this.baseUrl}${path}`, body);
   }
 
+  protected put<T>(path: string, body: unknown): Observable<T> {
+    return this.http.put<T>(`${this.baseUrl}${path}`, body);
+  }
+
   protected patch<T>(path: string, body: unknown): Observable<T> {
     return this.http.patch<T>(`${this.baseUrl}${path}`, body);
   }

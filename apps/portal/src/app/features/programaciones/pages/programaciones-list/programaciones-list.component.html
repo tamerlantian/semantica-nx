@@ -4,11 +4,34 @@
   @if (loading()) {
     <app-loading-spinner message="Cargando programaciones..." />
   } @else {
-    @if (programaciones().length > 0) {
+    @if (programaciones().length === 0) {
+      <app-empty-state
+        title="Sin programación"
+        [message]="'No tienes programación asignada para ' + nombreMesActual + '.'"
+        icon="pi pi-calendar-times"
+      />
+    } @else {
       <app-programacion-table
         [programaciones]="programaciones()"
         [diasDelMes]="diasDelMes()"
         [diaActual]="diaActual"
+        titulo="Este mes"
+        [subtitulo]="nombreMesActual"
+      />
+    }
+
+    @if (programacionesSiguiente().length === 0) {
+      <app-empty-state
+        title="Sin programación"
+        [message]="'No tienes programación asignada para ' + nombreMesSiguiente + '.'"
+        icon="pi pi-calendar-plus"
+      />
+    } @else {
+      <app-programacion-table
+        [programaciones]="programacionesSiguiente()"
+        [diasDelMes]="diasDelMesSiguiente()"
+        titulo="Próximo mes"
+        [subtitulo]="nombreMesSiguiente"
       />
     }
 

@@ -1,88 +1,152 @@
 <div class="page-container">
   <app-page-header title="Mi perfil" subtitle="Consulta y actualiza tu información personal" />
 
-  <div class="profile-card">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-      @if (errorMessage()) {
-        <p-message severity="error" [text]="errorMessage()!" styleClass="w-full mb-4" />
-      }
+  @if (isLoading()) {
+    <div class="profile-loading">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Cargando información...</span>
+    </div>
+  }
 
-      <div class="profile-form">
-        <div class="field">
-          <label for="nombres" class="field__label">Nombres</label>
-          <input
-            pInputText
-            id="nombres"
-            type="text"
-            formControlName="nombres"
-            fluid
-            [invalid]="nombresControl.invalid && nombresControl.touched"
-            aria-describedby="nombres-error"
-          />
-          @if (nombresControl.invalid && nombresControl.touched) {
-            <small id="nombres-error" class="form-error">
-              @if (nombresControl.hasError('required')) {
-                Los nombres son obligatorios
-              } @else if (nombresControl.hasError('minlength')) {
-                Mínimo 2 caracteres
-              }
-            </small>
-          }
-        </div>
-
-        <div class="field">
-          <label for="apellidos" class="field__label">Apellidos</label>
-          <input
-            pInputText
-            id="apellidos"
-            type="text"
-            formControlName="apellidos"
-            fluid
-            [invalid]="apellidosControl.invalid && apellidosControl.touched"
-            aria-describedby="apellidos-error"
-          />
-          @if (apellidosControl.invalid && apellidosControl.touched) {
-            <small id="apellidos-error" class="form-error">
-              @if (apellidosControl.hasError('required')) {
-                Los apellidos son obligatorios
-              } @else if (apellidosControl.hasError('minlength')) {
-                Mínimo 2 caracteres
-              }
-            </small>
-          }
-        </div>
-
-        <div class="field">
-          <label for="numero_identificacion" class="field__label">Número de identificación</label>
-          <input
-            pInputText
-            id="numero_identificacion"
-            type="text"
-            formControlName="numero_identificacion"
-            fluid
-            [invalid]="identificacionControl.invalid && identificacionControl.touched"
-            aria-describedby="identificacion-error"
-          />
-          @if (identificacionControl.invalid && identificacionControl.touched) {
-            <small id="identificacion-error" class="form-error">
-              El número de identificación es obligatorio
-            </small>
-          }
-        </div>
-
-        <div class="field">
-          <label for="email" class="field__label">Correo electrónico</label>
-          <input pInputText id="email" type="email" formControlName="email" fluid />
-          <small class="field__hint">El correo electrónico no se puede modificar</small>
-        </div>
-
-        <p-button
-          type="submit"
-          label="Guardar cambios"
-          [loading]="isSaving()"
-          [disabled]="isSaving() || form.pristine"
+  @if (!isLoading()) {
+  <div class="profile-layout">
+    <!-- Profile Header Card -->
+    <div class="profile-header">
+      <div class="profile-header__banner"></div>
+      <div class="profile-header__info">
+        <p-avatar
+          [label]="userInitials()"
+          size="xlarge"
+          shape="circle"
+          styleClass="profile-header__avatar"
         />
+        <div class="profile-header__details">
+          <h2 class="profile-header__name">{{ userFullName() }}</h2>
+          <p class="profile-header__email">
+            <i class="pi pi-envelope"></i>
+            {{ userEmail() }}
+          </p>
+        </div>
       </div>
-    </form>
+    </div>
+
+    <!-- Form Card -->
+    <div class="profile-card">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        @if (errorMessage()) {
+          <p-message severity="error" [text]="errorMessage()!" styleClass="w-full mb-4" />
+        }
+
+        <!-- Personal Information Section -->
+        <div class="profile-section">
+          <h3 class="profile-section__title">
+            <i class="pi pi-id-card"></i>
+            Información personal
+          </h3>
+
+          <div class="profile-form-grid">
+            <div class="field">
+              <label for="nombres" class="field__label">Nombres</label>
+              <input
+                pInputText
+                id="nombres"
+                type="text"
+                formControlName="nombres"
+                fluid
+                [invalid]="nombresControl.invalid && nombresControl.touched"
+                aria-describedby="nombres-error"
+              />
+              @if (nombresControl.invalid && nombresControl.touched) {
+                <small id="nombres-error" class="form-error">
+                  @if (nombresControl.hasError('required')) {
+                    Los nombres son obligatorios
+                  } @else if (nombresControl.hasError('minlength')) {
+                    Mínimo 2 caracteres
+                  }
+                </small>
+              }
+            </div>
+
+            <div class="field">
+              <label for="apellidos" class="field__label">Apellidos</label>
+              <input
+                pInputText
+                id="apellidos"
+                type="text"
+                formControlName="apellidos"
+                fluid
+                [invalid]="apellidosControl.invalid && apellidosControl.touched"
+                aria-describedby="apellidos-error"
+              />
+              @if (apellidosControl.invalid && apellidosControl.touched) {
+                <small id="apellidos-error" class="form-error">
+                  @if (apellidosControl.hasError('required')) {
+                    Los apellidos son obligatorios
+                  } @else if (apellidosControl.hasError('minlength')) {
+                    Mínimo 2 caracteres
+                  }
+                </small>
+              }
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="numero_identificacion" class="field__label">
+              Número de identificación
+            </label>
+            <input
+              pInputText
+              id="numero_identificacion"
+              type="text"
+              formControlName="numero_identificacion"
+              fluid
+              [invalid]="identificacionControl.invalid && identificacionControl.touched"
+              aria-describedby="identificacion-error"
+            />
+            @if (isIdentificacionLocked()) {
+              <small class="field__hint field__hint--locked">
+                <i class="pi pi-lock"></i>
+                Vinculado a una empresa · no es posible modificarlo
+              </small>
+            } @else if (identificacionControl.invalid && identificacionControl.touched) {
+              <small id="identificacion-error" class="form-error">
+                El número de identificación es obligatorio
+              </small>
+            }
+          </div>
+        </div>
+
+        <p-divider />
+
+        <!-- Contact Information Section -->
+        <div class="profile-section">
+          <h3 class="profile-section__title">
+            <i class="pi pi-envelope"></i>
+            Información de contacto
+          </h3>
+
+          <div class="field">
+            <label for="email" class="field__label">Correo electrónico</label>
+            <input pInputText id="email" type="email" formControlName="email" fluid />
+            <small class="field__hint">
+              <i class="pi pi-lock"></i>
+              El correo electrónico no se puede modificar
+            </small>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="profile-actions">
+          <p-button
+            type="submit"
+            label="Guardar cambios"
+            icon="pi pi-check"
+            [loading]="isSaving()"
+            [disabled]="isSaving() || form.pristine"
+          />
+        </div>
+      </form>
+    </div>
   </div>
+  }
 </div>

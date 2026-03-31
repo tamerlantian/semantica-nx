@@ -4,37 +4,54 @@
     subtitle="Accede rápidamente a los módulos del portal desde aquí."
   />
 
-  @for (section of sections; track section.label) {
-    <div class="inicio__section">
-      <h2 class="inicio__section-title">
-        <i [class]="section.icon"></i>
-        {{ section.label }}
-      </h2>
-      <div class="inicio__grid">
-        @for (item of section.items; track item.route) {
-          @if (item.requiresTenant && !hasTenant()) {
-            <div class="card card--disabled">
-              <div class="card__icon">
-                <i [class]="item.icon"></i>
-              </div>
-              <h3 class="card__title">{{ item.label }}</h3>
-              <p class="card__desc">{{ item.description }}</p>
-              <span class="card__badge">Requiere empresa</span>
-            </div>
-          } @else {
-            <a [routerLink]="item.route" class="card">
-              <div class="card__icon">
-                <i [class]="item.icon"></i>
-              </div>
-              <h3 class="card__title">{{ item.label }}</h3>
-              <p class="card__desc">{{ item.description }}</p>
-              <span class="card__arrow">
-                <i class="pi pi-arrow-right"></i>
-              </span>
-            </a>
-          }
-        }
+  <div class="inicio__layout">
+    <div class="inicio__left">
+      @for (section of sections; track section.label) {
+        <div class="inicio__section">
+          <h2 class="inicio__section-title">
+            <i [class]="section.icon"></i>
+            {{ section.label }}
+          </h2>
+          <div
+            class="inicio__grid"
+            [class.inicio__grid--fixed]="section.items.length >= 6"
+          >
+            @for (item of section.items; track item.route) {
+              @if (item.requiresTenant && !hasTenant()) {
+                <div class="card card--disabled">
+                  <div class="card__icon">
+                    <i [class]="item.icon"></i>
+                  </div>
+                  <h3 class="card__title">{{ item.label }}</h3>
+                  <p class="card__desc">{{ item.description }}</p>
+                  <span class="card__badge">Requiere empresa</span>
+                </div>
+              } @else {
+                <a [routerLink]="item.route" class="card">
+                  <div class="card__icon">
+                    <i [class]="item.icon"></i>
+                  </div>
+                  <h3 class="card__title">{{ item.label }}</h3>
+                  <p class="card__desc">{{ item.description }}</p>
+                  <span class="card__arrow">
+                    <i class="pi pi-arrow-right"></i>
+                  </span>
+                </a>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="inicio__right">
+      <div class="inicio__section">
+        <h2 class="inicio__section-title">
+          <i class="pi pi-link"></i>
+          Enlaces rápidos
+        </h2>
+        <app-enlaces-card />
       </div>
     </div>
-  }
+  </div>
 </div>

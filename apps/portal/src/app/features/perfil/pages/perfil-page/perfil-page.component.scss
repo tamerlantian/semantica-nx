@@ -1,17 +1,135 @@
-.profile-card {
-  background: var(--p-surface-0);
-  border-radius: 12px;
-  border: 1px solid var(--p-surface-200);
-  padding: 1.5rem;
-  max-width: 480px;
+.profile-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 4rem 0;
+  color: var(--p-text-muted-color);
+  font-size: 0.9rem;
+
+  .pi {
+    font-size: 1.25rem;
+    color: var(--p-primary-color);
+  }
 }
 
-.profile-form {
+.profile-layout {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+// ─── Profile Header Card ────────────────────────────────────────────────────
+.profile-header {
+  background: var(--p-surface-0);
+  border: 1px solid var(--p-surface-200);
+  border-radius: 12px;
+  overflow: hidden;
+
+  &__banner {
+    height: 100px;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--p-primary-color) 15%, transparent),
+      color-mix(in srgb, var(--p-primary-color) 8%, transparent)
+    );
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0 1.5rem 1.5rem;
+    margin-top: -32px;
+
+    ::ng-deep .profile-header__avatar {
+      &.p-avatar {
+        background: var(--p-primary-color);
+        color: #ffffff;
+        border: 3px solid var(--p-surface-0);
+        box-shadow: 0 2px 8px rgba(0 0 0 / 0.1);
+        width: 64px;
+        height: 64px;
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &__details {
+    min-width: 0;
+    padding-top: 36px;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--p-text-color);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__email {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: var(--p-text-muted-color);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .pi {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+// ─── Form Card ──────────────────────────────────────────────────────────────
+.profile-card {
+  background: var(--p-surface-0);
+  border: 1px solid var(--p-surface-200);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+// ─── Sections ───────────────────────────────────────────────────────────────
+.profile-section {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--p-text-color);
+    margin: 0;
+    letter-spacing: -0.01em;
+
+    i {
+      font-size: 1rem;
+      color: var(--p-primary-color);
+    }
+  }
 }
 
+// ─── 2-column grid for name fields ──────────────────────────────────────────
+.profile-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+// ─── Field styles ───────────────────────────────────────────────────────────
 .field {
   display: flex;
   flex-direction: column;
@@ -27,10 +145,71 @@
 .field__hint {
   font-size: 0.8rem;
   color: var(--p-text-muted-color);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  .pi {
+    font-size: 0.7rem;
+  }
+
+  &--locked {
+    color: var(--p-amber-500);
+
+    .pi {
+      color: var(--p-amber-500);
+    }
+  }
 }
 
-@media (max-width: 480px) {
+// ─── Button area ────────────────────────────────────────────────────────────
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1.5rem;
+}
+
+// ─── Responsive ─────────────────────────────────────────────────────────────
+@media (max-width: 576px) {
+  .profile-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-header {
+    &__banner {
+      height: 72px;
+    }
+
+    &__info {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-top: -28px;
+      padding: 0 1rem 1.25rem;
+    }
+
+    &__details {
+      padding-top: 0;
+    }
+
+    &__name {
+      font-size: 1.125rem;
+    }
+
+    &__email {
+      justify-content: center;
+    }
+  }
+
   .profile-card {
-    max-width: 100%;
+    padding: 1.25rem;
+  }
+
+  .profile-actions {
+    justify-content: stretch;
+
+    ::ng-deep .p-button {
+      width: 100%;
+    }
   }
 }

@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../auth/services/auth.service';
 import { PageHeaderComponent } from '@semantica/ui';
 import { ROUTE_PATHS } from '../../../core/constants/route-paths.constants';
+import { EnlacesCardComponent } from './components/enlaces-card/enlaces-card.component';
 
 interface QuickAccessItem {
   label: string;
@@ -21,7 +22,7 @@ interface QuickAccessSection {
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [RouterLink, PageHeaderComponent],
+  imports: [RouterLink, PageHeaderComponent, EnlacesCardComponent],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss',
 })

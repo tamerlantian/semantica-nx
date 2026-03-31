@@ -17,6 +17,10 @@ export const API_ENDPOINTS = {
     buscar: '/auth/tenant/seleccionar',
   },
   perfil: {
-    update: '/auth/user/perfil',
+    detalle: '/auth/user/detalle',
+    update: '/auth/user/actualizar',
+  },
+  enlaces: {
+    lista: '/gen/enlace/lista',
   },
 } as const;
