@@ -1,0 +1,14 @@
+app-programacion-table {
+  display: block;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+app-programaciones-legend {
+  display: block;
+  width: 18rem;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}

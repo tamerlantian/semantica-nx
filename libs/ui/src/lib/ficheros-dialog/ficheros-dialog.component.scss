@@ -1,0 +1,184 @@
+// Lista de ficheros
+.ficheros-content {
+  min-height: 60px;
+  max-height: 220px;
+  overflow-y: auto;
+  margin-bottom: 0.75rem;
+}
+
+.ficheros-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  color: var(--p-text-muted-color);
+
+  &.ficheros-error {
+    color: var(--p-red-500);
+  }
+}
+
+.ficheros-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fichero-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--p-surface-100);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.fichero-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.fichero-icon {
+  font-size: 1.25rem;
+  color: var(--p-primary-color);
+  flex-shrink: 0;
+}
+
+.fichero-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fichero-nombre {
+  font-weight: 500;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fichero-meta {
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+}
+
+// Separador de sección
+.upload-section-header {
+  padding: 0.5rem 0;
+  margin-bottom: 0.5rem;
+  border-top: 1px solid var(--p-surface-200);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--p-text-color);
+}
+
+// Upload
+.upload-container {
+  :host ::ng-deep {
+    .p-fileupload {
+      border: none;
+      background: none;
+    }
+
+    .p-fileupload-header {
+      display: none;
+    }
+
+    .p-fileupload-content {
+      border: 2px dashed var(--p-surface-300);
+      border-radius: 8px;
+      background: var(--p-surface-50);
+      transition:
+        border-color 0.2s,
+        background-color 0.2s;
+      padding: 0;
+
+      &:hover {
+        border-color: var(--p-primary-color);
+        background: var(--p-primary-50, var(--p-surface-100));
+      }
+    }
+  }
+}
+
+.drop-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1rem;
+  cursor: pointer;
+}
+
+.drop-zone__icon {
+  font-size: 1.25rem;
+  color: var(--p-primary-color);
+  flex-shrink: 0;
+}
+
+.drop-zone__text {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.drop-zone__title {
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--p-text-color);
+}
+
+.drop-zone__subtitle {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--p-text-muted-color);
+}
+
+.file-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.file-preview__card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--p-surface-200);
+  border-radius: 8px;
+  background: var(--p-surface-50);
+}
+
+.file-preview__icon {
+  font-size: 1.25rem;
+  color: var(--p-primary-color);
+  flex-shrink: 0;
+}
+
+.file-preview__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.file-preview__name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-preview__size {
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+}

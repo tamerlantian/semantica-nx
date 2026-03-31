@@ -1,0 +1,86 @@
+<div class="page-container">
+  <app-page-header title="Solicitudes" subtitle="Historial de solicitudes del empleado">
+    <p-button label="Nuevo" icon="pi pi-plus" (click)="onNuevo()" />
+  </app-page-header>
+
+  @if (loading() && solicitudes().length === 0) {
+    <app-loading-spinner message="Cargando solicitudes..." />
+  } @else if (error()) {
+    <app-error-alert [message]="error()!" [retryable]="false" />
+  } @else if (!loading() && solicitudes().length === 0) {
+    <app-empty-state
+      title="Sin solicitudes"
+      message="No se encontraron solicitudes registradas."
+      icon="pi pi-file-edit"
+    />
+  } @else {
+    <div class="table-card">
+      <p-table
+        [value]="solicitudes()"
+        [lazy]="true"
+        [lazyLoadOnInit]="false"
+        [totalRecords]="totalRecords()"
+        [paginator]="true"
+        [rows]="pageSize()"
+        [first]="first()"
+        [loading]="loading()"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [rowHover]="true"
+        (onLazyLoad)="onLazyLoad($event)"
+        [scrollable]="true"
+        scrollHeight="600px"
+      >
+        <ng-template #header>
+          <tr>
+            <th>Id</th>
+            <th>Tipo</th>
+            <th>Desde</th>
+            <th>Hasta</th>
+            <th>Comentario</th>
+            <th>Estado</th>
+            <th>Comentario rechazo</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-solicitud>
+          <tr>
+            <td>{{ solicitud.codigo_solicitud_empleado_pk }}</td>
+            <td>{{ solicitud.solicitud_empleado_tipo_nombre }}</td>
+            <td>{{ solicitud.fecha_desde | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ solicitud.fecha_hasta | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ solicitud.comentario }}</td>
+            <td>
+              <p-tag
+                [value]="getEstadoSolicitud(solicitud.estado_solicitud).label"
+                [severity]="getEstadoSolicitud(solicitud.estado_solicitud).severity"
+              />
+            </td>
+            <td>{{ solicitud.comentario_rechazo }}</td>
+            <td>
+              <p-button
+                icon="pi pi-paperclip"
+                severity="secondary"
+                [text]="true"
+                [rounded]="true"
+                pTooltip="Adjuntar archivo"
+                tooltipPosition="top"
+                (click)="onAdjuntos(solicitud)"
+              />
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+
+  <app-solicitud-create-dialog [(visible)]="dialogVisible" (created)="onSolicitudCreated()" />
+  @if (selectedSolicitudId()) {
+    <app-ficheros-dialog
+      [(visible)]="ficherosDialogVisible"
+      [recordId]="selectedSolicitudId()"
+      codigoModelo="RhuSolicitudEmpleado"
+      header="Ficheros adjuntos de la solicitud"
+    />
+  }
+
+</div>

@@ -1,0 +1,10 @@
+<div class="page-container">
+  <app-page-header
+    title="Reportes de programación"
+    subtitle="Historial de reportes de programación enviados"
+  />
+
+  @if (empleadoId() > 0) {
+    <app-reportes-table [empleadoId]="empleadoId()" />
+  }
+</div>

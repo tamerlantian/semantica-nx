@@ -1,0 +1,56 @@
+<div class="page-container">
+  <app-page-header title="Créditos" subtitle="Créditos del empleado" />
+
+  @if (loading() && creditos().length === 0) {
+    <app-loading-spinner message="Cargando créditos..." />
+  } @else if (error()) {
+    <app-error-alert [message]="error()!" [retryable]="false" />
+  } @else if (!loading() && creditos().length === 0) {
+    <app-empty-state
+      title="Sin créditos"
+      message="No se encontraron créditos registrados."
+      icon="pi pi-money-bill"
+    />
+  } @else {
+    <div class="table-card">
+      <p-table
+        [value]="creditos()"
+        [lazy]="true"
+        [lazyLoadOnInit]="false"
+        [totalRecords]="totalRecords()"
+        [paginator]="true"
+        [rows]="pageSize()"
+        [first]="first()"
+        [loading]="loading()"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [rowHover]="true"
+        (onLazyLoad)="onLazyLoad($event)"
+        [scrollable]="true"
+        scrollHeight="600px"
+      >
+        <ng-template #header>
+          <tr>
+            <th>Tipo</th>
+            <th>Fecha solicitud</th>
+            <th>Valor solicitado</th>
+            <th>Valor cuota</th>
+            <th>Cuotas</th>
+            <th>Saldo</th>
+            <th>Estado</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-credito>
+          <tr>
+            <td>{{ credito.tipo }}</td>
+            <td>{{ credito.fecha_solicitud | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ credito.vr_solicitado | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td>{{ credito.vr_cuota | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td>{{ credito.num_cuotas }}</td>
+            <td>{{ credito.vr_saldo | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td>{{ credito.estado }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+</div>

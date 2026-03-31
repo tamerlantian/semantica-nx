@@ -1,0 +1,19 @@
+<div class="page-container">
+  <app-page-header title="Programaciones" subtitle="Programación mensual de turnos del empleado" />
+
+  @if (loading()) {
+    <app-loading-spinner message="Cargando programaciones..." />
+  } @else {
+    @if (programaciones().length > 0) {
+      <app-programacion-table
+        [programaciones]="programaciones()"
+        [diasDelMes]="diasDelMes()"
+        [diaActual]="diaActual"
+      />
+    }
+
+    @if (turnos().length > 0) {
+      <app-programaciones-legend [turnos]="turnos()" />
+    }
+  }
+</div>

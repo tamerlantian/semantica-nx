@@ -1,13 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { DrawerModule } from 'primeng/drawer';
-import { ButtonModule } from 'primeng/button';
-import { AccordionModule } from 'primeng/accordion';
 import { AuthService } from '../../auth/services/auth.service';
 import { AsociarEmpresaDialogComponent } from '../components/asociar-empresa-dialog/asociar-empresa-dialog.component';
 import { ROUTE_PATHS } from '../../../core/constants/route-paths.constants';
 
-interface NavItem {
+interface NavChild {
   label: string;
   icon: string;
   route: string;
@@ -17,19 +16,24 @@ interface NavItem {
 interface NavGroup {
   label: string;
   icon: string;
-  children: NavItem[];
+  children: NavChild[];
+}
+
+type NavItem = NavChild | NavGroup;
+
+export function isNavGroup(item: NavItem): item is NavGroup {
+  return 'children' in item;
 }
 
 @Component({
   selector: 'app-shell',
   standalone: true,
   imports: [
+    NgTemplateOutlet,
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
     DrawerModule,
-    ButtonModule,
-    AccordionModule,
     AsociarEmpresaDialogComponent,
   ],
   templateUrl: './shell.component.html',
@@ -43,15 +47,15 @@ export class ShellComponent {
   readonly drawerVisible = signal(false);
   readonly dialogVisible = signal(false);
 
-  readonly inicioItem: NavItem = {
-    label: 'Inicio',
-    icon: 'pi pi-home',
-    route: ROUTE_PATHS.dashboard.inicio,
-  };
+  /** Conjuntos de labels de grupos actualmente expandidos */
+  readonly expandedGroups = signal<Set<string>>(new Set(['Consultas', 'Finanzas']));
 
-  readonly activeGroups: string[] = ['Consultas', 'Finanzas'];
-
-  readonly navGroups: NavGroup[] = [
+  readonly navItems: NavItem[] = [
+    {
+      label: 'Inicio',
+      icon: 'pi pi-home',
+      route: ROUTE_PATHS.dashboard.inicio,
+    },
     {
       label: 'Consultas',
       icon: 'pi pi-search',
@@ -60,12 +64,6 @@ export class ShellComponent {
           label: 'Pagos',
           icon: 'pi pi-credit-card',
           route: ROUTE_PATHS.dashboard.pagos,
-          requiresTenant: true,
-        },
-        {
-          label: 'Turnos',
-          icon: 'pi pi-calendar',
-          route: ROUTE_PATHS.dashboard.turnos,
           requiresTenant: true,
         },
         {
@@ -92,6 +90,24 @@ export class ShellComponent {
           route: ROUTE_PATHS.dashboard.certificadoLaboral,
           requiresTenant: true,
         },
+        {
+          label: 'Turnos',
+          icon: 'pi pi-calendar',
+          route: ROUTE_PATHS.dashboard.turnos,
+          requiresTenant: true,
+        },
+        {
+          label: 'Programaciones',
+          icon: 'pi pi-table',
+          route: ROUTE_PATHS.dashboard.programaciones,
+          requiresTenant: true,
+        },
+        {
+          label: 'Reportes programación',
+          icon: 'pi pi-file-edit',
+          route: ROUTE_PATHS.dashboard.reportesProgramacion,
+          requiresTenant: true,
+        },
       ],
     },
     {
@@ -113,6 +129,24 @@ export class ShellComponent {
       ],
     },
   ];
+
+  readonly isNavGroup = isNavGroup;
+
+  isExpanded(label: string): boolean {
+    return this.expandedGroups().has(label);
+  }
+
+  toggleGroup(label: string): void {
+    this.expandedGroups.update((set) => {
+      const next = new Set(set);
+      if (next.has(label)) {
+        next.delete(label);
+      } else {
+        next.add(label);
+      }
+      return next;
+    });
+  }
 
   toggleDrawer(): void {
     this.drawerVisible.update((v) => !v);
