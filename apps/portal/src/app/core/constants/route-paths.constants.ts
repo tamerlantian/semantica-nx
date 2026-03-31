@@ -20,6 +20,7 @@ export const ROUTE_PATHS = {
     reportesProgramacion: '/dashboard/reportes-programacion',
     creditos: '/dashboard/creditos',
     anticipoNomina: '/dashboard/anticipo-nomina',
+    perfil: '/dashboard/perfil',
   },
   legal: {
     politicaPrivacidad: '/politica-de-privacidad',

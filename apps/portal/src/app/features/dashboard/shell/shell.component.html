@@ -12,21 +12,18 @@
 
     <div class="navbar-end">
       @if (currentUser()) {
-        <div class="user-info">
-          <div class="user-avatar">{{ currentUser()!.email.charAt(0).toUpperCase() }}</div>
+        <div class="user-menu-trigger" (click)="userMenu.toggle($event)">
+          <div class="user-avatar">{{ avatarLabel() }}</div>
           <div class="user-details">
             @if (currentUser()!.tenant_nombre) {
               <span class="user-empresa">{{ currentUser()!.tenant_nombre }}</span>
             }
-            <span class="user-name">{{ currentUser()!.email }}</span>
+            <span class="user-name">{{ currentUser()!.name || currentUser()!.email }}</span>
           </div>
+          <i class="pi pi-chevron-down user-chevron"></i>
         </div>
-        <div class="navbar-divider"></div>
+        <p-menu #userMenu [model]="userMenuItems" [popup]="true" />
       }
-      <button class="logout-btn" (click)="logout()" title="Cerrar sesión">
-        <i class="pi pi-sign-out"></i>
-        <span>Salir</span>
-      </button>
     </div>
   </header>
 

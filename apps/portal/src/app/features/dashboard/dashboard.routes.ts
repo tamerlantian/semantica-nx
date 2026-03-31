@@ -12,6 +12,10 @@ export const DASHBOARD_ROUTES: Routes = [
         loadComponent: () => import('./inicio/inicio.component').then((m) => m.InicioComponent),
       },
       {
+        path: 'perfil',
+        loadChildren: () => import('../perfil/perfil.routes').then((m) => m.PERFIL_ROUTES),
+      },
+      {
         path: 'pagos',
         canActivate: [tenantGuard],
         loadChildren: () => import('../pagos/pagos.routes').then((m) => m.PAGOS_ROUTES),

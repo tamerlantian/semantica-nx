@@ -5,6 +5,8 @@ export type { LoginRequest, AuthResponse, ResendVerificationRequest };
 
 export interface Usuario extends BaseUsuario {
   name: string;
+  apellidos: string | null;
+  numero_identificacion: string | null;
   tenant_id: number | null;
   empleado_id: number | null;
   tenant_nombre: string | null;

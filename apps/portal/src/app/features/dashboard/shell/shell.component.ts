@@ -1,7 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { DrawerModule } from 'primeng/drawer';
+import { MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../auth/services/auth.service';
 import { AsociarEmpresaDialogComponent } from '../components/asociar-empresa-dialog/asociar-empresa-dialog.component';
 import { ROUTE_PATHS } from '../../../core/constants/route-paths.constants';
@@ -34,6 +36,7 @@ export function isNavGroup(item: NavItem): item is NavGroup {
     RouterLink,
     RouterLinkActive,
     DrawerModule,
+    MenuModule,
     AsociarEmpresaDialogComponent,
   ],
   templateUrl: './shell.component.html',
@@ -41,11 +44,33 @@ export function isNavGroup(item: NavItem): item is NavGroup {
 })
 export class ShellComponent {
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   readonly currentUser = this.authService.currentUser;
   readonly hasTenant = this.authService.hasTenant;
   readonly drawerVisible = signal(false);
   readonly dialogVisible = signal(false);
+
+  readonly avatarLabel = computed(() => {
+    const user = this.currentUser();
+    if (!user) return '';
+    const name = user.name?.trim();
+    return (name ? name.charAt(0) : user.email.charAt(0)).toUpperCase();
+  });
+
+  readonly userMenuItems: MenuItem[] = [
+    // {
+    //   label: 'Mi perfil',
+    //   icon: 'pi pi-user',
+    //   command: () => this.router.navigate([ROUTE_PATHS.dashboard.perfil]),
+    // },
+    // { separator: true },
+    {
+      label: 'Cerrar sesión',
+      icon: 'pi pi-sign-out',
+      command: () => this.logout(),
+    },
+  ];
 
   /** Conjuntos de labels de grupos actualmente expandidos */
   readonly expandedGroups = signal<Set<string>>(new Set(['Consultas', 'Finanzas']));
