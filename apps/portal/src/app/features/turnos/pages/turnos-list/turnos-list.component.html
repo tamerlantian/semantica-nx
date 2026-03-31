@@ -28,10 +28,12 @@
     </div>
 
     @if (programaciones().length > 0) {
-      <app-programacion-calendar
-        [programaciones]="programaciones()"
-        [diaActual]="diaActual"
-      />
+      <div class="calendar-wrapper">
+        <app-programacion-calendar
+          [programaciones]="programaciones()"
+          [diaActual]="diaActual"
+        />
+      </div>
     }
   }
 </div>

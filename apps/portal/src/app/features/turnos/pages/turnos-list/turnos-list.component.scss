@@ -8,3 +8,11 @@
     grid-template-columns: 1fr;
   }
 }
+
+.calendar-wrapper {
+  width: 50%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
