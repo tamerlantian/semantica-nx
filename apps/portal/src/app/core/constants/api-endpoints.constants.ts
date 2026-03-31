@@ -19,4 +19,7 @@ export const API_ENDPOINTS = {
   perfil: {
     update: '/auth/user/perfil',
   },
+  enlaces: {
+    lista: '/gen/enlace/lista',
+  },
 } as const;
