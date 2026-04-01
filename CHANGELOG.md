@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.8](https://github.com/tamerlantian/semantica-nx/compare/v0.0.7...v0.0.8) (2026-04-01)
+
+
+### Bug Fixes
+
+* **portal:** usar proxy en staging para evitar bloqueo cross-site ([a53296e](https://github.com/tamerlantian/semantica-nx/commit/a53296e300a69f2bbbe48e38f0cde4bf9f0ab431))
+* **portal:** usar proxy en staging para evitar bloqueo cross-site ([95a6037](https://github.com/tamerlantian/semantica-nx/commit/95a6037f6e628d166c5ee0bf62cab22e9869f2d6))
+
 ## [0.0.7](https://github.com/tamerlantian/semantica-nx/compare/v0.0.6...v0.0.7) (2026-03-31)
 
 
