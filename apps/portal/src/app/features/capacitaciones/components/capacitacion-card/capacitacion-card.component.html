@@ -1,0 +1,84 @@
+<div class="capacitacion-card">
+  <div class="capacitacion-card__header">
+    <div class="capacitacion-card__header-icon">
+      <i class="pi pi-book"></i>
+    </div>
+    <div class="capacitacion-card__header-text">
+      <span class="capacitacion-card__header-title">{{ capacitacion().nombre }}</span>
+      <span class="capacitacion-card__header-hint">{{ capacitacion().tipo }}</span>
+    </div>
+    <p-tag
+      [value]="capacitacion().estado"
+      [severity]="estadoSeverity()"
+      class="capacitacion-card__status"
+    />
+  </div>
+
+  <div class="capacitacion-card__body">
+    <div class="capacitacion-card__tags">
+      <span class="capacitacion-card__tag">
+        <i [class]="modalidadIcon()"></i>
+        {{ capacitacion().modalidad }}
+      </span>
+      <span class="capacitacion-card__tag capacitacion-card__tag--horas">
+        <i class="pi pi-clock"></i>
+        {{ capacitacion().duracion_horas }}h
+      </span>
+    </div>
+
+    <div class="capacitacion-card__details">
+      <div class="capacitacion-card__detail-group">
+        <div class="capacitacion-card__detail">
+          <div class="capacitacion-card__detail-icon">
+            <i class="pi pi-user"></i>
+          </div>
+          <div class="capacitacion-card__detail-content">
+            <span class="capacitacion-card__detail-label">Instructor</span>
+            <span class="capacitacion-card__detail-value">{{ capacitacion().instructor }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="capacitacion-card__detail-group">
+        <div class="capacitacion-card__detail">
+          <div class="capacitacion-card__detail-icon">
+            <i class="pi pi-calendar"></i>
+          </div>
+          <div class="capacitacion-card__detail-content">
+            <span class="capacitacion-card__detail-label">Fechas</span>
+            <span class="capacitacion-card__detail-value">
+              {{ capacitacion().fecha_inicio | date: 'dd/MM/yyyy' }} –
+              {{ capacitacion().fecha_fin | date: 'dd/MM/yyyy' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="capacitacion-card__detail-group">
+        <div class="capacitacion-card__detail">
+          <div class="capacitacion-card__detail-icon">
+            <i class="pi pi-map-marker"></i>
+          </div>
+          <div class="capacitacion-card__detail-content">
+            <span class="capacitacion-card__detail-label">Lugar</span>
+            <span class="capacitacion-card__detail-value">{{ capacitacion().lugar }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @if (showProgress()) {
+      <div class="capacitacion-card__progress">
+        <div class="capacitacion-card__progress-header">
+          <span class="capacitacion-card__progress-label">Progreso</span>
+          <span class="capacitacion-card__progress-value">{{ capacitacion().progreso }}%</span>
+        </div>
+        <p-progressBar
+          [value]="capacitacion().progreso"
+          [showValue]="false"
+          styleClass="capacitacion-card__progress-bar"
+        />
+      </div>
+    }
+  </div>
+</div>

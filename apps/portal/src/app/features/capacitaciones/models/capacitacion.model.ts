@@ -9,3 +9,18 @@ export interface Capacitacion {
   horas: number;
   estado: string;
 }
+
+export interface CapacitacionDetalle {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  tipo: string;
+  instructor: string;
+  fecha_inicio: string;
+  fecha_fin: string;
+  duracion_horas: number;
+  estado: string;
+  progreso: number;
+  modalidad: string;
+  lugar: string;
+}
