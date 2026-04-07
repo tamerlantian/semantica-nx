@@ -151,6 +151,7 @@
                   placeholder="Seleccione una ciudad"
                   [filter]="true"
                   filterBy="nombre"
+                  (onFilter)="onFilterCiudades($event)"
                   [loading]="loadingCiudades()"
                   [style]="{ width: '100%' }"
                   appendTo="body"

@@ -1,10 +1,12 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { DividerModule } from 'primeng/divider';
-import { SelectModule } from 'primeng/select';
+import { SelectFilterEvent, SelectModule } from 'primeng/select';
 import { PageHeaderComponent } from '@semantica/ui';
 import { ToastService, extractErrorMessage } from '@semantica/core';
 import { ActualizarInformacionService } from '../../services/actualizar-informacion.service';
@@ -35,6 +37,8 @@ export class ActualizarInformacionPageComponent implements OnInit {
   private readonly actualizarInfoService = inject(ActualizarInformacionService);
   private readonly authService = inject(AuthService);
   private readonly toastService = inject(ToastService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly filterCiudadesSubject = new Subject<string>();
 
   readonly isLoading = signal(true);
   readonly isSaving = signal(false);
@@ -87,7 +91,32 @@ export class ActualizarInformacionPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.filterCiudadesSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((nombre) => {
+          this.loadingCiudades.set(true);
+          return this.actualizarInfoService.getCiudades(nombre || undefined);
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: (res) => {
+          this.ciudades.set(res.items);
+          this.loadingCiudades.set(false);
+        },
+        error: () => {
+          this.ciudades.set([]);
+          this.loadingCiudades.set(false);
+        },
+      });
+
     this.loadEmpleadoDetalle();
+  }
+
+  onFilterCiudades(event: SelectFilterEvent): void {
+    this.filterCiudadesSubject.next(event.filter?.trim() || '');
   }
 
   private loadEmpleadoDetalle(): void {
@@ -113,6 +142,7 @@ export class ActualizarInformacionPageComponent implements OnInit {
         });
         this.form.markAsPristine();
         this.isLoading.set(false);
+        this.loadCiudades();
       },
       error: (err) => {
         this.errorMessage.set(
@@ -161,5 +191,19 @@ export class ActualizarInformacionPageComponent implements OnInit {
 
   retry(): void {
     this.loadEmpleadoDetalle();
+  }
+
+  private loadCiudades(nombre?: string): void {
+    this.loadingCiudades.set(true);
+    this.actualizarInfoService.getCiudades(nombre).subscribe({
+      next: (res) => {
+        this.ciudades.set(res.items);
+        this.loadingCiudades.set(false);
+      },
+      error: () => {
+        this.ciudades.set([]);
+        this.loadingCiudades.set(false);
+      },
+    });
   }
 }
