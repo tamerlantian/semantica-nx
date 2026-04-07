@@ -29,14 +29,21 @@
       />
     </div>
 
-    @if (programaciones().length > 0) {
-      <div class="calendar-wrapper">
-        <app-programacion-calendar
-          [programaciones]="programaciones()"
-          [diaActual]="diaActual"
-        />
-      </div>
-    }
+    <div class="calendar-section">
+      @if (programaciones().length > 0) {
+        <div class="calendar-wrapper">
+          <app-programacion-calendar
+            [programaciones]="programaciones()"
+            [diaActual]="diaActual"
+          />
+        </div>
+      }
+
+      <app-vencimientos-card
+        [vencimientos]="vencimientos()"
+        [loading]="loadingVencimientos()"
+      />
+    </div>
   }
 
   <app-consignas-dialog [turno]="selectedTurno()" [(visible)]="consignasVisible" />

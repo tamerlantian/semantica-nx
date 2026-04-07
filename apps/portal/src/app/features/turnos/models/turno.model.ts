@@ -98,6 +98,13 @@ export interface Turno {
   estado_inactivo: boolean;
 }
 
+export interface DetalleVencimiento {
+  fecha_acreditacion: string | null;
+  fecha_poligono: string | null;
+  fecha_psicofisico: string | null;
+  fecha_psicosensometrico: string | null;
+}
+
 export interface Consigna {
   codigo_consigna_pk: number;
   codigo_puesto_fk: number;

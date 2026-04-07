@@ -1,12 +1,13 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { AuthService } from '../../../auth/services/auth.service';
 import { TurnosService } from '../../services/turnos.service';
-import { ProgramacionEmpleado, Turno, TurnoDelDia } from '../../models/turno.model';
+import { DetalleVencimiento, ProgramacionEmpleado, Turno, TurnoDelDia } from '../../models/turno.model';
 import { extraerTurnosUnicos, obtenerTurnosHoyManana } from '../../helpers/turno.helper';
 import { PageHeaderComponent, LoadingSpinnerComponent } from '@semantica/ui';
 import { TurnoCardComponent } from '../../components/turno-card/turno-card.component';
 import { ProgramacionCalendarComponent } from '../../components/programacion-calendar/programacion-calendar.component';
 import { ConsignasDialogComponent } from '../../components/consignas-dialog/consignas-dialog.component';
+import { VencimientosCardComponent } from '../../components/vencimientos-card/vencimientos-card.component';
 
 @Component({
   selector: 'app-turnos-list',
@@ -17,6 +18,7 @@ import { ConsignasDialogComponent } from '../../components/consignas-dialog/cons
     TurnoCardComponent,
     ProgramacionCalendarComponent,
     ConsignasDialogComponent,
+    VencimientosCardComponent,
   ],
   templateUrl: './turnos-list.component.html',
   styleUrl: './turnos-list.component.scss',
@@ -29,6 +31,8 @@ export class TurnosListComponent implements OnInit {
   readonly turnoManana = signal<TurnoDelDia | null>(null);
   readonly programaciones = signal<ProgramacionEmpleado[]>([]);
   readonly loading = signal(true);
+  readonly vencimientos = signal<DetalleVencimiento | null>(null);
+  readonly loadingVencimientos = signal(true);
 
   readonly diaActual = new Date().getDate();
 
@@ -39,8 +43,17 @@ export class TurnosListComponent implements OnInit {
     const user = this.authService.currentUser();
     if (!user) {
       this.loading.set(false);
+      this.loadingVencimientos.set(false);
       return;
     }
+
+    this.turnosService.getDetalleVencimiento(user.empleado_id!).subscribe({
+      next: (data) => {
+        this.vencimientos.set(data);
+        this.loadingVencimientos.set(false);
+      },
+      error: () => this.loadingVencimientos.set(false),
+    });
 
     obtenerTurnosHoyManana(this.turnosService, user.empleado_id!).subscribe({
       next: ({ turnoHoy, turnoManana, programaciones }) => {

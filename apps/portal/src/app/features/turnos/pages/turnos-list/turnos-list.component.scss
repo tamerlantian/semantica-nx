@@ -9,10 +9,30 @@
   }
 }
 
-.calendar-wrapper {
-  width: 50%;
+.calendar-section {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+
+  .calendar-wrapper {
+    flex: 1;
+    min-width: 0;
+  }
+
+  app-vencimientos-card {
+    width: 320px;
+    flex-shrink: 0;
+  }
 
   @media (max-width: 768px) {
-    width: 100%;
+    flex-direction: column;
+
+    .calendar-wrapper {
+      width: 100%;
+    }
+
+    app-vencimientos-card {
+      width: 100%;
+    }
   }
 }

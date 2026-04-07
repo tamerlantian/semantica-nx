@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseHttpService, PaginatedResponse } from '../../../core';
-import { Consigna, ProgramacionEmpleado, Turno } from '../models/turno.model';
+import { Consigna, DetalleVencimiento, ProgramacionEmpleado, Turno } from '../models/turno.model';
 
 @Injectable({ providedIn: 'root' })
 export class TurnosService extends BaseHttpService {
@@ -25,6 +25,13 @@ export class TurnosService extends BaseHttpService {
   /** Obtiene el detalle de los turnos a partir de sus códigos. */
   getTurnosProgramacion(turnos: string[]): Observable<PaginatedResponse<Turno>> {
     return this.post<PaginatedResponse<Turno>>(this.TURNO_PROGRAMACION_URL, { turnos });
+  }
+
+  /** Obtiene el detalle de vencimientos de un empleado. */
+  getDetalleVencimiento(empleadoId: number): Observable<DetalleVencimiento> {
+    return this.get<DetalleVencimiento>('/rhu/empleado/detalle-vencimiento', {
+      empleado_id: empleadoId,
+    });
   }
 
   /** Obtiene las consignas habilitadas para el portal de un puesto. */
