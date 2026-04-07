@@ -5,7 +5,6 @@ import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
-import { DividerModule } from 'primeng/divider';
 import { SelectFilterEvent, SelectModule } from 'primeng/select';
 import { PageHeaderComponent } from '@semantica/ui';
 import { ToastService, extractErrorMessage } from '@semantica/core';
@@ -25,7 +24,6 @@ import {
     InputTextModule,
     ButtonModule,
     MessageModule,
-    DividerModule,
     SelectModule,
     PageHeaderComponent,
   ],
@@ -97,13 +95,26 @@ export class ActualizarInformacionPageComponent implements OnInit {
         distinctUntilChanged(),
         switchMap((nombre) => {
           this.loadingCiudades.set(true);
-          return this.actualizarInfoService.getCiudades(nombre || undefined);
+          return this.actualizarInfoService.getCiudades({ nombre: nombre || undefined });
         }),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: (res) => {
-          this.ciudades.set(res.items);
+          let items = res.items;
+          const selectedCityId = this.form.value.codigo_ciudad_fk;
+          if (
+            selectedCityId != null &&
+            !items.some((c) => c.codigo_ciudad_pk === selectedCityId)
+          ) {
+            const selectedCity = this.ciudades().find(
+              (c) => c.codigo_ciudad_pk === selectedCityId,
+            );
+            if (selectedCity) {
+              items = [selectedCity, ...items];
+            }
+          }
+          this.ciudades.set(items);
           this.loadingCiudades.set(false);
         },
         error: () => {
@@ -193,12 +204,34 @@ export class ActualizarInformacionPageComponent implements OnInit {
     this.loadEmpleadoDetalle();
   }
 
-  private loadCiudades(nombre?: string): void {
+  private loadCiudades(): void {
     this.loadingCiudades.set(true);
-    this.actualizarInfoService.getCiudades(nombre).subscribe({
+    const selectedCityId = this.form.value.codigo_ciudad_fk;
+
+    this.actualizarInfoService.getCiudades().subscribe({
       next: (res) => {
-        this.ciudades.set(res.items);
-        this.loadingCiudades.set(false);
+        let items = res.items;
+        const needsFetch =
+          selectedCityId != null && !items.some((c) => c.codigo_ciudad_pk === selectedCityId);
+
+        if (needsFetch) {
+          this.actualizarInfoService.getCiudades({ ciudad_id: selectedCityId }).subscribe({
+            next: (selectedRes) => {
+              if (selectedRes.items.length > 0) {
+                items = [selectedRes.items[0], ...items];
+              }
+              this.ciudades.set(items);
+              this.loadingCiudades.set(false);
+            },
+            error: () => {
+              this.ciudades.set(items);
+              this.loadingCiudades.set(false);
+            },
+          });
+        } else {
+          this.ciudades.set(items);
+          this.loadingCiudades.set(false);
+        }
       },
       error: () => {
         this.ciudades.set([]);

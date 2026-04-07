@@ -23,11 +23,11 @@ export class ActualizarInformacionService extends BaseHttpService {
     return this.post<unknown>(this.ACTUALIZACION_URL, body);
   }
 
-  getCiudades(nombre?: string): Observable<PaginatedResponse<Ciudad>> {
+  getCiudades(params?: { nombre?: string; ciudad_id?: number }): Observable<PaginatedResponse<Ciudad>> {
     return this.get<PaginatedResponse<Ciudad>>(this.CIUDADES_URL, {
       page: 1,
       size: 50,
-      nombre,
+      ...params,
     });
   }
 }
