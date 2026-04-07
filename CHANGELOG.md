@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.10](https://github.com/tamerlantian/semantica-nx/compare/v0.0.9...v0.0.10) (2026-04-07)
+
+
+### Bug Fixes
+
+* ancho de card de vencimientos al 50% ([df2d70d](https://github.com/tamerlantian/semantica-nx/commit/df2d70d56b67fe30af175ee2ba418cc7014227cb))
+
 ## [0.0.9](https://github.com/tamerlantian/semantica-nx/compare/v0.0.8...v0.0.9) (2026-04-07)
 
 
