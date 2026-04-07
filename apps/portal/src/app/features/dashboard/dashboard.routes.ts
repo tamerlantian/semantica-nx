@@ -65,6 +65,14 @@ export const DASHBOARD_ROUTES: Routes = [
           ),
       },
       {
+        path: 'actualizar-informacion',
+        canActivate: [tenantGuard],
+        loadChildren: () =>
+          import('../actualizar-informacion/actualizar-informacion.routes').then(
+            (m) => m.ACTUALIZAR_INFORMACION_ROUTES,
+          ),
+      },
+      {
         path: 'creditos',
         canActivate: [tenantGuard],
         loadChildren: () => import('../creditos/creditos.routes').then((m) => m.CREDITOS_ROUTES),

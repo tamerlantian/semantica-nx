@@ -1,0 +1,280 @@
+<p-dialog
+  header="Solicitar crédito"
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '720px' }"
+  [breakpoints]="{ '768px': '95vw' }"
+  (onShow)="onShow()"
+  (onHide)="onHide()"
+>
+  @if (loadingConfig()) {
+    <div class="loading-config">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Cargando configuración...</span>
+    </div>
+  } @else if (!configuracion()) {
+    <div class="loading-config loading-config--error">
+      <i class="pi pi-exclamation-triangle"></i>
+      <span>No se pudo cargar la configuración. Intenta de nuevo.</span>
+    </div>
+  } @else {
+  <p-stepper [(value)]="activeStep" [linear]="true">
+    <p-step-list>
+      <p-step [value]="1">Monto</p-step>
+      <p-step [value]="2">Plazo</p-step>
+      <p-step [value]="3">Confirmación</p-step>
+    </p-step-list>
+
+    <p-step-panels>
+      <!-- Step 1: Monto -->
+      <p-step-panel [value]="1">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="step-monto">
+            <div class="step-monto__icon-wrap">
+              <i class="pi pi-wallet"></i>
+            </div>
+            <h3 class="step-monto__heading">¿Cuánto necesitas?</h3>
+            <p class="step-monto__subheading">
+              Selecciona un monto entre $100.000 y $2.000.000 COP
+            </p>
+
+            <div class="step-monto__amount-display">
+              {{ form.controls.monto.value | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+            </div>
+
+            <div class="step-monto__input-wrap">
+              <p-inputnumber
+                [formControl]="form.controls.monto"
+                mode="currency"
+                currency="COP"
+                locale="es-CO"
+                [min]="100000"
+                [max]="2000000"
+                [step]="50000"
+                [fluid]="true"
+                (onInput)="onMontoChange($event.value)"
+              />
+            </div>
+
+            <div class="step-monto__slider">
+              <p-slider
+                [ngModel]="sliderValue()"
+                (ngModelChange)="onSliderChange($event)"
+                [ngModelOptions]="{ standalone: true }"
+                [min]="100000"
+                [max]="2000000"
+                [step]="50000"
+              />
+            </div>
+
+            <div class="step-monto__range-labels">
+              <span>$100.000</span>
+              <span>$2.000.000</span>
+            </div>
+
+            @if (form.controls.monto.invalid && form.controls.monto.touched) {
+              <small class="form-error">Ingresa un monto entre $100.000 y $2.000.000</small>
+            }
+          </div>
+
+          <div class="step-actions step-actions--end">
+            <p-button
+              label="Siguiente"
+              icon="pi pi-arrow-right"
+              iconPos="right"
+              (click)="goToStep2(activateCallback)"
+              [disabled]="form.controls.monto.invalid"
+            />
+          </div>
+        </ng-template>
+      </p-step-panel>
+
+      <!-- Step 2: Plazo -->
+      <p-step-panel [value]="2">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="step-plazo">
+            <h3 class="step-plazo__heading">Elige tu plan de pago</h3>
+            <p class="step-plazo__subheading">
+              Monto solicitado:
+              <strong>
+                {{ form.controls.monto.value | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+              </strong>
+              <span class="step-plazo__tasa">Tasa anual: {{ configuracion()!.tasa_interes }}%</span>
+            </p>
+
+            <div class="planes-grid">
+              @for (plan of planes(); track plan.num_cuotas) {
+                <div
+                  class="plan-card"
+                  [class.plan-card--selected]="selectedPlan()?.num_cuotas === plan.num_cuotas"
+                  (click)="selectPlan(plan)"
+                >
+                  @if (selectedPlan()?.num_cuotas === plan.num_cuotas) {
+                    <div class="plan-card__check">
+                      <i class="pi pi-check-circle"></i>
+                    </div>
+                  }
+
+                  <div class="plan-card__duration">
+                    {{ plan.num_cuotas }} {{ plan.num_cuotas === 1 ? 'mes' : 'meses' }}
+                  </div>
+                  <div class="plan-card__rate">
+                    {{ plan.tasa_interes_display }}
+                  </div>
+
+                  <div class="plan-card__divider"></div>
+
+                  <div class="plan-card__cuota-label">Cuota mensual</div>
+                  <div class="plan-card__cuota">
+                    {{ plan.vr_cuota | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+                  </div>
+
+                  <div class="plan-card__details">
+                    <div class="plan-card__detail">
+                      <span class="plan-card__detail-label">Intereses</span>
+                      <span class="plan-card__detail-value">
+                        {{ plan.vr_intereses | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+                      </span>
+                    </div>
+                    <div class="plan-card__detail">
+                      <span class="plan-card__detail-label">Total a pagar</span>
+                      <span class="plan-card__detail-value plan-card__detail-value--total">
+                        {{ plan.vr_total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+
+            @if (!selectedPlan() && form.controls.num_cuotas.touched) {
+              <small class="form-error">Selecciona un plan de pago</small>
+            }
+          </div>
+
+          <div class="step-actions">
+            <p-button
+              label="Anterior"
+              icon="pi pi-arrow-left"
+              severity="secondary"
+              [outlined]="true"
+              (click)="activateCallback(1)"
+            />
+            <p-button
+              label="Siguiente"
+              icon="pi pi-arrow-right"
+              iconPos="right"
+              (click)="goToStep3(activateCallback)"
+              [disabled]="!selectedPlan()"
+            />
+          </div>
+        </ng-template>
+      </p-step-panel>
+
+      <!-- Step 3: Confirmación -->
+      <p-step-panel [value]="3">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="step-confirmacion">
+            <h3 class="step-confirmacion__heading">Describe el motivo del crédito</h3>
+
+            <div class="resumen-card">
+              <div class="resumen-card__title">
+                <i class="pi pi-info-circle"></i>
+                Resumen de tu solicitud
+              </div>
+              <div class="resumen-card__body">
+                <div class="resumen-card__row">
+                  <span class="resumen-card__label">Monto solicitado</span>
+                  <span class="resumen-card__value">
+                    {{
+                      form.controls.monto.value | currency: 'COP' : 'symbol-narrow' : '1.0-0'
+                    }}
+                  </span>
+                </div>
+                <div class="resumen-card__row">
+                  <span class="resumen-card__label">Plazo</span>
+                  <span class="resumen-card__value">
+                    {{ selectedPlan()?.num_cuotas }}
+                    {{ selectedPlan()?.num_cuotas === 1 ? 'mes' : 'meses' }}
+                  </span>
+                </div>
+                <div class="resumen-card__row">
+                  <span class="resumen-card__label">Tasa de interés</span>
+                  <span class="resumen-card__value">
+                    {{ selectedPlan()?.tasa_interes_display }}
+                  </span>
+                </div>
+                <div class="resumen-card__row">
+                  <span class="resumen-card__label">Cuota mensual</span>
+                  <span class="resumen-card__value">
+                    {{
+                      selectedPlan()?.vr_cuota | currency: 'COP' : 'symbol-narrow' : '1.0-0'
+                    }}
+                  </span>
+                </div>
+                <div class="resumen-card__divider"></div>
+                <div class="resumen-card__row">
+                  <span class="resumen-card__label">Intereses</span>
+                  <span class="resumen-card__value">
+                    {{
+                      selectedPlan()?.vr_intereses | currency: 'COP' : 'symbol-narrow' : '1.0-0'
+                    }}
+                  </span>
+                </div>
+                <div class="resumen-card__row resumen-card__row--total">
+                  <span class="resumen-card__label">Total a pagar</span>
+                  <span class="resumen-card__value">
+                    {{
+                      selectedPlan()?.vr_total | currency: 'COP' : 'symbol-narrow' : '1.0-0'
+                    }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="descripcion">¿Por qué necesitas este crédito?</label>
+              <textarea
+                pTextarea
+                id="descripcion"
+                [formControl]="form.controls.descripcion"
+                rows="4"
+                [maxlength]="500"
+                placeholder="Describe brevemente el motivo de tu solicitud..."
+                class="w-full"
+              ></textarea>
+              <div class="form-field__footer">
+                @if (form.controls.descripcion.invalid && form.controls.descripcion.touched) {
+                  <small class="form-error">La descripción es requerida</small>
+                }
+                <span class="char-counter">
+                  {{ form.controls.descripcion.value.length }} / 500
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <p-button
+              label="Anterior"
+              icon="pi pi-arrow-left"
+              severity="secondary"
+              [outlined]="true"
+              (click)="activateCallback(2)"
+            />
+            <p-button
+              label="Enviar solicitud"
+              icon="pi pi-send"
+              iconPos="right"
+              (click)="onSubmit()"
+              [loading]="submitting()"
+              [disabled]="form.invalid || submitting()"
+            />
+          </div>
+        </ng-template>
+      </p-step-panel>
+    </p-step-panels>
+  </p-stepper>
+  }
+</p-dialog>

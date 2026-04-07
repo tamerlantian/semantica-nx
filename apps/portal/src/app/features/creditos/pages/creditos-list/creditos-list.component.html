@@ -1,9 +1,54 @@
 <div class="page-container">
-  <app-page-header title="Créditos" subtitle="Créditos del empleado" />
+  <app-page-header title="Créditos" subtitle="Gestión de créditos del empleado">
+    <p-button label="Solicitar crédito" icon="pi pi-plus" (click)="onNuevo()" />
+  </app-page-header>
 
-  <app-empty-state
-    title="Funcionalidad no disponible"
-    message="Tu empresa asociada aún no cumple con los requisitos para esta funcionalidad."
-    icon="pi pi-lock"
-  />
+  <app-credito-solicitud [(visible)]="showSolicitud" (created)="onCreditoCreated()" />
+
+  @if (loading() && creditos().length === 0) {
+    <app-loading-spinner message="Cargando créditos..." />
+  } @else if (error()) {
+    <app-error-alert [message]="error()!" [retryable]="false" />
+  } @else if (!loading() && creditos().length === 0) {
+    <app-empty-state
+      title="Sin créditos"
+      message="No tienes créditos registrados."
+      icon="pi pi-wallet"
+    />
+  } @else {
+    <div class="table-card">
+      <p-table
+        [value]="creditos()"
+        [rowHover]="true"
+        [scrollable]="true"
+        scrollHeight="600px"
+      >
+        <ng-template #header>
+          <tr>
+            <th>Monto</th>
+            <th>Plazo</th>
+            <th>Tasa de interés</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-credito>
+          <tr>
+            <td>{{ credito.monto | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td>{{ credito.plazo }} {{ credito.plazo === 1 ? 'mes' : 'meses' }}</td>
+            <td>{{ credito.tasa_interes }}%</td>
+            <td class="descripcion-cell text-truncate">{{ credito.descripcion }}</td>
+            <td>{{ credito.fecha_creacion | date: 'dd/MM/yyyy' }}</td>
+            <td>
+              <p-tag
+                [value]="getEstado(credito).label"
+                [severity]="getEstado(credito).severity"
+              />
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
 </div>

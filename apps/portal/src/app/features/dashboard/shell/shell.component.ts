@@ -73,7 +73,7 @@ export class ShellComponent {
   ];
 
   /** Conjuntos de labels de grupos actualmente expandidos */
-  readonly expandedGroups = signal<Set<string>>(new Set(['Consultas', 'Finanzas']));
+  readonly expandedGroups = signal<Set<string>>(new Set(['Consultas', 'Utilidades', 'Finanzas']));
 
   readonly navItems: NavItem[] = [
     {
@@ -131,6 +131,18 @@ export class ShellComponent {
           label: 'Reportes programación',
           icon: 'pi pi-file-edit',
           route: ROUTE_PATHS.dashboard.reportesProgramacion,
+          requiresTenant: true,
+        },
+      ],
+    },
+    {
+      label: 'Utilidades',
+      icon: 'pi pi-wrench',
+      children: [
+        {
+          label: 'Actualizar información',
+          icon: 'pi pi-user-edit',
+          route: ROUTE_PATHS.dashboard.actualizarInformacion,
           requiresTenant: true,
         },
       ],

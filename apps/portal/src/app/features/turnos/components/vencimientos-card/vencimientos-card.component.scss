@@ -1,0 +1,173 @@
+.vencimientos-card {
+  background: var(--p-content-background);
+  border: 1px solid var(--p-surface-200);
+  border-radius: 0.75rem;
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--p-surface-200);
+  }
+
+  &__header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    background: var(--p-surface-100);
+    color: var(--p-text-muted-color);
+    font-size: 0.875rem;
+    flex-shrink: 0;
+  }
+
+  &__header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.0625rem;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--p-text-color);
+    line-height: 1.2;
+  }
+
+  &__subtitle {
+    font-size: 0.725rem;
+    color: var(--p-text-muted-color);
+    line-height: 1.2;
+  }
+
+  &__body {
+    padding: 0.75rem 1.25rem;
+  }
+
+  &__loading,
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.5rem 0;
+    color: var(--p-text-muted-color);
+    font-size: 0.8rem;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+.vencimiento-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--p-surface-50);
+
+  &__indicator {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &--vigente {
+      background: var(--p-green-500);
+    }
+
+    &--vencido {
+      background: var(--p-red-500);
+    }
+
+    &--sin-definir {
+      background: var(--p-yellow-500);
+    }
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  &__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--p-text-color);
+    line-height: 1.2;
+  }
+
+  &__fecha {
+    font-size: 0.725rem;
+    line-height: 1.2;
+
+    &--vigente {
+      color: var(--p-green-600);
+    }
+
+    &--vencido {
+      color: var(--p-red-600);
+    }
+
+    &--sin-definir {
+      color: var(--p-yellow-600);
+    }
+  }
+
+  &__badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 1rem;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+
+    &--vigente {
+      background: color-mix(in srgb, var(--p-green-500) 15%, transparent);
+      color: var(--p-green-600);
+    }
+
+    &--vencido {
+      background: color-mix(in srgb, var(--p-red-500) 15%, transparent);
+      color: var(--p-red-600);
+    }
+
+    &--sin-definir {
+      background: color-mix(in srgb, var(--p-yellow-500) 15%, transparent);
+      color: var(--p-yellow-600);
+    }
+  }
+}
+
+// Dark mode
+:host-context(.dark-mode) {
+  .vencimiento-item {
+    background: var(--p-surface-100);
+
+    &__badge {
+      &--vigente {
+        background: color-mix(in srgb, var(--p-green-500) 20%, transparent);
+      }
+
+      &--vencido {
+        background: color-mix(in srgb, var(--p-red-500) 20%, transparent);
+      }
+
+      &--sin-definir {
+        background: color-mix(in srgb, var(--p-yellow-500) 20%, transparent);
+      }
+    }
+  }
+}

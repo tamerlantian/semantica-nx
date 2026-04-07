@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import {
   PageHeaderComponent,
   LoadingSpinnerComponent,
@@ -7,9 +6,9 @@ import {
   ErrorAlertComponent,
 } from '../../../../shared';
 import { CapacitacionesService } from '../../services/capacitaciones.service';
-import { Capacitacion } from '../../models/capacitacion.model';
+import { CapacitacionDetalle } from '../../models/capacitacion.model';
+import { CapacitacionCardComponent } from '../capacitacion-card/capacitacion-card.component';
 import { extractErrorMessage } from '@semantica/core';
-import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
@@ -20,8 +19,7 @@ import { AuthService } from '../../../auth/services/auth.service';
     LoadingSpinnerComponent,
     EmptyStateComponent,
     ErrorAlertComponent,
-    TableModule,
-    DatePipe,
+    CapacitacionCardComponent,
   ],
   templateUrl: './capacitaciones-list.component.html',
   styleUrl: './capacitaciones-list.component.scss',
@@ -32,16 +30,20 @@ export class CapacitacionesListComponent implements OnInit {
 
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
-  readonly capacitaciones = signal<Capacitacion[]>([]);
-  readonly totalRecords = signal(0);
-  readonly pageSize = signal(50);
-  readonly first = signal(0);
+  readonly capacitaciones = signal<CapacitacionDetalle[]>([]);
+  readonly total = signal(0);
+  readonly page = signal(1);
+  readonly size = signal(50);
 
   ngOnInit(): void {
-    this.loadCapacitaciones(1);
+    this.loadCapacitaciones();
   }
 
-  loadCapacitaciones(page: number): void {
+  onAsistenciaConfirmada(): void {
+    this.loadCapacitaciones();
+  }
+
+  loadCapacitaciones(): void {
     const user = this.authService.currentUser();
 
     if (!user?.empleado_id) {
@@ -53,11 +55,15 @@ export class CapacitacionesListComponent implements OnInit {
     this.error.set(null);
 
     this.capacitacionesService
-      .getCapacitaciones({ page, size: this.pageSize(), empleado_id: user.empleado_id })
+      .getCapacitacionDetalles({
+        empleado_id: user.empleado_id,
+        page: this.page(),
+        size: this.size(),
+      })
       .subscribe({
-        next: (res) => {
-          this.capacitaciones.set(res.items);
-          this.totalRecords.set(res.total);
+        next: (response) => {
+          this.capacitaciones.set(response.items);
+          this.total.set(response.total);
           this.loading.set(false);
         },
         error: (err) => {
@@ -65,13 +71,5 @@ export class CapacitacionesListComponent implements OnInit {
           this.loading.set(false);
         },
       });
-  }
-
-  onLazyLoad(event: TableLazyLoadEvent): void {
-    const first = event.first ?? 0;
-    const rows = event.rows ?? this.pageSize();
-    this.first.set(first);
-    this.pageSize.set(rows);
-    this.loadCapacitaciones(Math.floor(first / rows) + 1);
   }
 }

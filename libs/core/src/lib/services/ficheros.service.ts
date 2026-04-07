@@ -27,4 +27,12 @@ export class FicherosService {
       formData,
     );
   }
+
+  descargarFichero(pk: number): void {
+    this.http
+      .get<{ url: string }>(`${this.baseUrl}/doc/fichero/descargar-url/${pk}`)
+      .subscribe(({ url }) => {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      });
+  }
 }

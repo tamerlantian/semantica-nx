@@ -18,6 +18,7 @@ export const ROUTE_PATHS = {
     turnos: '/dashboard/turnos',
     programaciones: '/dashboard/programaciones',
     reportesProgramacion: '/dashboard/reportes-programacion',
+    actualizarInformacion: '/dashboard/actualizar-informacion',
     creditos: '/dashboard/creditos',
     anticipoNomina: '/dashboard/anticipo-nomina',
     perfil: '/dashboard/perfil',

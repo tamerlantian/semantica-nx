@@ -1,0 +1,50 @@
+<div class="vencimientos-card">
+  <div class="vencimientos-card__header">
+    <div class="vencimientos-card__header-icon">
+      <i class="pi pi-shield"></i>
+    </div>
+    <div class="vencimientos-card__header-text">
+      <span class="vencimientos-card__title">Vencimientos</span>
+      <span class="vencimientos-card__subtitle">Estado de documentos</span>
+    </div>
+  </div>
+
+  <div class="vencimientos-card__body">
+    @if (loading()) {
+      <div class="vencimientos-card__loading">
+        <i class="pi pi-spinner pi-spin"></i>
+        <span>Cargando...</span>
+      </div>
+    } @else if (!vencimientos()) {
+      <div class="vencimientos-card__empty">
+        <i class="pi pi-info-circle"></i>
+        <span>Sin información de vencimientos</span>
+      </div>
+    } @else {
+      <div class="vencimientos-card__list">
+        @for (item of items(); track item.label) {
+          <div class="vencimiento-item">
+            <div class="vencimiento-item__indicator" [class]="'vencimiento-item__indicator--' + item.estado"></div>
+            <div class="vencimiento-item__content">
+              <span class="vencimiento-item__label">{{ item.label }}</span>
+              <span class="vencimiento-item__fecha" [class]="'vencimiento-item__fecha--' + item.estado">
+                @if (item.fecha) {
+                  {{ item.fecha | date: 'dd/MM/yyyy' }}
+                } @else {
+                  Sin definir
+                }
+              </span>
+            </div>
+            <div class="vencimiento-item__badge" [class]="'vencimiento-item__badge--' + item.estado">
+              @switch (item.estado) {
+                @case ('vigente') { Vigente }
+                @case ('vencido') { Vencido }
+                @case ('sin-definir') { Pendiente }
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
