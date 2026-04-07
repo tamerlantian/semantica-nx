@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.9](https://github.com/tamerlantian/semantica-nx/compare/v0.0.8...v0.0.9) (2026-04-07)
+
+
+### Features
+
+* **portal:** agregar tarjeta de vencimientos en vista de turnos ([d4a0913](https://github.com/tamerlantian/semantica-nx/commit/d4a091368663913547c657de182e6edeb698db7d))
+* **portal:** conectar capacitaciones a API real y ampliar tarjeta ([16d04a7](https://github.com/tamerlantian/semantica-nx/commit/16d04a7eec82e285a07ee743e6c74d9a13bea77e))
+* **portal:** conectar selector de ciudades a API con búsqueda ([d000e70](https://github.com/tamerlantian/semantica-nx/commit/d000e703256f419979b8031876ad72ac31f2e9ad))
+* **portal:** implementar módulo de actualizar información ([52d7d6d](https://github.com/tamerlantian/semantica-nx/commit/52d7d6dc4faa956b8dd61b9dd422c28d429a81f1))
+* **portal:** implementar módulo de solicitud de créditos ([dfa9125](https://github.com/tamerlantian/semantica-nx/commit/dfa9125e51c8ef22980a7fc95b6ae2429ffe13a2))
+* **portal:** rediseñar actualizar información con layout de dos paneles ([0ee02f7](https://github.com/tamerlantian/semantica-nx/commit/0ee02f79fff53e1aa4428fd8aed951ee5c9b5df3))
+* **portal:** rediseñar vista de capacitaciones con tarjetas ([901a0c4](https://github.com/tamerlantian/semantica-nx/commit/901a0c47bc97b56ff12049934b6bec48bfe725b1))
+
+
+### Bug Fixes
+
+* calendario al 50% ([9d8da6a](https://github.com/tamerlantian/semantica-nx/commit/9d8da6aebc13e13a747bebf8c45e387a36c1feac))
+* **portal:** expandir grupo utilidades por defecto en el sidebar ([84c2e99](https://github.com/tamerlantian/semantica-nx/commit/84c2e995855783856244d8d5142b4b449ef550a4))
+
 ## [0.0.8](https://github.com/tamerlantian/semantica-nx/compare/v0.0.7...v0.0.8) (2026-04-01)
 
 
