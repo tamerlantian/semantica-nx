@@ -1,0 +1,125 @@
+.info-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 4rem 0;
+  color: var(--p-text-muted-color);
+  font-size: 0.9rem;
+
+  .pi {
+    font-size: 1.25rem;
+    color: var(--p-primary-color);
+  }
+}
+
+.info-layout {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+// ─── Card ───────────────────────────────────────────────────────────────────
+.info-card {
+  background: var(--p-surface-0);
+  border: 1px solid var(--p-surface-200);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+// ─── Sections ───────────────────────────────────────────────────────────────
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--p-text-color);
+    margin: 0;
+    letter-spacing: -0.01em;
+
+    i {
+      font-size: 1rem;
+      color: var(--p-primary-color);
+    }
+  }
+}
+
+// ─── Read-only info display ─────────────────────────────────────────────────
+.info-readonly {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  &__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--p-text-muted-color);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  &__value {
+    font-size: 0.925rem;
+    color: var(--p-text-color);
+  }
+}
+
+// ─── Form grid ──────────────────────────────────────────────────────────────
+.info-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+// ─── Field styles ───────────────────────────────────────────────────────────
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field__label {
+  font-size: 0.855rem;
+  font-weight: 600;
+  color: var(--p-text-color);
+}
+
+// ─── Button area ────────────────────────────────────────────────────────────
+.info-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1.5rem;
+}
+
+// ─── Responsive ─────────────────────────────────────────────────────────────
+@media (max-width: 576px) {
+  .info-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-card {
+    padding: 1.25rem;
+  }
+
+  .info-actions {
+    justify-content: stretch;
+
+    ::ng-deep .p-button {
+      width: 100%;
+    }
+  }
+}

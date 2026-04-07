@@ -1,0 +1,182 @@
+<div class="page-container">
+  <app-page-header
+    title="Actualizar información"
+    subtitle="Consulta y solicita cambios en tu información de contacto"
+    icon="pi pi-user-edit"
+  />
+
+  @if (isLoading()) {
+    <div class="info-loading">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Cargando información...</span>
+    </div>
+  } @else if (errorMessage() && !nombreCompleto()) {
+    <div class="info-layout">
+      <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+      <p-button label="Reintentar" icon="pi pi-refresh" [outlined]="true" (onClick)="retry()" />
+    </div>
+  } @else {
+    <div class="info-layout">
+      <div class="info-card">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+          @if (errorMessage()) {
+            <p-message severity="error" [text]="errorMessage()!" styleClass="w-full mb-4" />
+          }
+
+          <!-- Read-only employee context -->
+          <div class="info-section">
+            <h3 class="info-section__title">
+              <i class="pi pi-id-card"></i>
+              Datos del empleado
+            </h3>
+
+            <div class="info-readonly">
+              <div class="info-readonly__item">
+                <span class="info-readonly__label">Nombre completo</span>
+                <span class="info-readonly__value">{{ nombreCompleto() }}</span>
+              </div>
+              <div class="info-readonly__item">
+                <span class="info-readonly__label">Identificación</span>
+                <span class="info-readonly__value">{{ identificacion() }}</span>
+              </div>
+              <div class="info-readonly__item">
+                <span class="info-readonly__label">Correo electrónico</span>
+                <span class="info-readonly__value">{{ correo() }}</span>
+              </div>
+            </div>
+          </div>
+
+          <p-divider />
+
+          <!-- Editable contact fields -->
+          <div class="info-section">
+            <h3 class="info-section__title">
+              <i class="pi pi-phone"></i>
+              Información de contacto
+            </h3>
+
+            <div class="info-form-grid">
+              <div class="field">
+                <label for="telefono" class="field__label">
+                  Teléfono <span class="form-required">*</span>
+                </label>
+                <input
+                  pInputText
+                  id="telefono"
+                  type="text"
+                  formControlName="telefono"
+                  fluid
+                  [invalid]="telefonoControl.invalid && telefonoControl.touched"
+                  aria-describedby="telefono-error"
+                />
+                @if (telefonoControl.invalid && telefonoControl.touched) {
+                  <small id="telefono-error" class="form-error">
+                    El teléfono es obligatorio
+                  </small>
+                }
+              </div>
+
+              <div class="field">
+                <label for="celular" class="field__label">
+                  Celular <span class="form-required">*</span>
+                </label>
+                <input
+                  pInputText
+                  id="celular"
+                  type="text"
+                  formControlName="celular"
+                  fluid
+                  [invalid]="celularControl.invalid && celularControl.touched"
+                  aria-describedby="celular-error"
+                />
+                @if (celularControl.invalid && celularControl.touched) {
+                  <small id="celular-error" class="form-error">
+                    El celular es obligatorio
+                  </small>
+                }
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="direccion" class="field__label">
+                Dirección <span class="form-required">*</span>
+              </label>
+              <input
+                pInputText
+                id="direccion"
+                type="text"
+                formControlName="direccion"
+                fluid
+                [invalid]="direccionControl.invalid && direccionControl.touched"
+                aria-describedby="direccion-error"
+              />
+              @if (direccionControl.invalid && direccionControl.touched) {
+                <small id="direccion-error" class="form-error">
+                  La dirección es obligatoria
+                </small>
+              }
+            </div>
+
+            <div class="info-form-grid">
+              <div class="field">
+                <label for="barrio" class="field__label">
+                  Barrio <span class="form-required">*</span>
+                </label>
+                <input
+                  pInputText
+                  id="barrio"
+                  type="text"
+                  formControlName="barrio"
+                  fluid
+                  [invalid]="barrioControl.invalid && barrioControl.touched"
+                  aria-describedby="barrio-error"
+                />
+                @if (barrioControl.invalid && barrioControl.touched) {
+                  <small id="barrio-error" class="form-error">
+                    El barrio es obligatorio
+                  </small>
+                }
+              </div>
+
+              <div class="field">
+                <label for="ciudad" class="field__label">
+                  Ciudad <span class="form-required">*</span>
+                </label>
+                <p-select
+                  id="ciudad"
+                  formControlName="codigo_ciudad_fk"
+                  [options]="ciudades()"
+                  optionLabel="nombre"
+                  optionValue="codigo_ciudad_pk"
+                  placeholder="Seleccione una ciudad"
+                  [filter]="true"
+                  filterBy="nombre"
+                  [loading]="loadingCiudades()"
+                  [style]="{ width: '100%' }"
+                  appendTo="body"
+                  [invalid]="ciudadControl.invalid && ciudadControl.touched"
+                />
+                @if (ciudadControl.invalid && ciudadControl.touched) {
+                  <small class="form-error">
+                    La ciudad es obligatoria
+                  </small>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="info-actions">
+            <p-button
+              type="submit"
+              label="Solicitar actualización"
+              icon="pi pi-send"
+              [loading]="isSaving()"
+              [disabled]="isSaving() || form.pristine"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>

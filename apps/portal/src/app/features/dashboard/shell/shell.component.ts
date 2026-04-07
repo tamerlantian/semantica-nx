@@ -136,6 +136,18 @@ export class ShellComponent {
       ],
     },
     {
+      label: 'Utilidades',
+      icon: 'pi pi-wrench',
+      children: [
+        {
+          label: 'Actualizar información',
+          icon: 'pi pi-user-edit',
+          route: ROUTE_PATHS.dashboard.actualizarInformacion,
+          requiresTenant: true,
+        },
+      ],
+    },
+    {
       label: 'Finanzas',
       icon: 'pi pi-wallet',
       children: [
