@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.12](https://github.com/tamerlantian/semantica-nx/compare/v0.0.11...v0.0.12) (2026-04-07)
+
+
+### Bug Fixes
+
+* **portal:** update creditos list endpoint to lista-portal ([6621d61](https://github.com/tamerlantian/semantica-nx/commit/6621d616aebd019800aa2f5b2ef160cc476947b0))
+
 ## [0.0.11](https://github.com/tamerlantian/semantica-nx/compare/v0.0.10...v0.0.11) (2026-04-07)
 
 
