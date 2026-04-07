@@ -4,51 +4,26 @@
       <i class="pi pi-book"></i>
     </div>
     <div class="capacitacion-card__header-text">
-      <span class="capacitacion-card__header-title">{{ capacitacion().nombre }}</span>
-      <span class="capacitacion-card__header-hint">{{ capacitacion().tipo }}</span>
+      <span class="capacitacion-card__header-title">{{ capacitacion().capacitacion_objetivo }}</span>
     </div>
     <p-tag
-      [value]="capacitacion().estado"
-      [severity]="estadoSeverity()"
+      [value]="asistenciaLabel()"
+      [severity]="asistenciaSeverity()"
       class="capacitacion-card__status"
     />
   </div>
 
   <div class="capacitacion-card__body">
-    <div class="capacitacion-card__tags">
-      <span class="capacitacion-card__tag">
-        <i [class]="modalidadIcon()"></i>
-        {{ capacitacion().modalidad }}
-      </span>
-      <span class="capacitacion-card__tag capacitacion-card__tag--horas">
-        <i class="pi pi-clock"></i>
-        {{ capacitacion().duracion_horas }}h
-      </span>
-    </div>
-
     <div class="capacitacion-card__details">
-      <div class="capacitacion-card__detail-group">
-        <div class="capacitacion-card__detail">
-          <div class="capacitacion-card__detail-icon">
-            <i class="pi pi-user"></i>
-          </div>
-          <div class="capacitacion-card__detail-content">
-            <span class="capacitacion-card__detail-label">Instructor</span>
-            <span class="capacitacion-card__detail-value">{{ capacitacion().instructor }}</span>
-          </div>
-        </div>
-      </div>
-
       <div class="capacitacion-card__detail-group">
         <div class="capacitacion-card__detail">
           <div class="capacitacion-card__detail-icon">
             <i class="pi pi-calendar"></i>
           </div>
           <div class="capacitacion-card__detail-content">
-            <span class="capacitacion-card__detail-label">Fechas</span>
+            <span class="capacitacion-card__detail-label">Fecha</span>
             <span class="capacitacion-card__detail-value">
-              {{ capacitacion().fecha_inicio | date: 'dd/MM/yyyy' }} –
-              {{ capacitacion().fecha_fin | date: 'dd/MM/yyyy' }}
+              {{ capacitacion().capacitacion_fecha_capacitacion | date: 'dd/MM/yyyy HH:mm' }}
             </span>
           </div>
         </div>
@@ -61,24 +36,97 @@
           </div>
           <div class="capacitacion-card__detail-content">
             <span class="capacitacion-card__detail-label">Lugar</span>
-            <span class="capacitacion-card__detail-value">{{ capacitacion().lugar }}</span>
+            <span class="capacitacion-card__detail-value">{{ capacitacion().capacitacion_lugar }}</span>
           </div>
         </div>
       </div>
-    </div>
 
-    @if (showProgress()) {
-      <div class="capacitacion-card__progress">
-        <div class="capacitacion-card__progress-header">
-          <span class="capacitacion-card__progress-label">Progreso</span>
-          <span class="capacitacion-card__progress-value">{{ capacitacion().progreso }}%</span>
+      <div class="capacitacion-card__detail-group">
+        <div class="capacitacion-card__detail">
+          <div class="capacitacion-card__detail-icon">
+            <i class="pi pi-list"></i>
+          </div>
+          <div class="capacitacion-card__detail-content">
+            <span class="capacitacion-card__detail-label">Contenido</span>
+            @for (linea of contenidoLineas(); track $index) {
+              <span class="capacitacion-card__detail-value">{{ linea }}</span>
+            }
+          </div>
         </div>
-        <p-progressBar
-          [value]="capacitacion().progreso"
-          [showValue]="false"
-          styleClass="capacitacion-card__progress-bar"
-        />
       </div>
-    }
+
+      @if (capacitacion().evaluacion !== null) {
+        <div class="capacitacion-card__detail-group">
+          <div class="capacitacion-card__detail">
+            <div class="capacitacion-card__detail-icon">
+              <i class="pi pi-star"></i>
+            </div>
+            <div class="capacitacion-card__detail-content">
+              <span class="capacitacion-card__detail-label">Evaluación</span>
+              <span class="capacitacion-card__detail-value">{{ capacitacion().evaluacion }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
   </div>
+
+  @if (hasEnlaces() || hasFicheros()) {
+    <div class="capacitacion-card__recursos">
+      @if (hasEnlaces()) {
+        <div class="capacitacion-card__recursos-section">
+          <span class="capacitacion-card__recursos-title">
+            <i class="pi pi-link"></i>
+            Enlaces
+          </span>
+          @for (enlace of capacitacion().enlaces; track enlace.codigo_enlace_pk) {
+            <a
+              [href]="enlace.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="capacitacion-card__enlace"
+            >
+              <span class="capacitacion-card__enlace-nombre">{{ enlace.nombre }}</span>
+              <i class="pi pi-external-link capacitacion-card__enlace-icon"></i>
+            </a>
+          }
+        </div>
+      }
+
+      @if (hasFicheros()) {
+        <div class="capacitacion-card__recursos-section">
+          <span class="capacitacion-card__recursos-title">
+            <i class="pi pi-paperclip"></i>
+            Archivos
+          </span>
+          @for (fichero of capacitacion().ficheros; track fichero.codigo_fichero_pk) {
+            <button
+              type="button"
+              class="capacitacion-card__fichero"
+              (click)="descargar(fichero.codigo_fichero_pk)"
+            >
+              <i [class]="getExtensionIcon(fichero.extension) + ' capacitacion-card__fichero-icon'"></i>
+              <span class="capacitacion-card__fichero-nombre">{{ fichero.nombre }}</span>
+              <span class="capacitacion-card__fichero-size">{{ formatSize(fichero.tamano) }}</span>
+              <i class="pi pi-download capacitacion-card__fichero-download"></i>
+            </button>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @if (!capacitacion().asistencia) {
+    <div class="capacitacion-card__footer">
+      <p-button
+        label="Confirmar asistencia"
+        icon="pi pi-check"
+        size="small"
+        severity="secondary"
+        [fluid]="true"
+        [loading]="confirming()"
+        (onClick)="confirmar()"
+      />
+    </div>
+  }
 </div>

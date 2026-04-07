@@ -13,8 +13,8 @@
     />
   } @else {
     <div class="capacitaciones-grid">
-      @for (cap of capacitaciones(); track cap.id) {
-        <app-capacitacion-card [capacitacion]="cap" />
+      @for (cap of capacitaciones(); track cap.codigo_capacitacion_detalle_pk) {
+        <app-capacitacion-card [capacitacion]="cap" (asistenciaConfirmada)="onAsistenciaConfirmada()" />
       }
     </div>
   }

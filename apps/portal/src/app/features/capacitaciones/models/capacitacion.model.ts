@@ -10,17 +10,32 @@ export interface Capacitacion {
   estado: string;
 }
 
-export interface CapacitacionDetalle {
-  id: number;
+export interface CapacitacionEnlace {
+  codigo_enlace_pk: number;
   nombre: string;
-  descripcion: string;
+  url: string;
+  descripcion: string | null;
+  fecha: string;
+  usuario: string;
+}
+
+export interface CapacitacionFichero {
+  codigo_fichero_pk: number;
+  nombre: string;
+  extension: string;
   tipo: string;
-  instructor: string;
-  fecha_inicio: string;
-  fecha_fin: string;
-  duracion_horas: number;
-  estado: string;
-  progreso: number;
-  modalidad: string;
-  lugar: string;
+  tamano: number;
+  fecha: string;
+}
+
+export interface CapacitacionDetalle {
+  codigo_capacitacion_detalle_pk: number;
+  evaluacion: string | null;
+  asistencia: boolean;
+  capacitacion_objetivo: string;
+  capacitacion_fecha_capacitacion: string;
+  capacitacion_lugar: string;
+  capacitacion_contenido: string;
+  enlaces: CapacitacionEnlace[];
+  ficheros: CapacitacionFichero[];
 }

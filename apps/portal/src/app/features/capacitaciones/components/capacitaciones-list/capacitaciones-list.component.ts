@@ -31,8 +31,15 @@ export class CapacitacionesListComponent implements OnInit {
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
   readonly capacitaciones = signal<CapacitacionDetalle[]>([]);
+  readonly total = signal(0);
+  readonly page = signal(1);
+  readonly size = signal(50);
 
   ngOnInit(): void {
+    this.loadCapacitaciones();
+  }
+
+  onAsistenciaConfirmada(): void {
     this.loadCapacitaciones();
   }
 
@@ -47,15 +54,22 @@ export class CapacitacionesListComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    this.capacitacionesService.getCapacitacionDetalles(user.empleado_id).subscribe({
-      next: (items) => {
-        this.capacitaciones.set(items);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        this.error.set(extractErrorMessage(err, 'No se pudieron cargar las capacitaciones.'));
-        this.loading.set(false);
-      },
-    });
+    this.capacitacionesService
+      .getCapacitacionDetalles({
+        empleado_id: user.empleado_id,
+        page: this.page(),
+        size: this.size(),
+      })
+      .subscribe({
+        next: (response) => {
+          this.capacitaciones.set(response.items);
+          this.total.set(response.total);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          this.error.set(extractErrorMessage(err, 'No se pudieron cargar las capacitaciones.'));
+          this.loading.set(false);
+        },
+      });
   }
 }
