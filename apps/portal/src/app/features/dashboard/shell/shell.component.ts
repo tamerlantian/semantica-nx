@@ -73,7 +73,7 @@ export class ShellComponent {
   ];
 
   /** Conjuntos de labels de grupos actualmente expandidos */
-  readonly expandedGroups = signal<Set<string>>(new Set(['Consultas', 'Finanzas']));
+  readonly expandedGroups = signal<Set<string>>(new Set(['Consultas', 'Utilidades', 'Finanzas']));
 
   readonly navItems: NavItem[] = [
     {
