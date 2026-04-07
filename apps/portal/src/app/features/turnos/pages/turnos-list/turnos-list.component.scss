@@ -23,6 +23,7 @@
   app-vencimientos-card {
     flex: 1;
     min-width: 0;
+    max-width: 50%;
   }
 
   @media (max-width: 768px) {
