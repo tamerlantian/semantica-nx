@@ -21,6 +21,6 @@ export const API_ENDPOINTS = {
     update: '/auth/user/actualizar',
   },
   enlaces: {
-    lista: '/gen/enlace/lista',
+    lista: '/gen/enlace/lista-portal',
   },
 } as const;

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.11](https://github.com/tamerlantian/semantica-nx/compare/v0.0.10...v0.0.11) (2026-04-07)
+
+
+### Bug Fixes
+
+* get links api changed ([a0dd333](https://github.com/tamerlantian/semantica-nx/commit/a0dd3337de1cf1705288a354a3fe59fb015259d5))
+
 ## [0.0.10](https://github.com/tamerlantian/semantica-nx/compare/v0.0.9...v0.0.10) (2026-04-07)
 
 
