@@ -17,7 +17,7 @@ export class CreditosService extends BaseHttpService {
   }
 
   getCreditos(): Observable<CreditoSolicitud[]> {
-    return this.get<PaginatedResponse<CreditoSolicitud>>('/mas/credito-solicitud/lista').pipe(
+    return this.get<PaginatedResponse<CreditoSolicitud>>('/mas/credito-solicitud/lista-portal').pipe(
       map((res) => res.items),
     );
   }
