@@ -10,7 +10,11 @@
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/karma.conf.js"
     ],
-    "sharedGlobals": []
+    "sharedGlobals": [
+      "!{workspaceRoot}/package.json",
+      "!{workspaceRoot}/package-lock.json",
+      "!{workspaceRoot}/CHANGELOG.md"
+    ]
   },
   "targetDefaults": {
     "@angular/build:application": {
