@@ -11,6 +11,8 @@ interface QuickAccessItem {
   icon: string;
   route: string;
   requiresTenant: boolean;
+  disabled?: boolean;
+  disabledLabel?: string;
 }
 
 interface QuickAccessSection {
@@ -91,6 +93,8 @@ export class InicioComponent {
           icon: 'pi pi-money-bill',
           route: ROUTE_PATHS.dashboard.creditos,
           requiresTenant: true,
+          disabled: true,
+          disabledLabel: 'Próximamente',
         },
         {
           label: 'Anticipo de nómina',
