@@ -22,4 +22,10 @@ export const API_ENDPOINTS = {
     byId: (id: number) => `/gen/formato/${id}`,
     updateContenido: (id: number) => `/gen/formato/${id}/contenido`,
   },
+  formatoImagen: {
+    list: '/gen/formato-imagen/lista-actualizar',
+    create: '/gen/formato-imagen/nuevo',
+    update: (id: number) => `/gen/formato-imagen/${id}/actualizar`,
+    delete: (id: number) => `/gen/formato-imagen/${id}/eliminar`,
+  },
 } as const;

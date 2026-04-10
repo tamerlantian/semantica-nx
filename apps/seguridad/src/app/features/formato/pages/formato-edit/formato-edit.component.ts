@@ -8,11 +8,12 @@ import { MessageService } from 'primeng/api';
 import { FormatoService } from '../../services/formato.service';
 import { Formato } from '../../models/formato.model';
 import { extractErrorMessage } from '../../../../core';
+import { FormatoImagenComponent } from './formato-imagen/formato-imagen.component';
 
 @Component({
   selector: 'app-formato-edit',
   standalone: true,
-  imports: [FormsModule, ButtonModule, EditorModule, SkeletonModule],
+  imports: [FormsModule, ButtonModule, EditorModule, SkeletonModule, FormatoImagenComponent],
   templateUrl: './formato-edit.component.html',
   styleUrl: './formato-edit.component.scss',
 })

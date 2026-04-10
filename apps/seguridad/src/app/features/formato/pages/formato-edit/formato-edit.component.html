@@ -25,5 +25,8 @@
     <div class="editor-card">
       <p-editor [(ngModel)]="contenido" [style]="{ height: '500px' }" />
     </div>
+
+    <!-- Imágenes del formato -->
+    <app-formato-imagen [codigoFormato]="formato()!.codigo_formato_pk" />
   }
 </div>
