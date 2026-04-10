@@ -159,7 +159,6 @@ export class ShellComponent {
           route: ROUTE_PATHS.dashboard.creditos,
           requiresTenant: true,
           disabled: true,
-          disabledLabel: 'Próximamente',
         },
         {
           label: 'Anticipo de nómina',
