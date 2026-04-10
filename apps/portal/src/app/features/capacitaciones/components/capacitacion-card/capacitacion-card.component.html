@@ -5,12 +5,12 @@
     </div>
     <div class="capacitacion-card__header-text">
       <span class="capacitacion-card__header-title">{{ capacitacion().capacitacion_objetivo }}</span>
+      <p-tag
+        [value]="asistenciaLabel()"
+        [severity]="asistenciaSeverity()"
+        class="capacitacion-card__status-tag"
+      />
     </div>
-    <p-tag
-      [value]="asistenciaLabel()"
-      [severity]="asistenciaSeverity()"
-      class="capacitacion-card__status"
-    />
   </div>
 
   <div class="capacitacion-card__body">
@@ -36,7 +36,18 @@
           </div>
           <div class="capacitacion-card__detail-content">
             <span class="capacitacion-card__detail-label">Lugar</span>
-            <span class="capacitacion-card__detail-value">{{ capacitacion().capacitacion_lugar }}</span>
+            @if (isLugarUrl()) {
+              <a
+                [href]="capacitacion().capacitacion_lugar"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="capacitacion-card__detail-value capacitacion-card__detail-value--url"
+              >
+                {{ capacitacion().capacitacion_lugar }}
+              </a>
+            } @else {
+              <span class="capacitacion-card__detail-value">{{ capacitacion().capacitacion_lugar }}</span>
+            }
           </div>
         </div>
       </div>
@@ -48,16 +59,29 @@
           </div>
           <div class="capacitacion-card__detail-content">
             <span class="capacitacion-card__detail-label">Contenido</span>
-            <div class="capacitacion-card__contenido-scroll">
+            <div
+              class="capacitacion-card__contenido-body"
+              [class.capacitacion-card__contenido-body--expanded]="expanded()"
+            >
               @for (linea of contenidoLineas(); track $index) {
                 <span class="capacitacion-card__detail-value">{{ linea }}</span>
               }
             </div>
+            @if (contenidoIsLong()) {
+              <button
+                type="button"
+                class="capacitacion-card__toggle-btn"
+                (click)="toggleExpanded()"
+              >
+                <span>{{ expanded() ? 'Ver menos' : 'Ver más' }}</span>
+                <i [class]="expanded() ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></i>
+              </button>
+            }
           </div>
         </div>
       </div>
 
-      @if (capacitacion().evaluacion !== null) {
+      @if (evaluacionSeverity() !== null) {
         <div class="capacitacion-card__detail-group">
           <div class="capacitacion-card__detail">
             <div class="capacitacion-card__detail-icon">
@@ -65,7 +89,11 @@
             </div>
             <div class="capacitacion-card__detail-content">
               <span class="capacitacion-card__detail-label">Evaluación</span>
-              <span class="capacitacion-card__detail-value">{{ capacitacion().evaluacion }}</span>
+              <p-tag
+                [value]="evaluacionLabel()"
+                [severity]="evaluacionSeverity()!"
+                class="capacitacion-card__evaluacion-tag"
+              />
             </div>
           </div>
         </div>
@@ -88,7 +116,7 @@
               rel="noopener noreferrer"
               class="capacitacion-card__enlace"
             >
-              <span class="capacitacion-card__enlace-nombre">{{ enlace.nombre }}</span>
+              <span class="capacitacion-card__enlace-nombre">{{ enlace.nombre | truncate: 35 }}</span>
               <i class="pi pi-external-link capacitacion-card__enlace-icon"></i>
             </a>
           }
@@ -108,7 +136,7 @@
               (click)="descargar(fichero.codigo_fichero_pk)"
             >
               <i [class]="getExtensionIcon(fichero.extension) + ' capacitacion-card__fichero-icon'"></i>
-              <span class="capacitacion-card__fichero-nombre">{{ fichero.nombre }}</span>
+              <span class="capacitacion-card__fichero-nombre">{{ fichero.nombre | truncate: 30 }}</span>
               <span class="capacitacion-card__fichero-size">{{ formatSize(fichero.tamano) }}</span>
               <i class="pi pi-download capacitacion-card__fichero-download"></i>
             </button>

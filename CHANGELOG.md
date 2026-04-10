@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.14](https://github.com/tamerlantian/semantica-nx/compare/v0.0.13...v0.0.14) (2026-04-10)
+
+
+### Features
+
+* added new fields to capacitacion.model ([4db1536](https://github.com/tamerlantian/semantica-nx/commit/4db15368dbb8aa59668fe8132de7b80442a4a556))
+* **portal:** add day-of-week letter to programacion-table headers ([e6160de](https://github.com/tamerlantian/semantica-nx/commit/e6160dedefa5c7643d1bbb3af27b4a656e2c6678))
+* **portal:** improve capacitaciones-card responsive design and layout ([7019a06](https://github.com/tamerlantian/semantica-nx/commit/7019a06ad8b43cbe604cdfffbd741db8ed926e39))
+
+
+### Bug Fixes
+
+* **portal:** improve responsive layout in turnos-list for tablets ([fd5e2a3](https://github.com/tamerlantian/semantica-nx/commit/fd5e2a33f957a3666f033f88309ed053b181342b))
+
 ## [0.0.13](https://github.com/tamerlantian/semantica-nx/compare/v0.0.12...v0.0.13) (2026-04-10)
 
 

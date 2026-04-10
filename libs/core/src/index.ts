@@ -40,6 +40,9 @@ export {
 } from './lib/utils/error.utils';
 export { MESES_ES, getMesAnioLabel, getSiguienteMes } from './lib/utils/date.utils';
 
+// Pipes
+export { TruncatePipe } from './lib/pipes/truncate.pipe';
+
 // Validators
 export { dateRangeValidator } from './lib/validators/date-range.validator';
 
