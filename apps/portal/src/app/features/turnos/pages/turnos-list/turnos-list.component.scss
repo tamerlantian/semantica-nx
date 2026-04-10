@@ -4,7 +4,7 @@
   gap: 1.5rem;
   margin-bottom: 1.5rem;
 
-  @media (max-width: 640px) {
+  @media (max-width: 1024px) {
     grid-template-columns: 1fr;
   }
 }
@@ -26,15 +26,17 @@
     max-width: 50%;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
 
     .calendar-wrapper {
       width: 100%;
+      max-width: 100%;
     }
 
     app-vencimientos-card {
       width: 100%;
+      max-width: 100%;
     }
   }
 }
