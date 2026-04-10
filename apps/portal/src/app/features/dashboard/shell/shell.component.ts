@@ -13,6 +13,8 @@ interface NavChild {
   icon: string;
   route: string;
   requiresTenant?: boolean;
+  disabled?: boolean;
+  disabledLabel?: string;
 }
 
 interface NavGroup {
@@ -156,6 +158,7 @@ export class ShellComponent {
           icon: 'pi pi-money-bill',
           route: ROUTE_PATHS.dashboard.creditos,
           requiresTenant: true,
+          disabled: true,
         },
         {
           label: 'Anticipo de nómina',

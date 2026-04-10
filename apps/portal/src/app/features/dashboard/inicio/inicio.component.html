@@ -17,7 +17,18 @@
             [class.inicio__grid--fixed]="section.items.length >= 6"
           >
             @for (item of section.items; track item.route) {
-              @if (item.requiresTenant && !hasTenant()) {
+              @if (item.disabled) {
+                <div class="card card--disabled">
+                  <div class="card__icon">
+                    <i [class]="item.icon"></i>
+                  </div>
+                  <h3 class="card__title">{{ item.label }}</h3>
+                  <p class="card__desc">{{ item.description }}</p>
+                  @if (item.disabledLabel) {
+                    <span class="card__badge">{{ item.disabledLabel }}</span>
+                  }
+                </div>
+              } @else if (item.requiresTenant && !hasTenant()) {
                 <div class="card card--disabled">
                   <div class="card__icon">
                     <i [class]="item.icon"></i>

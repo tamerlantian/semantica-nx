@@ -173,6 +173,33 @@
     word-break: break-word;
   }
 
+  // --- Contenido scroll ---
+  &__contenido-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 0.0625rem;
+    max-height: 10rem;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--p-surface-300);
+      border-radius: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--p-surface-400);
+    }
+  }
+
   // --- Recursos (enlaces + ficheros) ---
   &__recursos {
     padding: 1rem 1.25rem;

@@ -1,0 +1,302 @@
+<div class="formato-imagen">
+  <!-- Header -->
+  <div class="formato-imagen__header">
+    <h2 class="formato-imagen__title">
+      <i class="pi pi-images formato-imagen__title-icon"></i>
+      Imágenes del formato
+    </h2>
+    @if (!loading()) {
+      <p-button
+        label="Agregar imagen"
+        icon="pi pi-plus"
+        size="small"
+        [outlined]="true"
+        (onClick)="openDialog()"
+      />
+    }
+  </div>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="formato-imagen__grid">
+      @for (_ of [1, 2]; track $index) {
+        <div class="imagen-card">
+          <div class="imagen-card__preview">
+            <p-skeleton width="100%" height="100%" />
+          </div>
+          <div class="imagen-card__details">
+            <p-skeleton width="80%" height="1rem" />
+            <p-skeleton width="60%" height="1rem" />
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <!-- Empty state -->
+    @if (imagenes().length === 0) {
+      <div class="formato-imagen__empty">
+        <i class="pi pi-images formato-imagen__empty-icon"></i>
+        <p class="formato-imagen__empty-title">Sin imágenes</p>
+        <p class="formato-imagen__empty-message">
+          No hay imágenes configuradas para este formato.
+        </p>
+        <p-button
+          label="Agregar primera imagen"
+          icon="pi pi-plus"
+          size="small"
+          [outlined]="true"
+          (onClick)="openDialog()"
+          styleClass="mt-3"
+        />
+      </div>
+    } @else {
+      <div class="formato-imagen__grid">
+        @for (imagen of imagenes(); track imagen.codigo_formato_imagen_pk) {
+          <div class="imagen-card">
+            <!-- Image preview -->
+            <div class="imagen-card__preview">
+              @if (getPreview(imagen)) {
+                <img [src]="getPreview(imagen)" alt="Imagen del formato" />
+              } @else {
+                <div class="imagen-card__preview-fallback">
+                  <i class="pi pi-image"></i>
+                </div>
+              }
+              <p-button
+                class="imagen-card__delete-btn"
+                icon="pi pi-trash"
+                severity="danger"
+                [text]="true"
+                [rounded]="true"
+                size="small"
+                pTooltip="Eliminar imagen"
+                tooltipPosition="right"
+                [loading]="deleting() === imagen.codigo_formato_imagen_pk"
+                (onClick)="confirmarEliminar(imagen)"
+              />
+              <span class="imagen-card__badge">{{ imagen.extension | uppercase }}</span>
+            </div>
+
+            <!-- Editable fields -->
+            <div class="imagen-card__details">
+              <div class="imagen-card__fields">
+                <div class="imagen-card__field">
+                  <label class="imagen-card__label">X</label>
+                  <p-inputnumber
+                    [(ngModel)]="imagen.posicion_x"
+                    [min]="0"
+                    [showButtons]="true"
+                    [inputStyle]="{ width: '100%' }"
+                    size="small"
+                  />
+                </div>
+                <div class="imagen-card__field">
+                  <label class="imagen-card__label">Y</label>
+                  <p-inputnumber
+                    [(ngModel)]="imagen.posicion_y"
+                    [min]="0"
+                    [showButtons]="true"
+                    [inputStyle]="{ width: '100%' }"
+                    size="small"
+                  />
+                </div>
+                <div class="imagen-card__field">
+                  <label class="imagen-card__label">Ancho</label>
+                  <p-inputnumber
+                    [(ngModel)]="imagen.ancho"
+                    [min]="1"
+                    [showButtons]="true"
+                    [inputStyle]="{ width: '100%' }"
+                    size="small"
+                  />
+                </div>
+                <div class="imagen-card__field">
+                  <label class="imagen-card__label">Alto</label>
+                  <p-inputnumber
+                    [(ngModel)]="imagen.alto"
+                    [min]="1"
+                    [showButtons]="true"
+                    [inputStyle]="{ width: '100%' }"
+                    size="small"
+                  />
+                </div>
+              </div>
+
+              <div class="imagen-card__checkbox">
+              </div>
+
+              <p-button
+                label="Actualizar"
+                icon="pi pi-check"
+                size="small"
+                [outlined]="true"
+                [loading]="savingImageId() === imagen.codigo_formato_imagen_pk"
+                (onClick)="guardarCambios(imagen)"
+                styleClass="w-full"
+              />
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
+
+<p-confirmdialog />
+
+<!-- Dialog para agregar imagen -->
+<p-dialog
+  header="Agregar imagen"
+  [visible]="dialogVisible()"
+  (visibleChange)="dialogVisible.set($event)"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '520px' }"
+  [breakpoints]="{ '575px': '95vw' }"
+  (onHide)="closeDialog()"
+>
+  <!-- Zona de selección de archivo -->
+  <div class="dialog-content">
+    @if (!selectedFile()) {
+      <p-fileupload
+        #fileUpload
+        mode="advanced"
+        accept="image/*"
+        [maxFileSize]="5000000"
+        (onSelect)="onSelect($event)"
+        (onClear)="onClear()"
+        [showUploadButton]="false"
+        [showCancelButton]="false"
+      >
+        <ng-template #header>
+          <span></span>
+        </ng-template>
+        <ng-template #file>
+          <span></span>
+        </ng-template>
+        <ng-template #empty>
+          <div class="drop-zone">
+            <i class="pi pi-cloud-upload drop-zone__icon"></i>
+            <div class="drop-zone__text">
+              <span class="drop-zone__title">Arrastra tu imagen aquí</span>
+              <span class="drop-zone__subtitle">o</span>
+            </div>
+            <p-button
+              label="Seleccionar archivo"
+              icon="pi pi-folder-open"
+              severity="secondary"
+              [outlined]="true"
+              size="small"
+              (click)="fileUpload.choose($event)"
+            />
+            <span class="drop-zone__hint">PNG, JPG, SVG — máximo 5 MB</span>
+          </div>
+        </ng-template>
+      </p-fileupload>
+    } @else {
+      <!-- Vista previa del archivo -->
+      <div class="file-preview">
+        <div class="file-preview__card">
+          @if (selectedFilePreview()) {
+            <img
+              class="file-preview__image"
+              [src]="selectedFilePreview()"
+              alt="Vista previa"
+            />
+          }
+          <div class="file-preview__info">
+            <span class="file-preview__name">{{ selectedFile()!.name }}</span>
+            <span class="file-preview__size">{{ formatSize(selectedFile()!.size) }}</span>
+          </div>
+          <p-button
+            icon="pi pi-times"
+            severity="danger"
+            [text]="true"
+            [rounded]="true"
+            size="small"
+            (click)="onClear()"
+            [disabled]="uploading()"
+            pTooltip="Quitar archivo"
+          />
+        </div>
+
+        @if (uploading()) {
+          <p-progressbar mode="indeterminate" [style]="{ height: '4px' }" />
+        }
+      </div>
+
+      <!-- Campos de configuración -->
+      <div class="config-fields">
+        <div class="config-fields__grid">
+          <div class="config-fields__item">
+            <label class="config-fields__label">Posición X</label>
+            <p-inputnumber
+              [(ngModel)]="newPosicionX"
+              [min]="0"
+              [showButtons]="true"
+              [inputStyle]="{ width: '100%' }"
+              size="small"
+            />
+          </div>
+          <div class="config-fields__item">
+            <label class="config-fields__label">Posición Y</label>
+            <p-inputnumber
+              [(ngModel)]="newPosicionY"
+              [min]="0"
+              [showButtons]="true"
+              [inputStyle]="{ width: '100%' }"
+              size="small"
+            />
+          </div>
+          <div class="config-fields__item">
+            <label class="config-fields__label">Ancho</label>
+            <p-inputnumber
+              [(ngModel)]="newAncho"
+              [min]="1"
+              [showButtons]="true"
+              [inputStyle]="{ width: '100%' }"
+              size="small"
+            />
+          </div>
+          <div class="config-fields__item">
+            <label class="config-fields__label">Alto</label>
+            <p-inputnumber
+              [(ngModel)]="newAlto"
+              [min]="1"
+              [showButtons]="true"
+              [inputStyle]="{ width: '100%' }"
+              size="small"
+            />
+          </div>
+        </div>
+
+        <div class="config-fields__checkbox">
+          <p-checkbox
+            [(ngModel)]="newVisualizarUltimaPagina"
+            [binary]="true"
+            inputId="new_visualizar_ultima_pagina"
+          />
+          <label for="new_visualizar_ultima_pagina">Visualizar en última página</label>
+        </div>
+      </div>
+    }
+  </div>
+
+  <ng-template #footer>
+    <p-button
+      label="Cancelar"
+      severity="secondary"
+      [text]="true"
+      (onClick)="closeDialog()"
+    />
+    @if (selectedFile()) {
+      <p-button
+        label="Subir imagen"
+        icon="pi pi-upload"
+        (onClick)="submitUpload()"
+        [loading]="uploading()"
+        [disabled]="uploading()"
+      />
+    }
+  </ng-template>
+</p-dialog>

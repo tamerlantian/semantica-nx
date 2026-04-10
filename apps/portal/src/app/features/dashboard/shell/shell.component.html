@@ -80,10 +80,13 @@
       @if (isExpanded(item.label)) {
         <div class="nav-children">
           @for (child of item.children; track child.route) {
-            @if (child.requiresTenant && !hasTenant()) {
+            @if (child.disabled || (child.requiresTenant && !hasTenant())) {
               <span class="nav-item nav-item--child nav-item--disabled">
                 <i [class]="child.icon"></i>
                 <span>{{ child.label }}</span>
+                @if (child.disabledLabel) {
+                  <span class="nav-item__badge">{{ child.disabledLabel }}</span>
+                }
               </span>
             } @else {
               <a
