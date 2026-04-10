@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.13](https://github.com/tamerlantian/semantica-nx/compare/v0.0.12...v0.0.13) (2026-04-10)
+
+
+### Features
+
+* **portal:** disable creditos section with "próximamente" badge ([6817f61](https://github.com/tamerlantian/semantica-nx/commit/6817f61990afb59f7584c99f8ad5a6e18df5bff5))
+* **seguridad:** add formato-imagen management with delete support ([3733ae0](https://github.com/tamerlantian/semantica-nx/commit/3733ae046e6816aa5ddf64c5677c1f0a69756cca))
+
+
+### Bug Fixes
+
+* added package* to excluding rules nx ([7e22726](https://github.com/tamerlantian/semantica-nx/commit/7e2272673ada6983e7bc598efce967a3c8461dac))
+* confirm button changed color to primary ([b9cb8c5](https://github.com/tamerlantian/semantica-nx/commit/b9cb8c515f272f963f97e45e37c50678a831214f))
+* remove coming soon message from shell ([0ed77bb](https://github.com/tamerlantian/semantica-nx/commit/0ed77bb10860636ede0e2075624aff6510adc56a))
+
 ## [0.0.12](https://github.com/tamerlantian/semantica-nx/compare/v0.0.11...v0.0.12) (2026-04-07)
 
 
