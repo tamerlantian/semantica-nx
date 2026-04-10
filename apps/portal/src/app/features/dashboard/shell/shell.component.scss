@@ -144,7 +144,9 @@
 
 .shell-content {
   flex: 1;
+  min-width: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   background: var(--p-surface-50);
 }
 

@@ -4,12 +4,12 @@ import { Tag } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { CapacitacionDetalle } from '../../models/capacitacion.model';
 import { CapacitacionesService } from '../../services/capacitaciones.service';
-import { FicherosService, ToastService } from '@semantica/core';
+import { FicherosService, ToastService, TruncatePipe } from '@semantica/core';
 
 @Component({
   selector: 'app-capacitacion-card',
   standalone: true,
-  imports: [DatePipe, Tag, ButtonModule],
+  imports: [DatePipe, Tag, ButtonModule, TruncatePipe],
   templateUrl: './capacitacion-card.component.html',
   styleUrl: './capacitacion-card.component.scss',
 })
@@ -22,6 +22,7 @@ export class CapacitacionCardComponent {
   readonly asistenciaConfirmada = output<void>();
 
   readonly confirming = signal(false);
+  readonly expanded = signal(false);
 
   readonly asistenciaSeverity = computed(() =>
     this.capacitacion().asistencia ? 'success' : 'warn',
@@ -41,6 +42,30 @@ export class CapacitacionCardComponent {
 
   readonly hasFicheros = computed(() => this.capacitacion().ficheros.length > 0);
 
+  readonly isLugarUrl = computed(() =>
+    this.capacitacion().capacitacion_lugar.startsWith('http'),
+  );
+
+  readonly evaluacionSeverity = computed((): 'success' | 'warn' | 'danger' | null => {
+    const raw = this.capacitacion().evaluacion;
+    if (raw === null) return null;
+    const val = parseInt(raw, 10);
+    if (isNaN(val)) return null;
+    if (val >= 70) return 'success';
+    if (val >= 50) return 'warn';
+    return 'danger';
+  });
+
+  readonly evaluacionLabel = computed(() => {
+    const raw = this.capacitacion().evaluacion;
+    if (raw === null) return '';
+    return `${raw} / 100`;
+  });
+
+  readonly contenidoIsLong = computed(
+    () => this.capacitacion().capacitacion_contenido.length > 120,
+  );
+
   formatSize(bytes: number): string {
     if (bytes === 0) return '0 B';
     const k = 1024;
@@ -56,6 +81,10 @@ export class CapacitacionCardComponent {
     if (['doc', 'docx'].includes(ext)) return 'pi pi-file-word';
     if (['xls', 'xlsx'].includes(ext)) return 'pi pi-file-excel';
     return 'pi pi-file';
+  }
+
+  toggleExpanded(): void {
+    this.expanded.update((v) => !v);
   }
 
   descargar(pk: number): void {
