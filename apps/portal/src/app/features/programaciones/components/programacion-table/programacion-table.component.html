@@ -20,7 +20,7 @@
         <th class="accion-col"></th>
         @for (dia of diasDelMes(); track dia) {
           <th style="min-width: 48px; text-align: center" [class.dia-actual]="dia === diaActual()">
-            {{ dia }}
+            {{ getDayLabel(dia) }}
           </th>
         }
       </tr>

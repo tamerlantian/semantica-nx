@@ -14,11 +14,19 @@ import { ReporteCreateDialogComponent } from '../reporte-create-dialog/reporte-c
 export class ProgramacionTableComponent {
   readonly programaciones = input.required<ProgramacionEmpleado[]>();
   readonly diasDelMes = input.required<number[]>();
+  readonly mes = input.required<number>(); // 1-based
+  readonly anio = input.required<number>();
   readonly diaActual = input(0);
   readonly titulo = input('Programación del mes');
   readonly subtitulo = input('Detalle completo de turnos asignados');
 
   readonly totalColumnas = computed(() => this.diasDelMes().length);
+
+  getDayLabel(dia: number): string {
+    const letters = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
+    const dow = new Date(this.anio(), this.mes() - 1, dia).getDay();
+    return `${dia}${letters[dow]}`;
+  }
 
   readonly reporteDialogVisible = signal(false);
   readonly programacionSeleccionada = signal(0);
