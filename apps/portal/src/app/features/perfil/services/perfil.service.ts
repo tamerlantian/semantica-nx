@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BaseHttpService } from '../../../core/services/base-http.service';
+import { BaseHttpService } from '../../../core';
 import { API_ENDPOINTS } from '../../../core/constants/api-endpoints.constants';
 import { PerfilDetalle, UpdatePerfilRequest } from '../models/perfil.model';
 

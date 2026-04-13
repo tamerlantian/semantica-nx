@@ -3,12 +3,21 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ENVIRONMENT } from '../tokens';
 
-type ParamValue = string | number | boolean | null | undefined;
+/** Tipo de valores aceptados para parámetros HTTP */
+export type ParamValue = string | number | boolean | null | undefined;
 
-function buildHttpParams(params: Record<string, ParamValue>): HttpParams {
+/**
+ * Construye un objeto HttpParams a partir de un record plano.
+ * Los valores null/undefined son ignorados automáticamente.
+ *
+ * @example
+ * buildHttpParams({ page: 1, size: 10, empleado_id: undefined })
+ * // → HttpParams { page=1, size=10 }
+ */
+export function buildHttpParams(params: Record<string, ParamValue>): HttpParams {
   let httpParams = new HttpParams();
   for (const [key, value] of Object.entries(params)) {
-    if (value !== null && value !== undefined) {
+    if (value != null) {
       httpParams = httpParams.set(key, String(value));
     }
   }
@@ -16,7 +25,7 @@ function buildHttpParams(params: Record<string, ParamValue>): HttpParams {
 }
 
 /**
- * Servicio base que provee utilidades HTTP comunes para libs compartidas.
+ * Servicio base que provee utilidades HTTP comunes.
  *
  * Usa el token `ENVIRONMENT` para obtener la URL base, lo que permite
  * que tanto portal como seguridad inyecten su propio entorno.
@@ -24,9 +33,9 @@ function buildHttpParams(params: Record<string, ParamValue>): HttpParams {
  * @example
  * ```ts
  * @Injectable({ providedIn: 'root' })
- * export class MiService extends BaseHttpService {
- *   getData(): Observable<Data[]> {
- *     return this.get<Data[]>('/api/data');
+ * export class PagosService extends BaseHttpService {
+ *   getPagos(params?: BaseQueryParams): Observable<PaginatedResponse<Pago>> {
+ *     return this.get<PaginatedResponse<Pago>>(API_ENDPOINTS.pagos.lista, { ... });
  *   }
  * }
  * ```
