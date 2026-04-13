@@ -88,7 +88,9 @@ export class CapacitacionCardComponent {
   }
 
   descargar(pk: number): void {
-    this.ficherosService.descargarFichero(pk);
+    this.ficherosService.getDescargarUrl(pk).subscribe(({ url }) => {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    });
   }
 
   confirmar(): void {

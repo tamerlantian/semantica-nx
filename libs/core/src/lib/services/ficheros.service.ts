@@ -1,18 +1,16 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ENVIRONMENT } from '../tokens';
+import { BaseHttpService } from './base-http.service';
 import { Fichero } from '../models/fichero.model';
 
 @Injectable({ providedIn: 'root' })
-export class FicherosService {
-  private readonly http = inject(HttpClient);
-  private readonly baseUrl = inject(ENVIRONMENT).apiUrl;
+export class FicherosService extends BaseHttpService {
+  private readonly FICHEROS_URL = '/doc/fichero/modelo';
+  private readonly CARGAR_URL = '/doc/fichero/cargar';
+  private readonly DESCARGAR_URL = '/doc/fichero/descargar-url';
 
   getFicheros(codigoModelo: string, codigo: string): Observable<Fichero[]> {
-    return this.http.get<Fichero[]>(
-      `${this.baseUrl}/doc/fichero/modelo/${codigoModelo}/${codigo}`,
-    );
+    return this.get<Fichero[]>(`${this.FICHEROS_URL}/${codigoModelo}/${codigo}`);
   }
 
   cargarFichero(
@@ -23,16 +21,13 @@ export class FicherosService {
     const formData = new FormData();
     formData.append('archivo', file);
     return this.http.post(
-      `${this.baseUrl}/doc/fichero/cargar/${codigoModelo}/${recordId}`,
+      `${this.baseUrl}${this.CARGAR_URL}/${codigoModelo}/${recordId}`,
       formData,
     );
   }
 
-  descargarFichero(pk: number): void {
-    this.http
-      .get<{ url: string }>(`${this.baseUrl}/doc/fichero/descargar-url/${pk}`)
-      .subscribe(({ url }) => {
-        window.open(url, '_blank', 'noopener,noreferrer');
-      });
+  /** Retorna la URL firmada de descarga. El componente es responsable de abrirla. */
+  getDescargarUrl(pk: number): Observable<{ url: string }> {
+    return this.get<{ url: string }>(`${this.DESCARGAR_URL}/${pk}`);
   }
 }
