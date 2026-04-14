@@ -7,6 +7,8 @@ export {
   ToastService,
   TokenRefreshService,
   BaseAuthService,
+  BaseHttpService,
+  buildHttpParams,
   extractErrorMessage,
   parseApiError,
   ENVIRONMENT,
@@ -25,11 +27,11 @@ export type {
   LoginRequest,
   AuthResponse,
   ResendVerificationRequest,
+  ParamValue,
 } from '@semantica/core';
 
 // App-specific exports
-export { BaseHttpService } from './services/base-http.service';
-export type { PaginatedResponse, QueryParams } from './services/base-http.service';
+export type { PaginatedResponse, QueryParams } from './models/pagination.model';
 export { API_ENDPOINTS } from './constants/api-endpoints.constants';
 export { ROUTE_PATHS } from './constants/route-paths.constants';
 export { isSafeReturnUrl } from './utils/url.utils';
