@@ -111,10 +111,7 @@ export const appConfig: ApplicationConfig = {
     },
     provideAppInitializer(() => {
       const auth = inject(AuthService);
-      return firstValueFrom(auth.me()).catch(() => {
-        console.error('Failed to initialize user session');
-        return null;
-      });
+      return firstValueFrom(auth.me()).catch(() => null);
     }),
     provideAnimationsAsync(),
     providePrimeNG({
