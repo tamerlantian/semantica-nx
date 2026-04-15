@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import {
   PageHeaderComponent,
@@ -33,6 +34,7 @@ export class PagosListComponent implements OnInit {
   private readonly pagosService = inject(PagosService);
   private readonly authService = inject(AuthService);
   private readonly toastService = inject(ToastService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
@@ -59,6 +61,7 @@ export class PagosListComponent implements OnInit {
 
     this.pagosService
       .getPagos({ page, size: this.pageSize(), empleado_id: user.empleado_id! })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.pagos.set(res.items);
@@ -83,7 +86,10 @@ export class PagosListComponent implements OnInit {
   imprimirPago(pago: Pago): void {
     this.printing.set(pago.codigo_pago_pk);
 
-    this.pagosService.imprimirPago(pago.codigo_pago_pk).subscribe({
+    this.pagosService
+      .imprimirPago(pago.codigo_pago_pk)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (blob) => {
         const url = URL.createObjectURL(blob);
         window.open(url, '_blank');

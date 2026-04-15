@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
 import {
   PageHeaderComponent,
@@ -37,6 +38,7 @@ import { ReclamoCreateDialogComponent } from '../../components/reclamo-create-di
 export class ReclamosListComponent implements OnInit {
   private readonly reclamosService = inject(ReclamosService);
   private readonly authService = inject(AuthService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
@@ -68,6 +70,7 @@ export class ReclamosListComponent implements OnInit {
 
     this.reclamosService
       .getReclamos({ page, size: this.pageSize(), empleado_id: user.empleado_id! })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.reclamos.set(res.items);
@@ -119,7 +122,10 @@ export class ReclamosListComponent implements OnInit {
     loadingSet.add(id);
     this.respuestasLoading.set(loadingSet);
 
-    this.reclamosService.getRespuestas(id).subscribe({
+    this.reclamosService
+      .getRespuestas(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (res) => {
         const cache = new Map(this.respuestasCache());
         cache.set(id, res.items);
