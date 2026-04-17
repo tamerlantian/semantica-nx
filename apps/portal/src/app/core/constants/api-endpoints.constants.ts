@@ -16,7 +16,4 @@ export const API_ENDPOINTS = {
   tenant: {
     buscar: '/auth/tenant/seleccionar',
   },
-  enlaces: {
-    lista: '/gen/enlace/lista-portal',
-  },
 } as const;
