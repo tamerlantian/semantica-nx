@@ -91,12 +91,17 @@ export class PagosListComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
       next: (blob) => {
-        const url = URL.createObjectURL(blob);
+        const downloadBlob = new Blob([blob], { type: 'application/octet-stream' });
+        const url = URL.createObjectURL(downloadBlob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `pago-${pago.codigo_pago_pk}.pdf`;
+        a.rel = 'noopener';
+        a.style.display = 'none';
+        document.body.appendChild(a);
         a.click();
-        URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
         this.printing.set(null);
       },
       error: (err) => {
