@@ -85,26 +85,30 @@ export class PagosListComponent implements OnInit {
 
   imprimirPago(pago: Pago): void {
     this.printing.set(pago.codigo_pago_pk);
+    // Abre sincrónicamente antes del request — iOS bloquea window.open en callbacks async
+    const newWindow = window.open('', '_blank');
 
     this.pagosService
       .imprimirPago(pago.codigo_pago_pk)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
       next: (blob) => {
-        const downloadBlob = new Blob([blob], { type: 'application/octet-stream' });
-        const url = URL.createObjectURL(downloadBlob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `pago-${pago.codigo_pago_pk}.pdf`;
-        a.rel = 'noopener';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        const url = URL.createObjectURL(blob);
+        if (newWindow) {
+          newWindow.location.href = url;
+        } else {
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `pago-${pago.codigo_pago_pk}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+        setTimeout(() => URL.revokeObjectURL(url), 3000);
         this.printing.set(null);
       },
       error: (err) => {
+        newWindow?.close();
         this.toastService.error(extractErrorMessage(err, 'No se pudo imprimir el pago.'));
         this.printing.set(null);
       },
