@@ -1,29 +1,20 @@
-import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, signal } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
-import { FormatoImagen, FormatoImagenListResponse } from '../models/formato-imagen.model';
-import { environment } from '../../../../environments/environment';
-import { API_ENDPOINTS } from '../../../core';
+import { BaseHttpService, PaginatedResponse, API_ENDPOINTS } from '../../../core';
+import { FormatoImagen } from '../models/formato-imagen.model';
 
 @Injectable({ providedIn: 'root' })
-export class FormatoImagenService {
-  private readonly http = inject(HttpClient);
-
+export class FormatoImagenService extends BaseHttpService {
   private readonly _imagenes = signal<FormatoImagen[]>([]);
   readonly imagenes = this._imagenes.asReadonly();
 
   getImagenes(codigoFormato: number): Observable<FormatoImagen[]> {
-    const params = new HttpParams().set('formato_id', codigoFormato);
-
-    return this.http
-      .get<FormatoImagenListResponse>(
-        `${environment.apiUrl}${API_ENDPOINTS.formatoImagen.list}`,
-        { params },
-      )
-      .pipe(
-        map((res) => res.items),
-        tap((imagenes) => this._imagenes.set(imagenes)),
-      );
+    return this.get<PaginatedResponse<FormatoImagen>>(API_ENDPOINTS.formatoImagen.list, {
+      formato_id: codigoFormato,
+    }).pipe(
+      map((res) => res.items),
+      tap((imagenes) => this._imagenes.set(imagenes)),
+    );
   }
 
   crearImagen(data: {
@@ -44,20 +35,13 @@ export class FormatoImagenService {
     formData.append('visualizar_ultima_pagina', String(data.visualizar_ultima_pagina));
     formData.append('imagen', data.imagen);
 
-    return this.http
-      .post<FormatoImagen>(
-        `${environment.apiUrl}${API_ENDPOINTS.formatoImagen.create}`,
-        formData,
-      )
-      .pipe(
-        tap((imagen) => this._imagenes.update((list) => [...list, imagen])),
-      );
+    return this.post<FormatoImagen>(API_ENDPOINTS.formatoImagen.create, formData).pipe(
+      tap((imagen) => this._imagenes.update((list) => [...list, imagen])),
+    );
   }
 
   eliminarImagen(formatoImagenId: number): Observable<void> {
-    return this.http.delete<void>(
-      `${environment.apiUrl}${API_ENDPOINTS.formatoImagen.delete(formatoImagenId)}`,
-    );
+    return this.delete<void>(API_ENDPOINTS.formatoImagen.delete(formatoImagenId));
   }
 
   actualizarImagen(
@@ -70,19 +54,12 @@ export class FormatoImagenService {
       visualizar_ultima_pagina: boolean;
     },
   ): Observable<FormatoImagen> {
-    return this.http
-      .patch<FormatoImagen>(
-        `${environment.apiUrl}${API_ENDPOINTS.formatoImagen.update(id)}`,
-        data,
-      )
-      .pipe(
-        tap((updated) =>
-          this._imagenes.update((list) =>
-            list.map((img) =>
-              img.codigo_formato_imagen_pk === id ? updated : img,
-            ),
-          ),
+    return this.patch<FormatoImagen>(API_ENDPOINTS.formatoImagen.update(id), data).pipe(
+      tap((updated) =>
+        this._imagenes.update((list) =>
+          list.map((img) => (img.codigo_formato_imagen_pk === id ? updated : img)),
         ),
-      );
+      ),
+    );
   }
 }

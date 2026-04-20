@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
 import {
   PageHeaderComponent,
@@ -39,6 +40,7 @@ import { FicherosDialogComponent } from '@semantica/ui';
 export class SolicitudesListComponent implements OnInit {
   private readonly solicitudesService = inject(SolicitudesService);
   private readonly authService = inject(AuthService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
@@ -67,6 +69,7 @@ export class SolicitudesListComponent implements OnInit {
 
     this.solicitudesService
       .getSolicitudes({ page, size: this.pageSize(), empleado_id: user.empleado_id })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.solicitudes.set(res.items);

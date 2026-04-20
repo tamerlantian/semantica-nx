@@ -1,5 +1,7 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { switchMap } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
@@ -29,6 +31,7 @@ export class PerfilPageComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly perfilService = inject(PerfilService);
   private readonly toastService = inject(ToastService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly isLoading = signal(true);
   readonly isSaving = signal(false);
@@ -55,9 +58,9 @@ export class PerfilPageComponent implements OnInit {
   readonly isIdentificacionLocked = computed(() => !!this.detalle()?.empleado_id);
 
   readonly form = this.fb.group({
-    nombres: ['', [Validators.required, Validators.minLength(2)]],
-    apellidos: ['', [Validators.required, Validators.minLength(2)]],
-    numero_identificacion: ['', [Validators.required]],
+    nombres: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(2)]),
+    apellidos: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(2)]),
+    numero_identificacion: this.fb.nonNullable.control('', [Validators.required]),
     email: [{ value: '', disabled: true }],
   });
 
@@ -79,25 +82,32 @@ export class PerfilPageComponent implements OnInit {
 
   private loadDetalle(): void {
     this.isLoading.set(true);
-    this.perfilService.getDetalle().subscribe({
-      next: (detalle) => {
-        this.detalle.set(detalle);
-        this.form.patchValue({
-          nombres: detalle.nombres,
-          apellidos: detalle.apellidos,
-          numero_identificacion: detalle.numero_identificacion,
-          email: detalle.email,
-        });
-        if (detalle.empleado_id) {
-          this.form.controls.numero_identificacion.disable();
-        }
-        this.form.markAsPristine();
-        this.isLoading.set(false);
-      },
-      error: () => {
-        this.isLoading.set(false);
-      },
+    this.perfilService
+      .getDetalle()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (detalle) => {
+          this.patchDetalle(detalle);
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.isLoading.set(false);
+        },
+      });
+  }
+
+  private patchDetalle(detalle: PerfilDetalle): void {
+    this.detalle.set(detalle);
+    this.form.patchValue({
+      nombres: detalle.nombres,
+      apellidos: detalle.apellidos,
+      numero_identificacion: detalle.numero_identificacion,
+      email: detalle.email,
     });
+    if (detalle.empleado_id) {
+      this.form.controls.numero_identificacion.disable();
+    }
+    this.form.markAsPristine();
   }
 
   onSubmit(): void {
@@ -110,30 +120,27 @@ export class PerfilPageComponent implements OnInit {
     this.errorMessage.set(null);
 
     const data: UpdatePerfilRequest = {
-      nombres: this.form.getRawValue().nombres!,
-      apellidos: this.form.getRawValue().apellidos!,
-      numero_identificacion: this.form.getRawValue().numero_identificacion!,
+      nombres: this.form.getRawValue().nombres,
+      apellidos: this.form.getRawValue().apellidos,
+      numero_identificacion: this.form.getRawValue().numero_identificacion,
     };
 
-    this.perfilService.updatePerfil(data).subscribe({
-      next: () => {
-        this.perfilService.getDetalle().subscribe({
-          next: (detalle) => {
-            this.detalle.set(detalle);
-            this.isSaving.set(false);
-            this.toastService.success('Perfil actualizado correctamente');
-            this.form.markAsPristine();
-          },
-          error: () => {
-            this.isSaving.set(false);
-            this.toastService.success('Perfil actualizado correctamente');
-          },
-        });
-      },
-      error: (err) => {
-        this.isSaving.set(false);
-        this.errorMessage.set(extractErrorMessage(err, 'Error al actualizar el perfil'));
-      },
-    });
+    this.perfilService
+      .updatePerfil(data)
+      .pipe(
+        switchMap(() => this.perfilService.getDetalle()),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: (detalle) => {
+          this.patchDetalle(detalle);
+          this.isSaving.set(false);
+          this.toastService.success('Perfil actualizado correctamente');
+        },
+        error: (err) => {
+          this.isSaving.set(false);
+          this.errorMessage.set(extractErrorMessage(err, 'Error al actualizar el perfil'));
+        },
+      });
   }
 }

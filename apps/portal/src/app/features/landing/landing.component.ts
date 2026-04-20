@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -6,6 +5,7 @@ import { ENVIRONMENT } from '@semantica/core';
 import { ButtonModule } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
+import { ContactoService } from './services/contacto.service';
 
 interface FaqItem {
   question: string;
@@ -21,7 +21,7 @@ interface FaqItem {
 })
 export class LandingComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly http = inject(HttpClient);
+  private readonly contactoService = inject(ContactoService);
   private readonly env = inject(ENVIRONMENT);
 
   readonly currentYear = new Date().getFullYear();
@@ -98,7 +98,7 @@ export class LandingComponent {
       codigoProyecto: 11,
     };
 
-    this.http.post('https://semantica.com.co/api/contacto/nuevo', payload).subscribe({
+    this.contactoService.enviarContacto(payload).subscribe({
       next: () => {
         this.contactSending.set(false);
         this.contactSent.set(true);

@@ -22,9 +22,3 @@ export interface Formato {
   codigo: string;
 }
 
-export interface FormatoListResponse {
-  total: number;
-  page: number;
-  size: number;
-  items: Formato[];
-}

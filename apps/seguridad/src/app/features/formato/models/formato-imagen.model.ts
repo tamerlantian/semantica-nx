@@ -10,9 +10,3 @@ export interface FormatoImagen {
   visualizar_ultima_pagina: boolean;
 }
 
-export interface FormatoImagenListResponse {
-  total: number;
-  page: number;
-  size: number;
-  items: FormatoImagen[];
-}
