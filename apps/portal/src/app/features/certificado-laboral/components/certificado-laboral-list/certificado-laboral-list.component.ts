@@ -85,9 +85,17 @@ export class CertificadoLaboralListComponent implements OnInit {
 
     this.certificadoLaboralService.imprimirCertificado(contrato.codigo_contrato_pk).subscribe({
       next: (blob) => {
-        const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
-        URL.revokeObjectURL(url);
+        const downloadBlob = new Blob([blob], { type: 'application/octet-stream' });
+        const url = URL.createObjectURL(downloadBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `certificado-laboral-${contrato.codigo_contrato_pk}.pdf`;
+        a.rel = 'noopener';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
         this.printing.set(null);
       },
       error: (err) => {
