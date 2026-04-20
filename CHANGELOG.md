@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.15](https://github.com/tamerlantian/semantica-nx/compare/v0.0.14...v0.0.15) (2026-04-20)
+
+
+### Bug Fixes
+
+* **portal:** use anchor download instead of window.open for pago PDF ([45f538a](https://github.com/tamerlantian/semantica-nx/commit/45f538a2532dfe4c3c470f0df8c8902a3696e820))
+
+
+### Refactoring
+
+* **core:** add BaseHttpService to core and align ficheros.service ([7729e91](https://github.com/tamerlantian/semantica-nx/commit/7729e919b2e3b20f6264195ff1d416a7dcd4add4))
+* **core:** consolidate BaseHttpService into libs/core ([6d55ee5](https://github.com/tamerlantian/semantica-nx/commit/6d55ee5ed807069ee25c830030c35c901436ac32))
+* **portal:** add takeUntilDestroyed to list components ([6e16aba](https://github.com/tamerlantian/semantica-nx/commit/6e16aba161ecaba5356807ccc00b9da9d88833ac))
+* **portal:** extract landing contact endpoint into ContactoService ([2f4fb2c](https://github.com/tamerlantian/semantica-nx/commit/2f4fb2c5284bd5f749a8b3f91a6cf7b674afdbd1))
+* **portal:** improve perfil feature code quality ([f58f65f](https://github.com/tamerlantian/semantica-nx/commit/f58f65f3c012ab9c18195659eb36e517957bf2e7))
+* **portal:** move enlaces endpoint inline in EnlacesService ([4ff002f](https://github.com/tamerlantian/semantica-nx/commit/4ff002f36433df88bd940149df3ebee1ed63e14c))
+* **seguridad:** migrate services to extend BaseHttpService from @semantica/core ([8417d3e](https://github.com/tamerlantian/semantica-nx/commit/8417d3e807e8ee48a3c3eeeed650cfff08ebe65f))
+
 ## [0.0.14](https://github.com/tamerlantian/semantica-nx/compare/v0.0.13...v0.0.14) (2026-04-10)
 
 
