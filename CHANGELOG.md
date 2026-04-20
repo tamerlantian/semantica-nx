@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.17](https://github.com/tamerlantian/semantica-nx/compare/v0.0.16...v0.0.17) (2026-04-20)
+
+
+### Bug Fixes
+
+* **portal:** open window synchronously to bypass iOS Safari popup blocker ([40da474](https://github.com/tamerlantian/semantica-nx/commit/40da474b516fc222c397a3170282b55273ece342))
+
 ## [0.0.16](https://github.com/tamerlantian/semantica-nx/compare/v0.0.15...v0.0.16) (2026-04-20)
 
 
