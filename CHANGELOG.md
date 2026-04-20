@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.16](https://github.com/tamerlantian/semantica-nx/compare/v0.0.15...v0.0.16) (2026-04-20)
+
+
+### Bug Fixes
+
+* **portal:** fix PDF download on mobile for pagos and certificado laboral ([3c71e9e](https://github.com/tamerlantian/semantica-nx/commit/3c71e9ebb37f1f2321701d18ed862519e5b7cacf))
+
 ## [0.0.15](https://github.com/tamerlantian/semantica-nx/compare/v0.0.14...v0.0.15) (2026-04-20)
 
 
