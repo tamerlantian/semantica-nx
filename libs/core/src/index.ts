@@ -40,6 +40,7 @@ export {
   type ApiErrorResponse,
 } from './lib/utils/error.utils';
 export { MESES_ES, getMesAnioLabel, getSiguienteMes } from './lib/utils/date.utils';
+export { downloadBlob } from './lib/utils/download.utils';
 
 // Pipes
 export { TruncatePipe } from './lib/pipes/truncate.pipe';

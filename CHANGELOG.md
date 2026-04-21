@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.18](https://github.com/tamerlantian/semantica-nx/compare/v0.0.17...v0.0.18) (2026-04-21)
+
+
+### Bug Fixes
+
+* **portal:** simplify PDF download to fix mobile save error ([7f8ee3e](https://github.com/tamerlantian/semantica-nx/commit/7f8ee3e8ee00b25f2302e218b9feaf85d739377e))
+
 ## [0.0.17](https://github.com/tamerlantian/semantica-nx/compare/v0.0.16...v0.0.17) (2026-04-20)
 
 
