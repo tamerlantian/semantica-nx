@@ -8,7 +8,7 @@ import {
 } from '../../../../shared';
 import { CertificadoLaboralService } from '../../services/certificado-laboral.service';
 import { Contrato } from '../../models/contrato.model';
-import { extractErrorMessage, ToastService } from '@semantica/core';
+import { downloadBlob, extractErrorMessage, ToastService } from '@semantica/core';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../auth/services/auth.service';
@@ -82,27 +82,13 @@ export class CertificadoLaboralListComponent implements OnInit {
 
   imprimirCertificado(contrato: Contrato): void {
     this.printing.set(contrato.codigo_contrato_pk);
-    // Abre sincrónicamente antes del request — iOS bloquea window.open en callbacks async
-    const newWindow = window.open('', '_blank');
 
     this.certificadoLaboralService.imprimirCertificado(contrato.codigo_contrato_pk).subscribe({
       next: (blob) => {
-        const url = URL.createObjectURL(blob);
-        if (newWindow) {
-          newWindow.location.href = url;
-        } else {
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `certificado-laboral-${contrato.codigo_contrato_pk}.pdf`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        }
-        setTimeout(() => URL.revokeObjectURL(url), 3000);
+        downloadBlob(blob, `certificado-laboral-${contrato.codigo_contrato_pk}.pdf`);
         this.printing.set(null);
       },
       error: (err) => {
-        newWindow?.close();
         this.toastService.error(
           extractErrorMessage(err, 'No se pudo imprimir el certificado laboral.'),
         );
