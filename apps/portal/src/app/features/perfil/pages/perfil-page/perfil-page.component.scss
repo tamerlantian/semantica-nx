@@ -99,6 +99,97 @@
   padding: 2rem;
 }
 
+// ─── Company Card ─────────────────────────────────────────────────────────────
+.profile-empresa {
+  background: var(--p-surface-0);
+  border: 1px solid var(--p-surface-200);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--p-text-color);
+    margin: 0;
+    letter-spacing: -0.01em;
+
+    i {
+      font-size: 1rem;
+      color: var(--p-primary-color);
+    }
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__empty {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--p-text-muted-color);
+
+    .pi {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+.empresa-card {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  min-width: 0;
+
+  &__icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--p-primary-color) 12%, transparent);
+
+    .pi {
+      font-size: 1.1rem;
+      color: var(--p-primary-color);
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--p-text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    color: var(--p-text-muted-color);
+  }
+}
+
 // ─── Sections ───────────────────────────────────────────────────────────────
 .profile-section {
   display: flex;
@@ -203,6 +294,19 @@
 
   .profile-card {
     padding: 1.25rem;
+  }
+
+  .profile-empresa {
+    padding: 1.25rem;
+
+    &__row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    ::ng-deep .p-button {
+      width: 100%;
+    }
   }
 
   .profile-actions {

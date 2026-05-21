@@ -1,8 +1,8 @@
 export interface PerfilDetalle {
-  nombres: string;
-  apellidos: string;
-  numero_identificacion: string;
-  empleado_id: number;
+  nombres: string | null;
+  apellidos: string | null;
+  numero_identificacion: string | null;
+  empleado_id: number | null;
   email: string;
 }
 

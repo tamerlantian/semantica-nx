@@ -11,6 +11,8 @@ import { PageHeaderComponent } from '@semantica/ui';
 import { ToastService, extractErrorMessage } from '@semantica/core';
 import { PerfilService } from '../../services/perfil.service';
 import { PerfilDetalle, UpdatePerfilRequest } from '../../models/perfil.model';
+import { AuthService } from '../../../auth/services/auth.service';
+import { CambiarEmpresaDialogComponent } from '../../components/cambiar-empresa-dialog/cambiar-empresa-dialog.component';
 
 @Component({
   selector: 'app-perfil-page',
@@ -23,6 +25,7 @@ import { PerfilDetalle, UpdatePerfilRequest } from '../../models/perfil.model';
     AvatarModule,
     DividerModule,
     PageHeaderComponent,
+    CambiarEmpresaDialogComponent,
   ],
   templateUrl: './perfil-page.component.html',
   styleUrl: './perfil-page.component.scss',
@@ -31,26 +34,37 @@ export class PerfilPageComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly perfilService = inject(PerfilService);
   private readonly toastService = inject(ToastService);
+  private readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly isLoading = signal(true);
   readonly isSaving = signal(false);
   readonly errorMessage = signal<string | null>(null);
+  readonly cambiarEmpresaVisible = signal(false);
 
   private readonly detalle = signal<PerfilDetalle | null>(null);
+
+  readonly hasTenant = this.authService.hasTenant;
+
+  /** Empresa a la que el usuario está vinculado actualmente. */
+  readonly empresaActual = computed(() => {
+    const user = this.authService.currentUser();
+    if (!user?.tenant_id) return null;
+    return user.tenant_nombre ?? `Empresa #${user.tenant_id}`;
+  });
 
   readonly userInitials = computed(() => {
     const d = this.detalle();
     if (!d) return '?';
-    const first = d.nombres.charAt(0).toUpperCase();
-    const last = d.apellidos.charAt(0).toUpperCase();
+    const first = d.nombres?.trim().charAt(0).toUpperCase() ?? '';
+    const last = d.apellidos?.trim().charAt(0).toUpperCase() ?? '';
     return `${first}${last}` || '?';
   });
 
   readonly userFullName = computed(() => {
     const d = this.detalle();
     if (!d) return '';
-    return `${d.nombres} ${d.apellidos}`.trim();
+    return `${d.nombres ?? ''} ${d.apellidos ?? ''}`.trim() || 'Sin nombre';
   });
 
   readonly userEmail = computed(() => this.detalle()?.email ?? '');
@@ -96,12 +110,21 @@ export class PerfilPageComponent implements OnInit {
       });
   }
 
+  /**
+   * Tras cambiar de empresa, el `empleado_id` y el bloqueo de identificación
+   * cambian, por lo que se recarga el detalle del perfil.
+   */
+  onEmpresaCambiada(): void {
+    this.cambiarEmpresaVisible.set(false);
+    this.loadDetalle();
+  }
+
   private patchDetalle(detalle: PerfilDetalle): void {
     this.detalle.set(detalle);
     this.form.patchValue({
-      nombres: detalle.nombres,
-      apellidos: detalle.apellidos,
-      numero_identificacion: detalle.numero_identificacion,
+      nombres: detalle.nombres ?? '',
+      apellidos: detalle.apellidos ?? '',
+      numero_identificacion: detalle.numero_identificacion ?? '',
       email: detalle.email,
     });
     if (detalle.empleado_id) {

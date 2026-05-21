@@ -1,0 +1,99 @@
+<p-dialog
+  [header]="step() === 'select' ? 'Cambiar empresa' : 'Confirmar cambio'"
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '440px' }"
+  [breakpoints]="{ '500px': '90vw' }"
+  (onShow)="onShow()"
+>
+  <!-- ─── Paso 1: seleccionar empresa ─────────────────────────────────────── -->
+  @if (step() === 'select') {
+    <div class="cambiar-form">
+      @if (empresaActual(); as actual) {
+        <div class="cambiar-form__actual">
+          <span class="cambiar-form__actual-label">Empresa actual</span>
+          <span class="cambiar-form__actual-name">{{ actual.nombre }}</span>
+        </div>
+      }
+
+      <p class="cambiar-form__desc">
+        Busca la empresa a la que quieres vincular tu cuenta.
+      </p>
+
+      @if (errorMessage()) {
+        <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+      }
+
+      <div class="form-field">
+        <label for="empresa-nueva">Nueva empresa</label>
+        <p-autocomplete
+          id="empresa-nueva"
+          [(ngModel)]="selectedTenant"
+          [suggestions]="suggestions()"
+          (completeMethod)="onSearch($event)"
+          optionLabel="nombre"
+          [forceSelection]="true"
+          placeholder="Escribe para buscar..."
+          appendTo="body"
+          [style]="{ width: '100%' }"
+          [inputStyle]="{ width: '100%' }"
+        />
+      </div>
+    </div>
+  } @else {
+    <!-- ─── Paso 2: confirmar ─────────────────────────────────────────────── -->
+    <div class="cambiar-confirm">
+      @if (errorMessage()) {
+        <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+      }
+
+      <div class="cambiar-confirm__flow">
+        <div class="empresa-chip empresa-chip--from">
+          <span class="empresa-chip__label">Empresa actual</span>
+          <span class="empresa-chip__name">{{ empresaActual()?.nombre }}</span>
+        </div>
+        <i class="pi pi-arrow-down cambiar-confirm__arrow"></i>
+        <div class="empresa-chip empresa-chip--to">
+          <span class="empresa-chip__label">Nueva empresa</span>
+          <span class="empresa-chip__name">{{ selectedTenant?.nombre }}</span>
+        </div>
+      </div>
+
+      <p-message
+        severity="warn"
+        styleClass="w-full"
+        text="Al cambiar de empresa se actualizará tu información laboral asociada."
+      />
+    </div>
+  }
+
+  <ng-template #footer>
+    @if (step() === 'select') {
+      <p-button label="Cancelar" severity="secondary" [text]="true" (click)="visible.set(false)" />
+      <p-button
+        label="Continuar"
+        icon="pi pi-arrow-right"
+        iconPos="right"
+        (click)="goToConfirm()"
+        [disabled]="!selectedTenant"
+      />
+    } @else {
+      <p-button
+        label="Atrás"
+        icon="pi pi-arrow-left"
+        severity="secondary"
+        [text]="true"
+        (click)="back()"
+        [disabled]="submitting()"
+      />
+      <p-button
+        label="Confirmar cambio"
+        icon="pi pi-check"
+        (click)="onConfirm()"
+        [loading]="submitting()"
+        [disabled]="submitting()"
+      />
+    }
+  </ng-template>
+</p-dialog>
