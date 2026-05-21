@@ -28,6 +28,40 @@
       </div>
     </div>
 
+    <!-- Company Card -->
+    <div class="profile-empresa">
+      <h3 class="profile-empresa__title">
+        <i class="pi pi-building"></i>
+        Empresa vinculada
+      </h3>
+
+      @if (hasTenant()) {
+        <div class="profile-empresa__row">
+          <div class="empresa-card">
+            <div class="empresa-card__icon">
+              <i class="pi pi-building"></i>
+            </div>
+            <div class="empresa-card__info">
+              <span class="empresa-card__name">{{ empresaActual() }}</span>
+              <span class="empresa-card__label">Empresa actual</span>
+            </div>
+          </div>
+          <p-button
+            label="Cambiar empresa"
+            icon="pi pi-sync"
+            severity="secondary"
+            [outlined]="true"
+            (click)="cambiarEmpresaVisible.set(true)"
+          />
+        </div>
+      } @else {
+        <p class="profile-empresa__empty">
+          <i class="pi pi-info-circle"></i>
+          Aún no estás vinculado a ninguna empresa.
+        </p>
+      }
+    </div>
+
     <!-- Form Card -->
     <div class="profile-card">
       <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
@@ -147,4 +181,9 @@
     </div>
   </div>
   }
+
+  <app-cambiar-empresa-dialog
+    [(visible)]="cambiarEmpresaVisible"
+    (cambiada)="onEmpresaCambiada()"
+  />
 </div>
