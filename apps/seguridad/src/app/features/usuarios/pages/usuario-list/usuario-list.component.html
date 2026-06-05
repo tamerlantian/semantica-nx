@@ -7,9 +7,9 @@
     <p-button label="Nuevo usuario" icon="pi pi-plus" (onClick)="openCreateDialog()" />
   </app-page-header>
 
-  @if (loading() && usuarios().length === 0) {
+  @if (loading() && usuarios().length === 0 && !hasActiveFilters()) {
     <app-loading-spinner message="Cargando usuarios..." />
-  } @else if (!loading() && usuarios().length === 0) {
+  } @else if (!loading() && usuarios().length === 0 && !hasActiveFilters()) {
     <app-empty-state
       title="Sin usuarios"
       message="Aún no hay usuarios registrados. Crea el primero para darle acceso a la plataforma."
@@ -24,10 +24,38 @@
     </app-empty-state>
   } @else {
     <div class="table-card">
+      <!-- Filtros: búsqueda por correo + filtro por rol -->
+      <div class="table-toolbar">
+        <p-iconfield class="toolbar-search">
+          <p-inputicon class="pi pi-search" />
+          <input
+            pInputText
+            type="text"
+            placeholder="Buscar por correo..."
+            [value]="searchEmail()"
+            (input)="onSearchInput($any($event.target).value)"
+          />
+        </p-iconfield>
+
+        <p-select
+          class="toolbar-role"
+          [options]="roleFilterOptions"
+          [ngModel]="selectedRole()"
+          (onChange)="onRoleChange($event.value)"
+          (onClear)="onRoleChange(null)"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Todos los roles"
+          [showClear]="true"
+          appendTo="body"
+        />
+      </div>
+
       <p-table
         [value]="usuarios()"
         [lazy]="true"
         [lazyLoadOnInit]="false"
+        [first]="first()"
         [totalRecords]="totalRecords()"
         [loading]="loading()"
         [rowHover]="true"
@@ -78,6 +106,12 @@
                 <span class="status status--pending"> <i class="pi pi-clock"></i> Pendiente </span>
               }
             </td>
+          </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+          <tr>
+            <td colspan="3" class="empty-row">No se encontraron usuarios con esos filtros.</td>
           </tr>
         </ng-template>
       </p-table>

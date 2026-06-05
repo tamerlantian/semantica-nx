@@ -16,10 +16,16 @@ export class UsuarioService extends BaseHttpService {
     this._total.set(0);
   }
 
-  getUsuarios(page = 1, size = 10): Observable<PaginatedResponse<UsuarioListItem>> {
+  getUsuarios(
+    page = 1,
+    size = 10,
+    filters?: { role?: string | null; email?: string | null },
+  ): Observable<PaginatedResponse<UsuarioListItem>> {
     return this.get<PaginatedResponse<UsuarioListItem>>(API_ENDPOINTS.user.list, {
       page,
       size,
+      role: filters?.role || undefined,
+      email: filters?.email || undefined,
     }).pipe(
       tap((res) => {
         this._usuarios.set(res.items);

@@ -1,10 +1,14 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 import { PasswordModule } from 'primeng/password';
 import { SelectModule } from 'primeng/select';
 import { AutoCompleteModule, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
@@ -28,11 +32,14 @@ import { extractErrorMessage } from '../../../../core';
     PageHeaderComponent,
     LoadingSpinnerComponent,
     EmptyStateComponent,
+    FormsModule,
     ButtonModule,
     TableModule,
     TooltipModule,
     DialogModule,
     InputTextModule,
+    IconFieldModule,
+    InputIconModule,
     PasswordModule,
     SelectModule,
     AutoCompleteModule,
@@ -45,6 +52,7 @@ export class UsuarioListComponent implements OnInit {
   private readonly usuarioService = inject(UsuarioService);
   private readonly tenantService = inject(TenantService);
   private readonly messageService = inject(MessageService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly usuarios = this.usuarioService.usuarios;
   readonly totalRecords = this.usuarioService.total;
@@ -53,6 +61,18 @@ export class UsuarioListComponent implements OnInit {
 
   readonly roleOptions = USER_ROLES;
   private readonly roleLabels = new Map(USER_ROLES.map((r) => [r.value, r.label]));
+
+  // ── Filtros ──
+  readonly selectedRole = signal<string | null>(null);
+  readonly searchEmail = signal('');
+  /** Índice de la primera fila; permite resetear el paginador a la página 1. */
+  readonly first = signal(0);
+  readonly hasActiveFilters = computed(() => !!this.selectedRole() || !!this.searchEmail().trim());
+
+  /** Opciones del filtro de rol: "Todos" + los roles asignables. */
+  readonly roleFilterOptions = [{ label: 'Todos los roles', value: null }, ...USER_ROLES];
+
+  private readonly searchSubject = new Subject<string>();
 
   // ── Diálogo de creación ──
   readonly createDialogVisible = signal(false);
@@ -67,6 +87,16 @@ export class UsuarioListComponent implements OnInit {
     tenant: [null as Tenant | null, Validators.required],
   });
 
+  constructor() {
+    // La búsqueda por correo se debouncea para no disparar una petición por tecla.
+    this.searchSubject
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe((term) => {
+        this.searchEmail.set(term);
+        this.resetAndLoad();
+      });
+  }
+
   ngOnInit(): void {
     this.loadUsuarios(1, this.rows());
   }
@@ -74,23 +104,45 @@ export class UsuarioListComponent implements OnInit {
   onLazyLoad(event: TableLazyLoadEvent): void {
     const first = event.first ?? 0;
     const rows = event.rows ?? this.rows();
+    this.first.set(first);
+    this.rows.set(rows);
     const page = Math.floor(first / rows) + 1;
     this.loadUsuarios(page, rows);
   }
 
+  onSearchInput(value: string): void {
+    this.searchSubject.next(value);
+  }
+
+  onRoleChange(role: string | null): void {
+    this.selectedRole.set(role);
+    this.resetAndLoad();
+  }
+
+  /** Vuelve a la primera página y recarga con los filtros actuales. */
+  private resetAndLoad(): void {
+    this.first.set(0);
+    this.loadUsuarios(1, this.rows());
+  }
+
   loadUsuarios(page: number, size: number): void {
     this.loading.set(true);
-    this.usuarioService.getUsuarios(page, size).subscribe({
-      next: () => this.loading.set(false),
-      error: (err: unknown) => {
-        this.loading.set(false);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: extractErrorMessage(err, 'No se pudieron cargar los usuarios.'),
-        });
-      },
-    });
+    this.usuarioService
+      .getUsuarios(page, size, {
+        role: this.selectedRole(),
+        email: this.searchEmail().trim() || null,
+      })
+      .subscribe({
+        next: () => this.loading.set(false),
+        error: (err: unknown) => {
+          this.loading.set(false);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: extractErrorMessage(err, 'No se pudieron cargar los usuarios.'),
+          });
+        },
+      });
   }
 
   openCreateDialog(): void {
