@@ -1,3 +1,57 @@
+// ─── Barra de filtros ────────────────────────────────────────────────────────
+// Búsqueda por correo (crece) + filtro de rol (ancho fijo). Pegada a la tabla
+// mediante un borde inferior tenue; en móvil los controles se apilan.
+
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  // Padding horizontal = inset de las celdas (alinea el buscador con las columnas).
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--p-surface-200);
+}
+
+.toolbar-search {
+  width: 260px;
+
+  // El host es <p-iconfield>; forzar el wrapper interno y el input al ancho fijo.
+  ::ng-deep .p-iconfield {
+    display: block;
+    width: 100%;
+  }
+
+  input {
+    width: 100%;
+  }
+}
+
+.toolbar-role {
+  width: 200px;
+
+  ::ng-deep .p-select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .table-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar-search,
+  .toolbar-role {
+    width: 100%;
+  }
+}
+
+// Fila de "sin resultados" cuando un filtro no arroja coincidencias.
+.empty-row {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--p-text-muted-color);
+}
+
 // ─── Celda de usuario (avatar + nombre + email) ──────────────────────────────
 
 .user-cell {
