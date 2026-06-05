@@ -17,6 +17,13 @@ export const API_ENDPOINTS = {
     create: '/auth/api-key/nuevo',
     byId: (id: number) => `/auth/api-key/eliminar/${id}`,
   },
+  user: {
+    list: `${USER}/lista`,
+    create: `${USER}/nuevo`,
+  },
+  tenant: {
+    buscar: '/auth/tenant/seleccionar',
+  },
   formato: {
     list: '/gen/formato/lista',
     byId: (id: number) => `/gen/formato/${id}`,

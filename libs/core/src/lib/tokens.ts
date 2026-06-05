@@ -1,5 +1,6 @@
-import { InjectionToken } from '@angular/core';
+import { InjectionToken, Signal } from '@angular/core';
 import { Observable } from 'rxjs';
+import { BaseUsuario } from './models/auth.model';
 
 export interface SemanticaEnvironment {
   apiUrl: string;
@@ -15,6 +16,7 @@ export interface RoutePaths {
 
 export interface AuthServiceContract {
   isAuthenticated: () => boolean;
+  currentUser: Signal<BaseUsuario | null>;
   refresh: () => Observable<unknown>;
   clearSession: () => void;
 }

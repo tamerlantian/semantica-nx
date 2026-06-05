@@ -1,0 +1,211 @@
+<div class="page-container">
+  <app-page-header
+    title="Usuarios"
+    subtitle="Gestiona las personas con acceso a la plataforma"
+    icon="pi pi-users"
+  >
+    <p-button label="Nuevo usuario" icon="pi pi-plus" (onClick)="openCreateDialog()" />
+  </app-page-header>
+
+  @if (loading() && usuarios().length === 0) {
+    <app-loading-spinner message="Cargando usuarios..." />
+  } @else if (!loading() && usuarios().length === 0) {
+    <app-empty-state
+      title="Sin usuarios"
+      message="Aún no hay usuarios registrados. Crea el primero para darle acceso a la plataforma."
+      icon="pi pi-users"
+    >
+      <p-button
+        label="Crear primer usuario"
+        icon="pi pi-plus"
+        [outlined]="true"
+        (onClick)="openCreateDialog()"
+      />
+    </app-empty-state>
+  } @else {
+    <div class="table-card">
+      <p-table
+        [value]="usuarios()"
+        [lazy]="true"
+        [lazyLoadOnInit]="false"
+        [totalRecords]="totalRecords()"
+        [loading]="loading()"
+        [rowHover]="true"
+        [paginator]="true"
+        [rows]="rows()"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        (onLazyLoad)="onLazyLoad($event)"
+        [scrollable]="true"
+        scrollHeight="600px"
+      >
+        <ng-template #header>
+          <tr>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Verificado</th>
+          </tr>
+        </ng-template>
+
+        <ng-template #body let-usuario>
+          <tr>
+            <!-- Usuario: avatar + nombre + email -->
+            <td>
+              <div class="user-cell">
+                <div class="user-cell__avatar">{{ initial(usuario) }}</div>
+                <div class="user-cell__info">
+                  <span class="user-cell__name">{{ displayName(usuario) }}</span>
+                  @if (hasName(usuario)) {
+                    <span class="user-cell__email">{{ usuario.email }}</span>
+                  }
+                </div>
+              </div>
+            </td>
+
+            <!-- Rol -->
+            <td>
+              <span class="role-pill" [class.role-pill--admin]="usuario.role === 'admin'">
+                {{ roleLabel(usuario.role) }}
+              </span>
+            </td>
+
+            <!-- Verificado -->
+            <td>
+              @if (usuario.is_verified) {
+                <span class="status status--ok">
+                  <i class="pi pi-check-circle"></i> Verificado
+                </span>
+              } @else {
+                <span class="status status--pending"> <i class="pi pi-clock"></i> Pendiente </span>
+              }
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+</div>
+
+<!-- Diálogo: crear usuario -->
+<p-dialog
+  [visible]="createDialogVisible()"
+  (visibleChange)="createDialogVisible.set($event)"
+  header="Nuevo usuario"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="create-dialog"
+  [style]="{ width: '480px' }"
+  [breakpoints]="{ '575px': '95vw' }"
+>
+  <form [formGroup]="createForm" (ngSubmit)="submitCreate()" class="create-form" autocomplete="off">
+    <!-- Correo -->
+    <div class="form-field">
+      <label for="user-email" class="form-label"
+        >Correo electrónico <span class="required">*</span></label
+      >
+      <input
+        id="user-email"
+        pInputText
+        type="email"
+        formControlName="email"
+        placeholder="usuario@empresa.com"
+        class="w-full"
+        [class.ng-invalid]="createForm.controls.email.invalid && createForm.controls.email.touched"
+      />
+      @if (createForm.controls.email.invalid && createForm.controls.email.touched) {
+        <span class="field-error">
+          @if (createForm.controls.email.errors?.['required']) {
+            El correo es obligatorio.
+          } @else if (createForm.controls.email.errors?.['email']) {
+            Ingresa un correo válido.
+          }
+        </span>
+      }
+    </div>
+
+    <!-- Contraseña -->
+    <div class="form-field">
+      <label for="user-password" class="form-label"
+        >Contraseña <span class="required">*</span></label
+      >
+      <p-password
+        inputId="user-password"
+        formControlName="password"
+        fluid
+        [toggleMask]="true"
+        placeholder="Mínimo 8 caracteres"
+        [invalid]="createForm.controls.password.invalid && createForm.controls.password.touched"
+        promptLabel="Ingresa una contraseña"
+        weakLabel="Débil"
+        mediumLabel="Media"
+        strongLabel="Fuerte"
+      />
+      @if (createForm.controls.password.invalid && createForm.controls.password.touched) {
+        <span class="field-error">
+          @if (createForm.controls.password.errors?.['required']) {
+            La contraseña es obligatoria.
+          } @else if (createForm.controls.password.errors?.['minlength']) {
+            Mínimo 8 caracteres.
+          }
+        </span>
+      }
+    </div>
+
+    <!-- Rol -->
+    <div class="form-field">
+      <label for="user-role" class="form-label">Rol <span class="required">*</span></label>
+      <p-select
+        inputId="user-role"
+        formControlName="role"
+        [options]="roleOptions"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Selecciona un rol"
+        appendTo="body"
+        [style]="{ width: '100%' }"
+        [invalid]="createForm.controls.role.invalid && createForm.controls.role.touched"
+      />
+      @if (createForm.controls.role.invalid && createForm.controls.role.touched) {
+        <span class="field-error">El rol es obligatorio.</span>
+      }
+    </div>
+
+    <!-- Empresa / Tenant -->
+    <div class="form-field">
+      <label for="user-tenant" class="form-label">Empresa <span class="required">*</span></label>
+      <p-autocomplete
+        inputId="user-tenant"
+        formControlName="tenant"
+        [suggestions]="tenantSuggestions()"
+        (completeMethod)="onSearchTenants($event)"
+        optionLabel="nombre"
+        [forceSelection]="true"
+        [delay]="300"
+        placeholder="Escribe para buscar una empresa..."
+        emptyMessage="No se encontraron empresas"
+        appendTo="body"
+        [style]="{ width: '100%' }"
+        [inputStyle]="{ width: '100%' }"
+        [invalid]="createForm.controls.tenant.invalid && createForm.controls.tenant.touched"
+      />
+      @if (createForm.controls.tenant.invalid && createForm.controls.tenant.touched) {
+        <span class="field-error">La empresa es obligatoria.</span>
+      }
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancelar"
+      [text]="true"
+      severity="secondary"
+      (onClick)="createDialogVisible.set(false)"
+    />
+    <p-button
+      label="Crear usuario"
+      icon="pi pi-user-plus"
+      [loading]="submitting()"
+      (onClick)="submitCreate()"
+    />
+  </ng-template>
+</p-dialog>
