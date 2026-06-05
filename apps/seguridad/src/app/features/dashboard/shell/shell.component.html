@@ -34,7 +34,7 @@
     <!-- Sidebar desktop -->
     <aside class="shell-sidebar">
       <nav class="sidebar-nav">
-        <ng-container *ngTemplateOutlet="navTpl; context: { $implicit: navItems }" />
+        <ng-container *ngTemplateOutlet="navTpl; context: { $implicit: navItems() }" />
       </nav>
     </aside>
 
@@ -53,7 +53,7 @@
   header="Menú"
 >
   <nav class="sidebar-nav">
-    <ng-container *ngTemplateOutlet="navTpl; context: { $implicit: navItems }" />
+    <ng-container *ngTemplateOutlet="navTpl; context: { $implicit: navItems() }" />
   </nav>
 </p-drawer>
 

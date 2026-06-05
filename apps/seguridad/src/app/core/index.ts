@@ -2,6 +2,7 @@
 export {
   authGuard,
   publicGuard,
+  roleGuard,
   authInterceptor,
   errorInterceptor,
   ToastService,

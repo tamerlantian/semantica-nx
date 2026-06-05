@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.19](https://github.com/tamerlantian/semantica-nx/compare/v0.0.18...v0.0.19) (2026-06-05)
+
+
+### Features
+
+* **portal:** permitir cambiar de empresa desde el perfil ([4d0743b](https://github.com/tamerlantian/semantica-nx/commit/4d0743bcc8a01daf32def0941c143a7217ea4657))
+* **seguridad:** agregar módulo de usuarios paginado restringido a admin ([c78ae9e](https://github.com/tamerlantian/semantica-nx/commit/c78ae9eae2700e83ab5da79ed697a68c20aae49f))
+
 ## [0.0.18](https://github.com/tamerlantian/semantica-nx/compare/v0.0.17...v0.0.18) (2026-04-21)
 
 

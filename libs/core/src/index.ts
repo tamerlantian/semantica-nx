@@ -12,6 +12,7 @@ export {
 // Guards
 export { authGuard } from './lib/guards/auth.guard';
 export { publicGuard } from './lib/guards/public.guard';
+export { roleGuard } from './lib/guards/role.guard';
 
 // Interceptors
 export { authInterceptor } from './lib/interceptors/auth.interceptor';
