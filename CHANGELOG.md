@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.20](https://github.com/tamerlantian/semantica-nx/compare/v0.0.19...v0.0.20) (2026-06-05)
+
+
+### Features
+
+* **seguridad:** agregar filtros de correo y rol a la tabla de usuarios ([8bd2058](https://github.com/tamerlantian/semantica-nx/commit/8bd20586a3666999db93c0538661b7b30493801b))
+
 ## [0.0.19](https://github.com/tamerlantian/semantica-nx/compare/v0.0.18...v0.0.19) (2026-06-05)
 
 
