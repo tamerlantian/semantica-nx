@@ -15,17 +15,9 @@ export class VerifyEmailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
-  /**
-   * Estado inicial en `false`: la verificación NO se dispara al cargar la página,
-   * sino al hacer clic en el botón. Esto evita que webviews de apps de correo o
-   * escáneres de seguridad que solo "abren" el enlace consuman el token de un solo
-   * uso antes de que el usuario lo confirme (causa de "Token inválido" en móvil).
-   */
-  readonly isLoading = signal(false);
+  readonly isLoading = signal(true);
   readonly errorMessage = signal<string | null>(null);
   readonly verified = signal(false);
-
-  private readonly token = signal<string | null>(null);
 
   ngOnInit(): void {
     const token = this.route.snapshot.queryParamMap.get('token');
@@ -33,20 +25,6 @@ export class VerifyEmailComponent implements OnInit {
       this.router.navigate([ROUTE_PATHS.auth.login]);
       return;
     }
-
-    // Solo guardamos el token; la verificación ocurre al confirmar con el botón.
-    this.token.set(token);
-  }
-
-  /** Confirma el correo. Se invoca con un clic explícito del usuario. */
-  verificar(): void {
-    const token = this.token();
-    if (!token || this.isLoading()) {
-      return;
-    }
-
-    this.isLoading.set(true);
-    this.errorMessage.set(null);
 
     this.authService.verifyEmail(token).subscribe({
       next: () => {
