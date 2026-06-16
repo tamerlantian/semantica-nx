@@ -35,7 +35,25 @@
         <img src="fondo_transparente.png" alt="Semantica Portal" class="form-panel__logo-img" />
       </div>
 
-      @if (isLoading()) {
+      @if (!isLoading() && !verified() && !errorMessage()) {
+        <div class="confirm-state">
+          <div class="confirm-state__icon">
+            <i class="pi pi-envelope"></i>
+          </div>
+          <h2 class="confirm-state__title">Confirma tu correo</h2>
+          <p class="confirm-state__desc">
+            Haz clic en el botón para activar tu cuenta y completar el registro.
+          </p>
+          <button
+            type="button"
+            class="confirm-state__btn"
+            (click)="verificar()"
+            [disabled]="isLoading()"
+          >
+            Confirmar mi correo
+          </button>
+        </div>
+      } @else if (isLoading()) {
         <div class="loading-state">
           <div class="loading-state__spinner">
             <i class="pi pi-spin pi-spinner"></i>

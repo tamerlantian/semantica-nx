@@ -103,6 +103,8 @@ export const appConfig: ApplicationConfig = {
         API_ENDPOINTS.auth.refresh,
         API_ENDPOINTS.auth.logout,
         API_ENDPOINTS.auth.me,
+        API_ENDPOINTS.auth.verifyEmail,
+        API_ENDPOINTS.auth.resendVerification,
         API_ENDPOINTS.auth.forgotPassword,
         API_ENDPOINTS.auth.resetPassword,
         API_ENDPOINTS.auth.register,
