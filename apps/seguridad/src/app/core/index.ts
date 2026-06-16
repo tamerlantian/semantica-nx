@@ -10,6 +10,7 @@ export {
   BaseAuthService,
   BaseHttpService,
   buildHttpParams,
+  createCooldown,
   extractErrorMessage,
   parseApiError,
   ENVIRONMENT,
@@ -20,6 +21,7 @@ export {
 export type {
   ApiError,
   ApiErrorResponse,
+  CooldownController,
   BaseUsuario,
   AuthServiceContract,
   AuthApiEndpoints,

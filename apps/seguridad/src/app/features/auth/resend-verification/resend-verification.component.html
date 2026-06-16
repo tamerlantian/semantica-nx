@@ -40,77 +40,63 @@
         Volver al login
       </a>
 
-      @if (!submitted()) {
-        <div class="form-panel__header">
-          <h2 class="form-panel__title">Verificar cuenta</h2>
-          <p class="form-panel__subtitle">
-            Ingresa tu correo electrónico y te reenviaremos el enlace de verificación.
-          </p>
-        </div>
+      <div class="form-panel__header">
+        <h2 class="form-panel__title">Verificar cuenta</h2>
+        <p class="form-panel__subtitle">
+          Ingresa tu correo electrónico y te reenviaremos el enlace de verificación.
+        </p>
+      </div>
 
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="auth-form">
-          @if (errorMessage()) {
-            <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
-          }
-
-          <div class="field">
-            <label for="email" class="field__label">Correo electrónico</label>
-            <input
-              pInputText
-              id="email"
-              type="email"
-              formControlName="email"
-              fluid
-              placeholder="usuario@ejemplo.com"
-              [invalid]="emailControl.invalid && emailControl.touched"
-              aria-describedby="email-error"
-            />
-            @if (emailControl.invalid && emailControl.touched) {
-              <small id="email-error" class="field__error">
-                @if (emailControl.hasError('required')) {
-                  El correo es requerido.
-                } @else if (emailControl.hasError('email')) {
-                  Ingresa un correo válido.
-                }
-              </small>
-            }
-          </div>
-
-          <app-turnstile
-            (verified)="captchaToken.set($event)"
-            (expired)="captchaToken.set(null)"
-            (errored)="captchaToken.set(null)"
-          />
-
-          <p-button
-            type="submit"
-            label="Reenviar verificación"
-            fluid
-            styleClass="auth-btn"
-            [loading]="isLoading()"
-            [disabled]="isLoading() || !captchaToken()"
-          />
-        </form>
-      } @else {
-        <div class="success-state">
-          <div class="success-state__icon">
-            <i class="pi pi-envelope"></i>
-          </div>
-          <h2 class="success-state__title">Correo enviado</h2>
-          <p class="success-state__desc">
-            Hemos enviado un enlace de verificación a tu correo electrónico. Revisa tu bandeja de
-            entrada y la carpeta de spam.
-          </p>
-          @if (cooldown() > 0) {
-            <p class="success-state__cooldown">Puedes reenviar en {{ cooldown() }} segundos</p>
-          } @else {
-            <button class="success-state__resend" (click)="resendAgain()">
-              Reenviar correo de verificación
-            </button>
-          }
-          <a routerLink="/auth/login" class="success-state__back">Volver al login</a>
+      @if (sent()) {
+        <div class="success-notice" role="status">
+          <i class="pi pi-check-circle success-notice__icon"></i>
+          <span>Enviado. Revisa tu bandeja de entrada y la carpeta de spam.</span>
         </div>
       }
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="auth-form">
+        @if (errorMessage()) {
+          <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
+        }
+
+        <div class="field">
+          <label for="email" class="field__label">Correo electrónico</label>
+          <input
+            pInputText
+            id="email"
+            type="email"
+            formControlName="email"
+            fluid
+            placeholder="usuario@ejemplo.com"
+            [invalid]="emailControl.invalid && emailControl.touched"
+            aria-describedby="email-error"
+          />
+          @if (emailControl.invalid && emailControl.touched) {
+            <small id="email-error" class="field__error">
+              @if (emailControl.hasError('required')) {
+                El correo es requerido.
+              } @else if (emailControl.hasError('email')) {
+                Ingresa un correo válido.
+              }
+            </small>
+          }
+        </div>
+
+        <app-turnstile
+          (verified)="captchaToken.set($event)"
+          (expired)="captchaToken.set(null)"
+          (errored)="captchaToken.set(null)"
+        />
+
+        <p-button
+          type="submit"
+          [label]="cooldownLabel()"
+          fluid
+          styleClass="auth-btn"
+          [loading]="isLoading()"
+          [disabled]="isLoading() || cooldown() > 0 || !captchaToken()"
+        />
+      </form>
     </div>
   </div>
 </div>
