@@ -19,7 +19,11 @@ export { authInterceptor } from './lib/interceptors/auth.interceptor';
 export { errorInterceptor } from './lib/interceptors/error.interceptor';
 
 // Services
-export { BaseHttpService, buildHttpParams, type ParamValue } from './lib/services/base-http.service';
+export {
+  BaseHttpService,
+  buildHttpParams,
+  type ParamValue,
+} from './lib/services/base-http.service';
 export { ToastService } from './lib/services/toast.service';
 export { TokenRefreshService } from './lib/services/token-refresh.service';
 export { FicherosService } from './lib/services/ficheros.service';
@@ -42,6 +46,7 @@ export {
 } from './lib/utils/error.utils';
 export { MESES_ES, getMesAnioLabel, getSiguienteMes } from './lib/utils/date.utils';
 export { downloadBlob } from './lib/utils/download.utils';
+export { createCooldown, type CooldownController } from './lib/utils/cooldown.util';
 
 // Pipes
 export { TruncatePipe } from './lib/pipes/truncate.pipe';

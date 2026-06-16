@@ -1,12 +1,15 @@
-import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { AuthService } from '../../services/auth.service';
-import { extractErrorMessage } from '@semantica/core';
+import { createCooldown, extractErrorMessage } from '@semantica/core';
 import { TurnstileComponent } from '../../../../shared';
+
+const COOLDOWN_SECONDS = 60;
 
 @Component({
   selector: 'app-resend-verification',
@@ -26,16 +29,28 @@ export class ResendVerificationComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly turnstile = viewChild(TurnstileComponent);
 
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
-  readonly submitted = signal(false);
+  readonly sent = signal(false);
   readonly captchaToken = signal<string | null>(null);
-  readonly cooldown = signal(0);
   readonly isUnverified = signal(false);
 
-  private cooldownInterval: ReturnType<typeof setInterval> | null = null;
+  private readonly cd = createCooldown();
+  readonly cooldown = this.cd.remaining;
+
+  /** Label dinámico del botón: cuenta regresiva mientras el cooldown está activo. */
+  readonly cooldownLabel = computed(() => {
+    const secs = this.cooldown();
+    if (secs <= 0) {
+      return 'Reenviar verificación';
+    }
+    const mins = Math.floor(secs / 60);
+    const rest = (secs % 60).toString().padStart(2, '0');
+    return `Reenviar en ${mins}:${rest}`;
+  });
 
   readonly form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -46,10 +61,18 @@ export class ResendVerificationComponent implements OnInit {
     const email = params.get('email');
     if (email) {
       this.form.patchValue({ email });
+      this.cd.restore(this.cooldownKey(email));
     }
     if (params.get('unverified') === 'true') {
       this.isUnverified.set(true);
     }
+
+    // Reaparece el cooldown si se escribe un correo que aún está en espera.
+    this.emailControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
+      if (value && this.emailControl.valid) {
+        this.cd.restore(this.cooldownKey(value));
+      }
+    });
   }
 
   onSubmit(): void {
@@ -69,9 +92,9 @@ export class ResendVerificationComponent implements OnInit {
         next: () => {
           this.turnstile()?.reset();
           this.captchaToken.set(null);
-          this.submitted.set(true);
+          this.sent.set(true);
           this.isLoading.set(false);
-          this.startCooldown();
+          this.cd.start(COOLDOWN_SECONDS, this.cooldownKey(email!));
         },
         error: (err) => {
           this.turnstile()?.reset();
@@ -84,24 +107,8 @@ export class ResendVerificationComponent implements OnInit {
       });
   }
 
-  resendAgain(): void {
-    this.submitted.set(false);
-  }
-
-  private startCooldown(): void {
-    this.cooldown.set(60);
-    this.cooldownInterval = setInterval(() => {
-      const current = this.cooldown();
-      if (current <= 1) {
-        this.cooldown.set(0);
-        if (this.cooldownInterval) {
-          clearInterval(this.cooldownInterval);
-          this.cooldownInterval = null;
-        }
-      } else {
-        this.cooldown.set(current - 1);
-      }
-    }, 1000);
+  private cooldownKey(email: string): string {
+    return `resend-verification:${email.trim().toLowerCase()}`;
   }
 
   get emailControl() {
