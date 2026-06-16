@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.21](https://github.com/tamerlantian/semantica-nx/compare/v0.0.20...v0.0.21) (2026-06-16)
+
+
+### Features
+
+* **auth:** bloquear botón de reenvío con cuenta regresiva persistente ([a70df31](https://github.com/tamerlantian/semantica-nx/commit/a70df3198c528f1f11363a905f5e6253232350e3))
+
+
+### Bug Fixes
+
+* **auth:** verificar correo con clic explícito para evitar token inválido ([d3bfc94](https://github.com/tamerlantian/semantica-nx/commit/d3bfc94123bd02f771093676598ae60a1b57f072))
+
 ## [0.0.20](https://github.com/tamerlantian/semantica-nx/compare/v0.0.19...v0.0.20) (2026-06-05)
 
 
