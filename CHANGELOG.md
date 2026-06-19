@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.22](https://github.com/tamerlantian/semantica-nx/compare/v0.0.21...v0.0.22) (2026-06-19)
+
+
+### Features
+
+* **dashboard:** mostrar datos de identidad y aviso al asociar empresa ([ba0de42](https://github.com/tamerlantian/semantica-nx/commit/ba0de426f86e9ade36a1f5e2a920e94fff020f9a))
+
+
+### Bug Fixes
+
+* **perfil:** refrescar estado de auth al guardar el perfil ([81cee94](https://github.com/tamerlantian/semantica-nx/commit/81cee9414efe89849d715d0393ade8b41330a85a))
+
 ## [0.0.21](https://github.com/tamerlantian/semantica-nx/compare/v0.0.20...v0.0.21) (2026-06-16)
 
 
