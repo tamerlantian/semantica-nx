@@ -8,9 +8,7 @@
   (onShow)="onShow()"
 >
   <div class="asociar-form">
-    <p class="asociar-form__desc">
-      Busca la empresa por nombre para vincular tu cuenta.
-    </p>
+    <p class="asociar-form__desc">Busca la empresa por nombre para vincular tu cuenta.</p>
 
     @if (errorMessage()) {
       <p-message severity="error" [text]="errorMessage()!" styleClass="w-full" />
@@ -30,6 +28,47 @@
         [style]="{ width: '100%' }"
         [inputStyle]="{ width: '100%' }"
       />
+    </div>
+
+    <div class="asociar-datos">
+      <span class="asociar-datos__caption">Estos son tus datos registrados</span>
+
+      <div class="asociar-datos__row">
+        <span class="asociar-datos__icon"><i class="pi pi-envelope"></i></span>
+        <div class="asociar-datos__content">
+          <span class="asociar-datos__label">Correo registrado</span>
+          <span class="asociar-datos__value">{{ correo() }}</span>
+        </div>
+      </div>
+
+      <div class="asociar-datos__row">
+        <span class="asociar-datos__icon"><i class="pi pi-id-card"></i></span>
+        <div class="asociar-datos__content">
+          <span class="asociar-datos__label">Número de identificación</span>
+          @if (numeroIdentificacion()) {
+            <span class="asociar-datos__value">{{ numeroIdentificacion() }}</span>
+          } @else {
+            <span class="asociar-datos__value asociar-datos__value--empty">No registrado</span>
+          }
+        </div>
+      </div>
+
+      <p class="asociar-datos__edit">
+        <i class="pi pi-pencil"></i>
+        <span>
+          ¿Algún dato no coincide?
+          <a [routerLink]="perfilRoute" (click)="visible.set(false)">Edítalo en tu perfil</a>
+        </span>
+      </p>
+    </div>
+
+    <div class="asociar-warning" role="alert">
+      <span class="asociar-warning__icon">⚠️</span>
+      <p class="asociar-warning__text">
+        <strong>Importante:</strong> El correo con el que te registraste y tu número de
+        identificación deben coincidir exactamente con los datos que tiene
+        <strong>{{ empresaNombre }}</strong> sobre ti. Si no coinciden, no podrás asociarte 🙅‍♂️
+      </p>
     </div>
   </div>
 

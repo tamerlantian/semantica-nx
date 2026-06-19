@@ -1,17 +1,19 @@
-import { Component, inject, model, output, signal } from '@angular/core';
+import { Component, computed, inject, model, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { AutoCompleteModule, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Tenant } from '../../models/tenant.model';
+import { ROUTE_PATHS } from '../../../../core/constants/route-paths.constants';
 import { ToastService, extractErrorMessage } from '@semantica/core';
 
 @Component({
   selector: 'app-asociar-empresa-dialog',
   standalone: true,
-  imports: [FormsModule, DialogModule, AutoCompleteModule, ButtonModule, MessageModule],
+  imports: [FormsModule, RouterLink, DialogModule, AutoCompleteModule, ButtonModule, MessageModule],
   templateUrl: './asociar-empresa-dialog.component.html',
   styleUrl: './asociar-empresa-dialog.component.scss',
 })
@@ -28,6 +30,20 @@ export class AsociarEmpresaDialogComponent {
   readonly errorMessage = signal<string | null>(null);
 
   selectedTenant: Tenant | null = null;
+
+  /** Datos de identidad del empleado (solo lectura) con los que se valida la asociacion. */
+  readonly correo = computed(() => this.authService.currentUser()?.email ?? '');
+  readonly numeroIdentificacion = computed(
+    () => this.authService.currentUser()?.numero_identificacion ?? '',
+  );
+
+  /** Ruta al perfil para que el empleado corrija sus datos si no coinciden. */
+  readonly perfilRoute = ROUTE_PATHS.dashboard.perfil;
+
+  /** Nombre de la empresa seleccionada para interpolar en el mensaje de advertencia. */
+  get empresaNombre(): string {
+    return this.selectedTenant?.nombre ?? 'la empresa';
+  }
 
   onSearch(event: AutoCompleteCompleteEvent): void {
     const query = event.query.trim();
