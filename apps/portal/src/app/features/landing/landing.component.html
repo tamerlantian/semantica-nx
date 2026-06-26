@@ -174,111 +174,64 @@
         <span class="contact__eyebrow">Contacto</span>
         <h2 class="contact__title">Estamos para ayudarte</h2>
         <p class="contact__subtitle">
-          Completa el formulario y nos pondremos en contacto contigo lo antes posible.
+          Escríbenos por WhatsApp: nuestro asistente te orienta al instante y te conecta con el área
+          indicada, sin formularios ni esperas.
         </p>
       </div>
 
       <div class="contact__card">
-        @if (contactSent()) {
-          <div class="success-state">
-            <div class="success-state__icon">
-              <i class="pi pi-check-circle"></i>
+        <!-- Columna izquierda: narrativa + beneficios -->
+        <div class="contact__intro">
+          <span class="contact__status">
+            <span class="contact__status-dot" aria-hidden="true"></span>
+            En línea ahora
+          </span>
+          <h3 class="contact__intro-title">Hablemos por WhatsApp</h3>
+          <p class="contact__intro-desc">
+            Nuestro asistente recibe tu mensaje, resuelve lo que puede al instante y te dirige al
+            área de recursos humanos de tu empresa cuando lo necesitas.
+          </p>
+
+          <ul class="contact__features">
+            <li class="contact__feature">
+              <i class="pi pi-bolt"></i>
+              <span>Respuesta inmediata, sin esperas</span>
+            </li>
+            <li class="contact__feature">
+              <i class="pi pi-send"></i>
+              <span>Te dirigimos al área indicada</span>
+            </li>
+            <li class="contact__feature">
+              <i class="pi pi-comments"></i>
+              <span>Un solo canal para todas tus dudas</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="contact__divider" aria-hidden="true"></div>
+
+        <!-- Columna derecha: vista previa de chat + CTA -->
+        <div class="contact__action">
+          <div class="contact__chat" aria-hidden="true">
+            <div class="contact__bubble contact__bubble--in">
+              Hola 👋 Soy el asistente de Semantica, ¿en qué puedo ayudarte?
             </div>
-            <h2 class="success-state__title">¡Mensaje enviado!</h2>
-            <p class="success-state__desc">Gracias por contactarnos. Te responderemos pronto.</p>
-            <button class="success-state__back" (click)="contactSent.set(false)">
-              Enviar otro mensaje
-            </button>
+            <div class="contact__bubble contact__bubble--out">
+              Tengo una consulta sobre mi nómina
+            </div>
           </div>
-        } @else {
-          <form [formGroup]="contactForm" (ngSubmit)="submitContact()" class="contact__form">
-            <div class="contact__row">
-              <div class="contact__field">
-                <label class="contact__label" for="contact-nombre">Nombre</label>
-                <input
-                  pInputText
-                  id="contact-nombre"
-                  type="text"
-                  fluid
-                  formControlName="nombre"
-                  placeholder="Tu nombre completo"
-                />
-              </div>
-              <div class="contact__field">
-                <label class="contact__label" for="contact-correo">Correo electrónico</label>
-                <input
-                  pInputText
-                  id="contact-correo"
-                  type="email"
-                  fluid
-                  formControlName="correo"
-                  placeholder="correo&#64;ejemplo.com"
-                  [invalid]="correoControl.invalid && correoControl.touched"
-                />
-                @if (correoControl.invalid && correoControl.touched) {
-                  <small class="form-error">
-                    @if (correoControl.hasError('required')) {
-                      El correo es requerido.
-                    } @else if (correoControl.hasError('email')) {
-                      Ingresa un correo válido.
-                    }
-                  </small>
-                }
-              </div>
-            </div>
 
-            <div class="contact__row">
-              <div class="contact__field">
-                <label class="contact__label" for="contact-telefono">Teléfono</label>
-                <input
-                  pInputText
-                  id="contact-telefono"
-                  type="tel"
-                  fluid
-                  formControlName="telefono"
-                  placeholder="+57 300 000 0000"
-                  [invalid]="telefonoControl.invalid && telefonoControl.touched"
-                />
-                @if (telefonoControl.invalid && telefonoControl.touched) {
-                  <small class="form-error">El teléfono es requerido.</small>
-                }
-              </div>
-              <div class="contact__field">
-                <label class="contact__label" for="contact-empresa">Empresa</label>
-                <input
-                  pInputText
-                  id="contact-empresa"
-                  type="text"
-                  fluid
-                  formControlName="empresa"
-                  placeholder="Nombre de la empresa"
-                />
-              </div>
-            </div>
-
-            <div class="contact__field">
-              <label class="contact__label" for="contact-descripcion">Descripción</label>
-              <textarea
-                pTextarea
-                id="contact-descripcion"
-                fluid
-                formControlName="descripcion"
-                placeholder="¿En qué podemos ayudarte?"
-                rows="4"
-              ></textarea>
-            </div>
-
-            <p-button
-              type="submit"
-              label="Enviar mensaje"
-              icon="pi pi-send"
-              fluid
-              [loading]="contactSending()"
-              [disabled]="contactSending()"
-              styleClass="contact__submit"
-            />
-          </form>
-        }
+          <a
+            [href]="whatsappUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contact__wa-btn"
+          >
+            <i class="pi pi-whatsapp"></i>
+            Iniciar conversación
+          </a>
+          <span class="contact__wa-note">Se abrirá WhatsApp en una nueva ventana</span>
+        </div>
       </div>
     </div>
   </section>

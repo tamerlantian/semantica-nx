@@ -1,11 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ENVIRONMENT } from '@semantica/core';
-import { ButtonModule } from 'primeng/button';
-import { InputText } from 'primeng/inputtext';
-import { Textarea } from 'primeng/textarea';
-import { ContactoService } from './services/contacto.service';
 
 interface FaqItem {
   question: string;
@@ -15,28 +10,16 @@ interface FaqItem {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, InputText, Textarea, ButtonModule],
+  imports: [RouterLink],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss',
 })
 export class LandingComponent {
-  private readonly fb = inject(FormBuilder);
-  private readonly contactoService = inject(ContactoService);
   private readonly env = inject(ENVIRONMENT);
 
   readonly currentYear = new Date().getFullYear();
   readonly whatsappPhone = this.env.whatsappPhone;
   readonly whatsappUrl = `https://wa.me/57${this.env.whatsappPhone}`;
-  readonly contactSending = signal(false);
-  readonly contactSent = signal(false);
-
-  readonly contactForm = this.fb.nonNullable.group({
-    nombre: ['', Validators.maxLength(200)],
-    correo: ['', [Validators.required, Validators.email]],
-    telefono: ['', [Validators.required, Validators.maxLength(50)]],
-    empresa: [''],
-    descripcion: [''],
-  });
 
   readonly faqItems: FaqItem[] = [
     {
@@ -73,40 +56,7 @@ export class LandingComponent {
 
   readonly openIndex = signal<number | null>(null);
 
-  get correoControl() {
-    return this.contactForm.controls.correo;
-  }
-
-  get telefonoControl() {
-    return this.contactForm.controls.telefono;
-  }
-
   toggle(index: number): void {
     this.openIndex.update((current) => (current === index ? null : index));
-  }
-
-  submitContact(): void {
-    if (this.contactForm.invalid) {
-      this.contactForm.markAllAsTouched();
-      return;
-    }
-
-    this.contactSending.set(true);
-
-    const payload = {
-      ...this.contactForm.getRawValue(),
-      codigoProyecto: 11,
-    };
-
-    this.contactoService.enviarContacto(payload).subscribe({
-      next: () => {
-        this.contactSending.set(false);
-        this.contactSent.set(true);
-        this.contactForm.reset();
-      },
-      error: () => {
-        this.contactSending.set(false);
-      },
-    });
   }
 }
