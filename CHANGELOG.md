@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.23](https://github.com/tamerlantian/semantica-nx/compare/v0.0.22...v0.0.23) (2026-06-26)
+
+
+### Features
+
+* **landing:** reemplazar formulario de contacto por canal de whatsapp ([5becc5f](https://github.com/tamerlantian/semantica-nx/commit/5becc5f3f2daf21df98c79223a33a2c6a64ea110))
+
 ## [0.0.22](https://github.com/tamerlantian/semantica-nx/compare/v0.0.21...v0.0.22) (2026-06-19)
 
 

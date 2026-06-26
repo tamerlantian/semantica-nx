@@ -607,6 +607,12 @@
 
 // ─── Contact ────────────────────────────────────────────────────────────────
 .contact {
+  // WhatsApp es la identidad de esta acción: verde propio del canal,
+  // usado solo aquí para que el color signifique "conversación", no decoración.
+  --wa-green: #25d366;
+  --wa-green-deep: #128c7e;
+  --wa-green-dim: rgba(37 211 102 / 0.12);
+
   position: relative;
   z-index: 1;
   padding: 4rem 2rem 5rem;
@@ -662,99 +668,186 @@
     box-shadow:
       0 24px 64px rgba(0 0 0 / 0.08),
       0 4px 16px rgba(0 0 0 / 0.04);
-    padding: 2.5rem 2.75rem;
+    // División asimétrica, igual lenguaje que la sección "Acerca de".
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 2.75rem 3rem;
 
-    @media (max-width: 700px) {
+    @media (max-width: 760px) {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
       padding: 2rem 1.5rem;
     }
   }
 
-  &__form {
+  // ── Columna izquierda: narrativa ──
+  &__intro {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    align-items: flex-start;
   }
 
-  &__row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-
-    @media (max-width: 700px) {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  &__label {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--brand-text);
-    letter-spacing: -0.01em;
-  }
-
-  &__submit {
-    align-self: flex-start;
-    margin-top: 0.5rem;
-  }
-}
-
-.success-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 2rem 0;
-  animation: fadeUp 0.45s ease both;
-
-  &__icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--p-green-500) 12%, transparent);
-    display: flex;
+  &__status {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-
-    .pi {
-      font-size: 1.6rem;
-      color: var(--p-green-500);
-    }
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--wa-green-deep);
+    background: var(--wa-green-dim);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    margin-bottom: 1.25rem;
   }
 
-  &__title {
-    font-size: 1.5rem;
-    font-weight: 800;
+  &__status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--wa-green);
+    box-shadow: 0 0 0 0 rgba(37 211 102 / 0.5);
+    animation: pulse 2s ease-out infinite;
+  }
+
+  &__intro-title {
+    font-size: 1.4rem;
+    font-weight: 700;
     letter-spacing: -0.03em;
     color: var(--brand-text);
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.6rem;
+    line-height: 1.2;
   }
 
-  &__desc {
-    font-size: 0.875rem;
+  &__intro-desc {
+    font-size: 0.9rem;
     line-height: 1.7;
     color: var(--brand-muted);
-    margin: 0 0 2rem;
+    margin: 0 0 1.75rem;
+    max-width: 320px;
   }
 
-  &__back {
+  &__features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  &__feature {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.875rem;
+    color: var(--brand-text);
+
+    .pi {
+      font-size: 0.9rem;
+      color: var(--wa-green-deep);
+      width: 1.5rem;
+      height: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--wa-green-dim);
+      border-radius: 7px;
+      flex-shrink: 0;
+    }
+  }
+
+  &__divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--brand-border);
+    margin: 0 3rem;
+
+    @media (max-width: 760px) {
+      width: auto;
+      height: 1px;
+      margin: 0;
+    }
+  }
+
+  // ── Columna derecha: vista previa de chat + CTA ──
+  &__action {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  &__chat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.1rem 1.1rem 1.25rem;
+    background: var(--brand-surface-2);
+    border-radius: 16px;
+  }
+
+  &__bubble {
     font-size: 0.85rem;
+    line-height: 1.5;
+    padding: 0.65rem 0.9rem;
+    max-width: 85%;
+    box-shadow: 0 1px 2px rgba(0 0 0 / 0.06);
+
+    &--in {
+      align-self: flex-start;
+      background: var(--brand-surface);
+      color: var(--brand-text);
+      border-radius: 4px 14px 14px 14px;
+    }
+
+    &--out {
+      align-self: flex-end;
+      background: var(--wa-green);
+      color: #ffffff;
+      border-radius: 14px 4px 14px 14px;
+    }
+  }
+
+  &__wa-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.95rem;
     font-weight: 600;
-    color: var(--brand-blue);
     text-decoration: none;
-    border: none;
-    background: none;
-    cursor: pointer;
+    color: #ffffff;
+    background: var(--wa-green-deep);
+    box-shadow: 0 8px 24px rgba(18 140 126 / 0.28);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      filter 0.2s ease;
+
+    .pi {
+      font-size: 1.1rem;
+    }
 
     &:hover {
-      opacity: 0.75;
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 32px rgba(18 140 126 / 0.36);
     }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__wa-note {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--brand-muted-2);
   }
 }
 
@@ -809,6 +902,18 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37 211 102 / 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(37 211 102 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37 211 102 / 0);
   }
 }
 
