@@ -38,6 +38,20 @@
                 </span>
               </div>
             </div>
+            <p-button
+              class="fichero-download"
+              icon="pi pi-download"
+              severity="secondary"
+              [text]="true"
+              [rounded]="true"
+              size="small"
+              pTooltip="Descargar"
+              tooltipPosition="left"
+              [ariaLabel]="'Descargar ' + fichero.nombre + '.' + fichero.extension"
+              [loading]="downloadingPk() === fichero.codigo_fichero_pk"
+              [disabled]="downloadingPk() !== null"
+              (click)="descargar(fichero)"
+            />
           </li>
         }
       </ul>

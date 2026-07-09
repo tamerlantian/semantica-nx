@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.25](https://github.com/tamerlantian/semantica-nx/compare/v0.0.24...v0.0.25) (2026-07-09)
+
+
+### Features
+
+* **ui:** permitir descargar ficheros desde el diálogo de adjuntos ([8778cbb](https://github.com/tamerlantian/semantica-nx/commit/8778cbbca8c6416c3931e2b9be3e0eda5c3cfab1))
+
 ## [0.0.24](https://github.com/tamerlantian/semantica-nx/compare/v0.0.23...v0.0.24) (2026-07-09)
 
 

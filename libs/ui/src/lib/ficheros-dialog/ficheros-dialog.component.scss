@@ -28,11 +28,18 @@
 .fichero-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
   padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--p-surface-100);
+  transition: background-color 0.15s;
 
   &:last-child {
     border-bottom: none;
+  }
+
+  &:hover {
+    background: var(--p-surface-50);
   }
 }
 
@@ -41,6 +48,11 @@
   align-items: center;
   gap: 0.75rem;
   min-width: 0;
+  flex: 1;
+}
+
+.fichero-download {
+  flex-shrink: 0;
 }
 
 .fichero-icon {

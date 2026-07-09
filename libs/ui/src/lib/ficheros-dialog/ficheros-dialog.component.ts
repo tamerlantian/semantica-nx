@@ -4,13 +4,21 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { TooltipModule } from 'primeng/tooltip';
 import { extractErrorMessage, FicherosService, ToastService } from '@semantica/core';
 import type { Fichero } from '@semantica/core';
 
 @Component({
   selector: 'app-ficheros-dialog',
   standalone: true,
-  imports: [DatePipe, DialogModule, ButtonModule, FileUploadModule, ProgressBarModule],
+  imports: [
+    DatePipe,
+    DialogModule,
+    ButtonModule,
+    FileUploadModule,
+    ProgressBarModule,
+    TooltipModule,
+  ],
   templateUrl: './ficheros-dialog.component.html',
   styleUrl: './ficheros-dialog.component.scss',
 })
@@ -32,6 +40,8 @@ export class FicherosDialogComponent {
   readonly ficheros = signal<Fichero[]>([]);
   readonly loadingFicheros = signal(false);
   readonly errorFicheros = signal<string | null>(null);
+  /** PK del fichero que se está descargando, o null si no hay descarga en curso. */
+  readonly downloadingPk = signal<number | null>(null);
 
   onShow(): void {
     this.loadFicheros();
@@ -67,10 +77,26 @@ export class FicherosDialogComponent {
       });
   }
 
+  descargar(fichero: Fichero): void {
+    if (this.downloadingPk() !== null) return;
+
+    this.downloadingPk.set(fichero.codigo_fichero_pk);
+
+    this.ficherosService.getDescargarUrl(fichero.codigo_fichero_pk).subscribe({
+      next: ({ url }) => {
+        window.open(url, '_blank', 'noopener,noreferrer');
+        this.downloadingPk.set(null);
+      },
+      // El errorInterceptor ya notifica al usuario; aquí solo se libera el estado.
+      error: () => this.downloadingPk.set(null),
+    });
+  }
+
   onHide(): void {
     this.selectedFile.set(null);
     this.ficheros.set([]);
     this.errorFicheros.set(null);
+    this.downloadingPk.set(null);
   }
 
   formatSize(bytes: number): string {
