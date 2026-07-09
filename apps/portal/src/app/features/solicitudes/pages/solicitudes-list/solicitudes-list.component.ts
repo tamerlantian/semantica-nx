@@ -8,7 +8,7 @@ import {
   ErrorAlertComponent,
 } from '../../../../shared';
 import { SolicitudesService } from '../../services/solicitudes.service';
-import { SolicitudEmpleado } from '../../models/solicitud.model';
+import { EstadoSolicitud, SolicitudEmpleado } from '../../models/solicitud.model';
 import { extractErrorMessage } from '@semantica/core';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -17,6 +17,22 @@ import { TagModule } from 'primeng/tag';
 import { AuthService } from '../../../auth/services/auth.service';
 import { SolicitudCreateDialogComponent } from '../../components/solicitud-create-dialog/solicitud-create-dialog.component';
 import { FicherosDialogComponent } from '@semantica/ui';
+
+interface EstadoTag {
+  label: string;
+  severity: 'success' | 'info' | 'warn' | 'secondary' | 'contrast' | 'danger';
+}
+
+const ESTADO_MAP: Record<EstadoSolicitud, EstadoTag> = {
+  A: { label: 'Aceptado', severity: 'success' },
+  R: { label: 'Rechazado', severity: 'danger' },
+};
+
+const ESTADO_PENDIENTE: EstadoTag = { label: 'Pendiente', severity: 'warn' };
+
+function esEstadoConocido(codigo: string): codigo is EstadoSolicitud {
+  return codigo in ESTADO_MAP;
+}
 
 @Component({
   selector: 'app-solicitudes-list',
@@ -99,20 +115,9 @@ export class SolicitudesListComponent implements OnInit {
     this.loadSolicitudes(1);
   }
 
-  getEstadoSolicitud(estado: string): {
-    label: string;
-    severity: 'success' | 'info' | 'warn' | 'secondary' | 'contrast' | 'danger';
-  } {
-    switch (estado) {
-      case 'a':
-        return { label: 'Aceptado', severity: 'success' };
-      case 'r':
-        return { label: 'Rechazado', severity: 'danger' };
-      case 'c':
-        return { label: 'Cerrado', severity: 'secondary' };
-      default:
-        return { label: 'Pendiente', severity: 'warn' };
-    }
+  getEstadoSolicitud(estado: string): EstadoTag {
+    const codigo = estado?.toUpperCase() ?? '';
+    return esEstadoConocido(codigo) ? ESTADO_MAP[codigo] : ESTADO_PENDIENTE;
   }
 
   onAdjuntos(solicitud: SolicitudEmpleado): void {

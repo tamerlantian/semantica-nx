@@ -1,3 +1,6 @@
+/** Códigos que el API devuelve en `estado_solicitud`. Cualquier otro valor se trata como pendiente. */
+export type EstadoSolicitud = 'A' | 'R';
+
 export interface SolicitudEmpleado {
   codigo_solicitud_empleado_pk: number;
   codigo_empleado_fk: number;
@@ -13,7 +16,7 @@ export interface SolicitudEmpleado {
   estado_aprobado: boolean;
   estado_anulado: boolean;
   estado_cerrado: boolean;
-  estado_solicitud: string;
+  estado_solicitud: EstadoSolicitud;
   codigo_empresa_fk: number;
 }
 
