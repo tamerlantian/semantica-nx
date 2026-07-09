@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.24](https://github.com/tamerlantian/semantica-nx/compare/v0.0.23...v0.0.24) (2026-07-09)
+
+
+### Bug Fixes
+
+* **solicitudes:** corregir badge de estado que siempre mostraba pendiente ([48fbdec](https://github.com/tamerlantian/semantica-nx/commit/48fbdecc9bae27dcb87f9a2183da6754543def9c))
+
 ## [0.0.23](https://github.com/tamerlantian/semantica-nx/compare/v0.0.22...v0.0.23) (2026-06-26)
 
 
