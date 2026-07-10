@@ -43,6 +43,7 @@
             <th>Estado</th>
             <th>Respuestas</th>
             <th>Fecha cierre</th>
+            <th></th>
           </tr>
         </ng-template>
         <ng-template #body let-reclamo let-expanded="expanded">
@@ -76,11 +77,22 @@
               />
             </td>
             <td>{{ reclamo.fecha_cierre ? (reclamo.fecha_cierre | date: 'dd/MM/yyyy') : '—' }}</td>
+            <td>
+              <p-button
+                icon="pi pi-paperclip"
+                severity="secondary"
+                [text]="true"
+                [rounded]="true"
+                pTooltip="Adjuntar archivo"
+                tooltipPosition="top"
+                (click)="onAdjuntos(reclamo)"
+              />
+            </td>
           </tr>
         </ng-template>
         <ng-template #expandedrow let-reclamo>
           <tr>
-            <td [attr.colspan]="8" class="expansion-cell">
+            <td [attr.colspan]="9" class="expansion-cell">
               @if (respuestasLoading().has(reclamo.codigo_reclamo_pk)) {
                 <div class="respuestas-state">
                   <i class="pi pi-spin pi-spinner"></i>
@@ -130,4 +142,12 @@
   }
 
   <app-reclamo-create-dialog [(visible)]="dialogVisible" (created)="onReclamoCreated()" />
+  @if (selectedReclamoId()) {
+    <app-ficheros-dialog
+      [(visible)]="ficherosDialogVisible"
+      [recordId]="selectedReclamoId()"
+      codigoModelo="RhuReclamo"
+      header="Ficheros adjuntos del reclamo"
+    />
+  }
 </div>
