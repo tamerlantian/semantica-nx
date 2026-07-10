@@ -16,6 +16,7 @@ import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { AuthService } from '../../../auth/services/auth.service';
 import { ReclamoCreateDialogComponent } from '../../components/reclamo-create-dialog/reclamo-create-dialog.component';
+import { FicherosDialogComponent } from '@semantica/ui';
 
 @Component({
   selector: 'app-reclamos-list',
@@ -31,6 +32,7 @@ import { ReclamoCreateDialogComponent } from '../../components/reclamo-create-di
     TooltipModule,
     DatePipe,
     ReclamoCreateDialogComponent,
+    FicherosDialogComponent,
   ],
   templateUrl: './reclamos-list.component.html',
   styleUrl: './reclamos-list.component.scss',
@@ -47,6 +49,8 @@ export class ReclamosListComponent implements OnInit {
   readonly pageSize = signal(50);
   readonly first = signal(0);
   readonly dialogVisible = signal(false);
+  readonly ficherosDialogVisible = signal(false);
+  readonly selectedReclamoId = signal(0);
   readonly expandedRows = signal<Record<string, boolean>>({});
 
   readonly respuestasCache = signal<Map<number, ReclamoRespuesta[]>>(new Map());
@@ -98,6 +102,11 @@ export class ReclamosListComponent implements OnInit {
 
   onReclamoCreated(): void {
     this.loadReclamos(1);
+  }
+
+  onAdjuntos(reclamo: Reclamo): void {
+    this.selectedReclamoId.set(reclamo.codigo_reclamo_pk);
+    this.ficherosDialogVisible.set(true);
   }
 
   onRowExpand(event: TableRowExpandEvent): void {
