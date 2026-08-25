@@ -8,6 +8,8 @@ import { MessageModule } from 'primeng/message';
 import { AuthService } from '../services/auth.service';
 import { isSafeReturnUrl, extractErrorMessage, ROUTE_PATHS } from '../../../core';
 import { TurnstileComponent } from '../../../shared';
+import { TrimInputDirective } from '@semantica/ui';
+import { trimFormValues } from '@semantica/core';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +22,7 @@ import { TurnstileComponent } from '../../../shared';
     PasswordModule,
     MessageModule,
     TurnstileComponent,
+    TrimInputDirective,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -41,6 +44,8 @@ export class LoginComponent {
   });
 
   onSubmit(): void {
+    trimFormValues(this.form);
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
